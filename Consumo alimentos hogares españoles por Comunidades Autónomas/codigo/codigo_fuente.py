@@ -13,7 +13,6 @@ espacio dedicado a este proyecto en el repositorio de GitHub
 import pandas as pd
 import requests as rq
 import base64
-from github import Github
 
 
 """
@@ -289,7 +288,7 @@ en la carpeta del repositorio de GitHub habilitada para ello.
 # Definir las variables
 username = "DMorgon"
 reponame = "portafolios"
-access_token = "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"
+access_token = "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"
 
 # Convertir el DataFrame en contenido CSV
 
@@ -303,7 +302,7 @@ url = f"https://api.github.com/repos/{username}/{reponame}/contents/Consumo alim
 
 # Encabezados de autenticación
 headers = {
-    'Authorization': f'token {access_token}'
+    'Authorization': f"token {access_token}"
 }
 
 # Datos para la solicitud POST
