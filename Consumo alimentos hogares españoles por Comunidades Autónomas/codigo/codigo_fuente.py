@@ -288,33 +288,35 @@ en la carpeta del repositorio de GitHub habilitada para ello.
 # Definir las variables
 username = "DMorgon"
 reponame = "portafolios/main/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_preprocesados"
-access_token = "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"
+access_token = "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"
 
 # Convertir el DataFrame en contenido CSV
 
-csv_content = df_total.to_csv(index=False, encoding="utf8")
+csv_content = df_total.to_csv(index=False)
 
 # Codificar el contenido en base64
 encoded_content = base64.b64encode(csv_content.encode("utf-8")).decode("utf-8")
 
 # URL de la API para crear un archivo en GitHub
-url = f"https://api.github.com/repos/{username}/{reponame}/tabla_procesada.csv"
+url = f"https://api.github.com/repos/{username}/{reponame}/contents/tabla_procesada.csv"
 
 # Encabezados de autenticación
 headers = {
-    "Authorization": f"token {access_token}"
+    'Authorization': f'token {access_token}'
 }
 
 # Datos para la solicitud POST
 
 data = {
-    'path': url,
+    'path': "https://api.github.com/repos/DMorgon/portafolios/main/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_preprocesados/contents/tabla_procesada.csv",
     'message': 'Agregando archivo CSV',
     'content': encoded_content
 }
 
 # Realizar la solicitud POST para crear el archivo
 response = rq.post(url, json=data, headers=headers)
+
+print(response.text)
 
 if response.status_code == 201:
     print("Archivo creado exitosamente en GitHub.")
