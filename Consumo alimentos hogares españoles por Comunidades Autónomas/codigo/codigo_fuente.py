@@ -288,7 +288,7 @@ en la carpeta del repositorio de GitHub habilitada para ello.
 # Definir las variables
 username = "DMorgon"
 reponame = "portafolios/main/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_preprocesados"
-access_token = "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"
+access_token = "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"
 
 # Convertir el DataFrame en contenido CSV
 
