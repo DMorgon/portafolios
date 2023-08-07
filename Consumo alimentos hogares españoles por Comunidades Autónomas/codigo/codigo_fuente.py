@@ -242,7 +242,7 @@ lista_categoria = ["T.HUEVOS KGS", "MIEL", "TOTAL CARNE", "TOTAL PESCA", "TOTAL 
                    "GASEOSAS Y BEBID.REFR", "BASES PIZZAS&MASAS HO", "HARINAS Y SEMOLAS", "ENCURTIDOS",
                    "ESPECIAS Y CONDIMENTO", "SAL", "OTROS PROD.EN PESO", "OTROS PROD.EN VOLUMEN", "ALGAS"]
 
-df_total_filtrado = df_total[df_total["CATEGORIAS"].isin(lista_categoria)]
+df_total = df_total[df_total["CATEGORIAS"].isin(lista_categoria)]
 
 
 # Corrijo el nombre de la categoría de los alimentos
