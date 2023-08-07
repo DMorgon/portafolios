@@ -298,7 +298,7 @@ csv_content = df_total.to_csv(index=False)
 encoded_content = base64.b64encode(csv_content.encode("utf-8")).decode("utf-8")
 
 # URL de la API para crear un archivo en GitHub
-url = f"https://api.github.com/repos/{username}/{reponame}/contents/tabla_procesada.csv"
+url = f"https://api.github.com/repos/{username}/{reponame}/contents/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_preprocesados/tabla_procesada.csv"
 
 # Encabezados de autenticación
 headers = {
@@ -308,7 +308,7 @@ headers = {
 # Datos para la solicitud POST
 
 data = {
-    'path': "https://api.github.com/repos/DMorgon/portafolios/main/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_preprocesados/contents/tabla_procesada.csv",
+    'path': "https://api.github.com/repos/DMorgon/portafolios/contents/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_preprocesados/tabla_procesada.csv",
     'message': 'Agregando archivo CSV',
     'content': encoded_content
 }
