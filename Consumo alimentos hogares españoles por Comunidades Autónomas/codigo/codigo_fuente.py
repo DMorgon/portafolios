@@ -12,7 +12,7 @@ espacio dedicado a este proyecto en el repositorio de GitHub
 
 import pandas as pd
 import requests as rq
-import base64
+import os
 
 
 """
@@ -281,44 +281,20 @@ df_total = df_total.melt(id_vars=["AÑO", "CATEGORIAS", "ANALISIS"], var_name="C
 """
 5) EXPORTACIÓN DEL MARCO RESULTANTE
  
-Finalmente, del marco de datos resultantes, creo un documento con extensión .csv, que, posteriormente, voy a cargar
-en la carpeta del repositorio de GitHub habilitada para ello.
+Finalmente, del marco de datos resultantes, creo un documento con extensión .csv, que, posteriormente, voy a guardar en
+la carpeta de descarga de la máquina local
 """
 
-# Definir las variables
-username = "DMorgon"
-reponame = "portafolios"
-access_token = "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"
-
-# Convertir el DataFrame en contenido CSV
-
+# Convierto df_total  a un archivo CSV
 csv_content = df_total.to_csv(index=False)
 
-# Codificar el contenido en base64
-encoded_content = base64.b64encode(csv_content.encode("utf-8")).decode("utf-8")
+# Obtengo la ruta de la carpeta de descargas del usuario
+download_folder = os.path.expanduser('~')
+csv_filename = 'tabla_procesada.csv'
+csv_path = os.path.join(download_folder, csv_filename)
 
-# URL de la API para crear un archivo en GitHub
-url = f"https://api.github.com/repos/{username}/{reponame}/contents/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_preprocesados/tabla_procesada.csv"
+# Guardo el contenido del archivo CSV en la ubicación deseada
+with open(csv_path, 'w', encoding='utf-8') as f:
+    f.write(csv_content)
 
-# Encabezados de autenticación
-headers = {
-    'Authorization': f"token {access_token}"
-}
-
-# Datos para la solicitud POST
-
-data = {
-    'path': "https://api.github.com/repos/DMorgon/portafolios/contents/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_preprocesados/tabla_procesada.csv",
-    'message': 'Agregando archivo CSV',
-    'content': encoded_content
-}
-
-# Realizar la solicitud POST para crear el archivo
-response = rq.post(url, json=data, headers=headers)
-
-print(response.text)
-
-if response.status_code == 201:
-    print("Archivo creado exitosamente en GitHub.")
-else:
-    print("No se pudo crear el archivo en GitHub.")
+print(f'Archivo CSV guardado en: {csv_path}')
