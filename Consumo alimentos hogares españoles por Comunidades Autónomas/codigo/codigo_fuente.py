@@ -45,9 +45,9 @@ def carga_valor(nombre_archivo):
     repositorio = "portafolios/main/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_origen"
     ruta_archivo = f"{base_url}/{usuario_git}/{repositorio}/{nombre_archivo}.xlsx"
     response = rq.get(ruta_archivo)
-    df_consumoxcapita = pd.read_excel(response.content, sheet_name=1, header=2, engine="openpyxl")
-    df_consumoxcapita["ANALISIS"] = "Valor (miles de euros)"
-    return df_consumoxcapita
+    df_valor = pd.read_excel(response.content, sheet_name=1, header=2, engine="openpyxl")
+    df_valor["ANALISIS"] = "Valor (miles de euros)"
+    return df_valor
 
 
 def carga_volumen(nombre_archivo):
@@ -56,9 +56,9 @@ def carga_volumen(nombre_archivo):
     repositorio = "portafolios/main/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_origen"
     ruta_archivo = f"{base_url}/{usuario_git}/{repositorio}/{nombre_archivo}.xlsx"
     response = rq.get(ruta_archivo)
-    df_consumoxcapita = pd.read_excel(response.content, sheet_name=2, header=2, engine="openpyxl")
-    df_consumoxcapita["ANALISIS"] = "Volumen (miles de kg o litros)"
-    return df_consumoxcapita
+    df_volumen = pd.read_excel(response.content, sheet_name=2, header=2, engine="openpyxl")
+    df_volumen["ANALISIS"] = "Volumen (miles de kg o litros)"
+    return df_volumen
 
 
 def carga_consumoxcapita(nombre_archivo):
@@ -83,13 +83,26 @@ def carga_gastoxcapita(nombre_archivo):
     ruta_archivo = f"{base_url}/{usuario_git}/{repositorio}/{nombre_archivo}.xlsx"
     response = rq.get(ruta_archivo)
     if int(nombre_archivo) <= 2019:
-        df_consumoxcapita = pd.read_excel(response.content, sheet_name=5, header=2, engine="openpyxl")
-        df_consumoxcapita["ANALISIS"] = "Gasto x cápita (miles de kg o litros)"
+        df_gastoxcapita = pd.read_excel(response.content, sheet_name=5, header=2, engine="openpyxl")
+        df_gastoxcapita["ANALISIS"] = "Gasto x cápita (miles de kg o litros)"
     else:
-        df_consumoxcapita = pd.read_excel(response.content, sheet_name=6, header=2, engine="openpyxl")
-        df_consumoxcapita["ANALISIS"] = "Gasto x cápita (miles de kg o litros)"
-    return df_consumoxcapita
+        df_gastoxcapita = pd.read_excel(response.content, sheet_name=6, header=2, engine="openpyxl")
+        df_gastoxcapita["ANALISIS"] = "Gasto x cápita (miles de kg o litros)"
+    return df_gastoxcapita
 
+def carga_precio(nombre_archivo):
+    base_url = "https://raw.githubusercontent.com"
+    usuario_git = "DMorgon"
+    repositorio = "portafolios/main/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_origen"
+    ruta_archivo = f"{base_url}/{usuario_git}/{repositorio}/{nombre_archivo}.xlsx"
+    response = rq.get(ruta_archivo)
+    if int(nombre_archivo) <= 2019:
+        df_precio = pd.read_excel(response.content, sheet_name=6, header=2, engine="openpyxl")
+        df_precio["ANALISIS"] = "Precio (euros)"
+    else:
+        df_precio = pd.read_excel(response.content, sheet_name=4, header=2, engine="openpyxl")
+        df_precio["ANALISIS"] = "Precio (euros)"
+    return df_precio
 
 # Cargo los datos correspondientes con las hojas valor de cada archivo
 
@@ -127,14 +140,24 @@ for archivo in lista_archivos:
     df = carga_gastoxcapita(archivo)
     lista_df_gastoxcapita.append(df)
 
+# Cargo los datos correspondientes con las hojas precio de cada archivo
+
+
+lista_df_precio = []
+
+for archivo in lista_archivos:
+    df = carga_precio(archivo)
+    lista_df_precio.append(df)
+
 # uno los marcos de datos según el año y los incluyo en la lista_df
 
 lista_df = []
 
 for i in range(0, 23, 1):
-    df = pd.concat([lista_df_valor[i], lista_df_volumen[i], lista_df_consumoxcapita[i], lista_df_gastoxcapita[i]],
-                   ignore_index=True)
+    df = pd.concat([lista_df_valor[i], lista_df_volumen[i], lista_df_consumoxcapita[i], lista_df_gastoxcapita[i],
+                   lista_df_precio[i]], ignore_index=True)
     lista_df.append(df)
+
 
 """
 3. ANÁLISIS EXPLORATORIO DE DATOS
