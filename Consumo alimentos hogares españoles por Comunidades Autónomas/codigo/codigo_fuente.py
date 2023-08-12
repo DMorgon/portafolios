@@ -69,10 +69,10 @@ def carga_consumoxcapita(nombre_archivo):
     response = rq.get(ruta_archivo)
     if int(nombre_archivo) <= 2019:
         df_consumoxcapita = pd.read_excel(response.content, sheet_name=4, header=2, engine="openpyxl")
-        df_consumoxcapita["ANALISIS"] = "Consumo x cápita (miles de kg o litros)"
+        df_consumoxcapita["ANALISIS"] = "Consumo x cápita (kg o litros)"
     else:
         df_consumoxcapita = pd.read_excel(response.content, sheet_name=5, header=2, engine="openpyxl")
-        df_consumoxcapita["ANALISIS"] = "Consumo x cápita (miles de kg o litros)"
+        df_consumoxcapita["ANALISIS"] = "Consumo x cápita (kg o litros)"
     return df_consumoxcapita
 
 
@@ -84,10 +84,10 @@ def carga_gastoxcapita(nombre_archivo):
     response = rq.get(ruta_archivo)
     if int(nombre_archivo) <= 2019:
         df_gastoxcapita = pd.read_excel(response.content, sheet_name=5, header=2, engine="openpyxl")
-        df_gastoxcapita["ANALISIS"] = "Gasto x cápita (miles de kg o litros)"
+        df_gastoxcapita["ANALISIS"] = "Gasto x cápita (euros)"
     else:
         df_gastoxcapita = pd.read_excel(response.content, sheet_name=6, header=2, engine="openpyxl")
-        df_gastoxcapita["ANALISIS"] = "Gasto x cápita (miles de kg o litros)"
+        df_gastoxcapita["ANALISIS"] = "Gasto x cápita (euros)"
     return df_gastoxcapita
 
 def carga_precio(nombre_archivo):
