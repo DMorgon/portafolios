@@ -39,125 +39,23 @@ lista_archivos = ["2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007"
 # Creo las funciones que me permitirá cargar los datos de los archivos alojados en el repositorio de GitHub
 
 
-def carga_valor(nombre_archivo):
-    base_url = "https://raw.githubusercontent.com"
-    usuario_git = "DMorgon"
-    repositorio = "portafolios/main/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_origen"
-    ruta_archivo = f"{base_url}/{usuario_git}/{repositorio}/{nombre_archivo}.xlsx"
-    response = rq.get(ruta_archivo)
-    df_valor = pd.read_excel(response.content, sheet_name=1, header=2, engine="openpyxl")
-    df_valor["ANALISIS"] = "Valor (miles de euros)"
-    return df_valor
-
-
-def carga_volumen(nombre_archivo):
-    base_url = "https://raw.githubusercontent.com"
-    usuario_git = "DMorgon"
-    repositorio = "portafolios/main/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_origen"
-    ruta_archivo = f"{base_url}/{usuario_git}/{repositorio}/{nombre_archivo}.xlsx"
-    response = rq.get(ruta_archivo)
-    df_volumen = pd.read_excel(response.content, sheet_name=2, header=2, engine="openpyxl")
-    df_volumen["ANALISIS"] = "Volumen (miles de kg o litros)"
-    return df_volumen
-
-
 def carga_consumoxcapita(nombre_archivo):
     base_url = "https://raw.githubusercontent.com"
     usuario_git = "DMorgon"
     repositorio = "portafolios/main/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_origen"
     ruta_archivo = f"{base_url}/{usuario_git}/{repositorio}/{nombre_archivo}.xlsx"
     response = rq.get(ruta_archivo)
-    if int(nombre_archivo) <= 2019:
-        df_consumoxcapita = pd.read_excel(response.content, sheet_name=4, header=2, engine="openpyxl")
-        df_consumoxcapita["ANALISIS"] = "Consumo x cápita (kg o litros)"
-    else:
-        df_consumoxcapita = pd.read_excel(response.content, sheet_name=5, header=2, engine="openpyxl")
-        df_consumoxcapita["ANALISIS"] = "Consumo x cápita (kg o litros)"
-    return df_consumoxcapita
-
-
-def carga_gastoxcapita(nombre_archivo):
-    base_url = "https://raw.githubusercontent.com"
-    usuario_git = "DMorgon"
-    repositorio = "portafolios/main/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_origen"
-    ruta_archivo = f"{base_url}/{usuario_git}/{repositorio}/{nombre_archivo}.xlsx"
-    response = rq.get(ruta_archivo)
-    if int(nombre_archivo) <= 2019:
-        df_gastoxcapita = pd.read_excel(response.content, sheet_name=5, header=2, engine="openpyxl")
-        df_gastoxcapita["ANALISIS"] = "Gasto x cápita (euros)"
-    else:
-        df_gastoxcapita = pd.read_excel(response.content, sheet_name=6, header=2, engine="openpyxl")
-        df_gastoxcapita["ANALISIS"] = "Gasto x cápita (euros)"
-    return df_gastoxcapita
-
-def carga_precio(nombre_archivo):
-    base_url = "https://raw.githubusercontent.com"
-    usuario_git = "DMorgon"
-    repositorio = "portafolios/main/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_origen"
-    ruta_archivo = f"{base_url}/{usuario_git}/{repositorio}/{nombre_archivo}.xlsx"
-    response = rq.get(ruta_archivo)
-    if int(nombre_archivo) <= 2019:
-        df_precio = pd.read_excel(response.content, sheet_name=6, header=2, engine="openpyxl")
-        df_precio["ANALISIS"] = "Precio (euros)"
-    else:
-        df_precio = pd.read_excel(response.content, sheet_name=4, header=2, engine="openpyxl")
-        df_precio["ANALISIS"] = "Precio (euros)"
-    return df_precio
+    df_valor = pd.read_excel(response.content, sheet_name=13, header=2, engine="openpyxl")
+    return df_valor
 
 # Cargo los datos correspondientes con las hojas valor de cada archivo
 
 
-lista_df_valor = []
-
-for archivo in lista_archivos:
-    df = carga_valor(archivo)
-    lista_df_valor.append(df)
-
-# Cargo los datos correspondientes con las hojas volumen de cada archivo
-
-
-lista_df_volumen = []
-
-for archivo in lista_archivos:
-    df = carga_volumen(archivo)
-    lista_df_volumen.append(df)
-
-# Cargo los datos correspondientes con las hojas consumoxcapita de cada archivo.
-
-
-lista_df_consumoxcapita = []
+lista_df = []
 
 for archivo in lista_archivos:
     df = carga_consumoxcapita(archivo)
-    lista_df_consumoxcapita.append(df)
-
-# Cargo los datos correspondientes con las hojas gastoxcapita de cada archivo.
-
-
-lista_df_gastoxcapita = []
-
-for archivo in lista_archivos:
-    df = carga_gastoxcapita(archivo)
-    lista_df_gastoxcapita.append(df)
-
-# Cargo los datos correspondientes con las hojas precio de cada archivo
-
-
-lista_df_precio = []
-
-for archivo in lista_archivos:
-    df = carga_precio(archivo)
-    lista_df_precio.append(df)
-
-# uno los marcos de datos según el año y los incluyo en la lista_df
-
-lista_df = []
-
-for i in range(0, 23, 1):
-    df = pd.concat([lista_df_valor[i], lista_df_volumen[i], lista_df_consumoxcapita[i], lista_df_gastoxcapita[i],
-                   lista_df_precio[i]], ignore_index=True)
     lista_df.append(df)
-
 
 """
 3. ANÁLISIS EXPLORATORIO DE DATOS
@@ -167,6 +65,7 @@ información y anomalías de las mismas.
 
 """
 
+"""
 # Realizo EDA en cada marco de datos
 
 for i, df in enumerate(lista_df):
@@ -179,15 +78,18 @@ for i, df in enumerate(lista_df):
         print("No hay valores NA en la tabla de datos" + "\n")
 
 """
+"""
 Revisando la información de cada marco de datos, encontramos las siguientes anomalías:
 
-1) Los marcos de datos referentes a los años 2000, 2001, 2002, 2003, 2019, 2020, 2021 y 2022 tienen 20 columnas
- mientras que el resto de las tablas tienen 28. Hay variables que no son necesarias, para el análisis, con lo que
- pueden ser eliminadas.
- 
-2) Existen marcos de datos con el nombre de las variables de ciertas comunidades autónomas diferentes.
+1) df_2000 y df_2001 no tienen las variables referentes al ciclo de vida del hogar, con lo que podemos prescindir 
+los dos marcos de datos
 
-3) La variable de las categorías de los alimentos se denomina Unamed: 0.
+2) En todos los marcos de datos existen variables con respecto a la región, que no son necesarias, con lo que se podría 
+eliminar.
+
+3) El nombre de las variables no coincide en todas los marcos de datos
+
+
 """
 
 """
@@ -214,35 +116,68 @@ datos:
  identificadores
 """
 
-# Elimino las variables correspondientes a los territorios que no voy a utilizar
+# Creo la lista de marcos de datos sin df_2000 y df_2001
 
-columnas_eliminar = [".TOTAL ESPAÑA", "T.ESPAÑA", "NORESTE", "LEVANTE", "ANDALUCIA", "CENTRO-SUR", "CASTILLA Y LEON",
-                     "NOROESTE", "NORTE", "T.CANARIAS"]
+del lista_df[:2]
+
+
+# Elimino las variables que no se van a utilizar.
+
+variables_eliminar = [".TOTAL ESPAÑA", "NORESTE", "LEVANTE", "ANDALUCIA", "CENTRO-SUR", "CASTILLA Y LEON", "NOROESTE",
+                      "NORTE", "CANARIAS", "T.CANARIAS", "T.ESPAÑA", "MAS DE 50 AÑOS"]
 
 for df in lista_df:
-    df.drop(columns=columnas_eliminar, errors="ignore", inplace=True)
+    df.drop(columns=variables_eliminar, errors="ignore", inplace=True)
 
-# Corrijo el nombre de las variables correspondientes a las comunidades autónomas.
+
+# Corrijo el nombre de las variables
 
 for df in lista_df:
-    df.columns = df.columns.str.replace("CASTILLA LA MANCHA", "CASTILLA - LA MANCHA", regex=False)
-    df.columns = df.columns.str.replace("CASTILLA DE MADRID", "MADRID", regex=False)
-    df.columns = df.columns.str.replace("PRINCIPADO DE ASTURIAS", "ASTURIAS", regex=False)
-    df.columns = df.columns.str.replace("ILLES BALEARS", "BALEARES", regex=False)
-    df.columns = df.columns.str.replace("C. FORAL DE NAVARRA", "NAVARRA", regex=False)
-    df.columns = df.columns.str.replace("COMUNITAT VALENCIANA", "VALENCIA", regex=False)
-    df.columns = df.columns.str.replace("ANDALUCÍA", "ANDALUCIA", regex=False)
-    df.columns = df.columns.str.replace("T.ANDALUCIA", "ANDALUCIA", regex=False)
-    df.columns = df.columns.str.replace("CASTILLA Y LEÓN", "CASTILLA Y LEON", regex=False)
-    df.columns = df.columns.str.replace("ARAGÓN", "ARAGON", regex=False)
-    df.columns = df.columns.str.replace("REGIÓN DE MURCIA", "MURCIA", regex=False)
-    df.columns = df.columns.str.replace("COMUNIDAD DE MADRID", "MADRID", regex=False)
+    df.columns = df.columns.str.replace(">500000", "Mas de 500000", regex=False)
+    df.columns = df.columns.str.replace("+ DE 500000", "Mas de 500000", regex=False)
+    df.columns = df.columns.str.replace("JOVENES INDEPENDIE", "JOVENES INDEPENDIENTES", regex=False)
+    df.columns = df.columns.str.replace("JOVENES INDEPENDIENTESNTES", "JOVENES INDEPENDIENTES", regex=False)
+    df.columns = df.columns.str.replace("PAREJ.JOVENES SIN", "PAREJ.JOVENES SIN HIJOS", regex=False)
+    df.columns = df.columns.str.replace("PAREJ.JOVENES SIN HIJOS HIJOS", "PAREJ.JOVENES SIN HIJOS", regex=False)
+    df.columns = df.columns.str.replace("PAREJ.CON HIJOS PE", "PAREJ.CON HIJOS PEQUEÑOS", regex=False)
+    df.columns = df.columns.str.replace("PAREJ.CON HIJOS PEQUEÑOSQUEÑOS", "PAREJ.CON HIJOS PEQUEÑOS", regex=False)
+    df.columns = df.columns.str.replace("PAREJ.CON HIJOS ED", "PAREJ.CON HIJOS EDAD MEDIA", regex=False)
+    df.columns = df.columns.str.replace("PAREJ.CON HIJOS EDAD MEDIAAD MEDIA", "PAREJ.CON HIJOS EDAD MEDIA", regex=False)
+    df.columns = df.columns.str.replace("PAREJ.CON HIJOS MA", "PAREJ.CON HIJOS MAYORES", regex=False)
+    df.columns = df.columns.str.replace("PAREJ.CON HIJOS MAYORESYORES", "PAREJ.CON HIJOS MAYORES", regex=False)
+    df.columns = df.columns.str.replace("HOGARES MONOPARENT", "HOGARES MONOPARENTALES", regex=False)
+    df.columns = df.columns.str.replace("HOGARES MONOPARENTALESALES", "HOGARES MONOPARENTALES", regex=False)
+    df.columns = df.columns.str.replace("PAREJAS ADULTAS SI", "PAREJAS ADULTAS SIN HIJOS", regex=False)
+    df.columns = df.columns.str.replace("PAREJAS ADULTAS SIN HIJOSN HIJOS", "PAREJAS ADULTAS SIN HIJOS", regex=False)
+    df.columns = df.columns.str.replace("ADULTOS INDEPENDIE", "ADULTOS INDEPENDIENTES", regex=False)
+    df.columns = df.columns.str.replace("ADULTOS INDEPENDIENTESNTES", "ADULTOS INDEPENDIENTES", regex=False)
+    df.columns = df.columns.str.replace("- 6 AÑOS", "NIÑOS - 6 AÑOS", regex=False)
+    df.columns = df.columns.str.replace("NIÑOS NIÑOS - 6 AÑOS", "NIÑOS - 6 AÑOS", regex=False)
+    df.columns = df.columns.str.replace("DE 6 A 15", "NIÑOS 6 A 15 AÑOS", regex=False)
+    df.columns = df.columns.str.replace("- 35 AÑOS", "MENOS DE 35 AÑOS", regex=False)
+    df.columns = df.columns.str.replace("35 A 49 AÑOS", "DE 35 A 49 AÑOS", regex=False)
+    df.columns = df.columns.str.replace("DE DE 35 A 49 AÑOS", "DE 35 A 49 AÑOS", regex=False)
+    df.columns = df.columns.str.replace("50 A 64 AÑOS", "DE 50 A 64 AÑOS", regex=False)
+    df.columns = df.columns.str.replace("DE DE 50 A 64 AÑOS", "DE 50 A 64 AÑOS", regex=False)
     df.loc[:, sorted(df.columns)] = df.loc[:, df.columns]
+
+"""
+# Realizo EDA en cada marco de datos
+
+for i, df in enumerate(lista_df):
+    tabla_nombre = f"df_{2000 + i}"
+    print("Nombre de la tabla de datos:", tabla_nombre)
+    print(df.info())
+    if df.isna().any().any():
+        print("Hay valores NA en la tabla de datos" + "\n")
+    else:
+        print("No hay valores NA en la tabla de datos" + "\n")
+"""
 
 # Añado la columna AÑO con los valores correspondiente al año del marco de datos
 
 for i, df in enumerate(lista_df):
-    df["AÑO"] = int(lista_archivos[i])
+    df["AÑO"] = 2002 + i
 
 # Uno todas las tablas en una sola df_total
 
@@ -252,8 +187,7 @@ df_total = pd.concat(objs=lista_df, axis=0)
 
 df_total.rename(columns={"Unnamed: 0": "CATEGORIAS"}, inplace=True)
 
-
-# Realizó un filtro en df_total para sólo quedarme con las categorías de alimentos que voy a utilizar
+# Realizo un filtro en df_total para solo quedarme con las categorías de alimentos que voy a utilizar
 
 lista_categoria = ["T.HUEVOS KGS", "MIEL", "TOTAL CARNE", "TOTAL PESCA", "TOTAL LECHE LIQUIDA", "TOTAL OTRAS LECHES",
                    "DERIVADOS LACTEOS", "PAN", "BOLL.PAST.GALLET.CERE", "PRODUCTOS NAVIDEÑOS",
@@ -293,17 +227,56 @@ nuevas_categorias = {"T.HUEVOS KGS": "Huevos", "MIEL": "Miel", "TOTAL CARNE": "C
 
 df_total["CATEGORIAS"] = df_total["CATEGORIAS"].replace(nuevas_categorias)
 
+# Realizo EDA en cada marco de datos
 
-# Transformo el formato de ancho a largo, manteniendo las columnas "AÑO", "CATEGORIAS" y "ANALISIS" como identificadores
+print(df_total.info())
+if df_total.isna().any().any():
+    print("Hay valores NA en la tabla de datos" + "\n")
+else:
+    print("No hay valores NA en la tabla de datos" + "\n")
 
+# Transformo el formato de ancho a largo, manteniendo las columnas "AÑO", "CATEGORIAS" como identificadores
 
-df_total = df_total.melt(id_vars=["AÑO", "CATEGORIAS", "ANALISIS"], var_name="COMUNIDAD AUTONOMA",
+df_total = df_total.melt(id_vars=["AÑO", "CATEGORIAS"], var_name="CONDICIONES SOCIOECONÓMICAS",
                          value_name="CANTIDAD")
 
+# Creo la variable "ANALISIS"
+
+
+def mapeo(variable):
+    if variable in ["< 2000 HABIT.", "2000 A 10000", "10001 A 100000", "100001 A 500000", "Mas de 500000"]:
+        return "Población del municipio"
+    elif variable in ["1 PERSONA", "2 PERSONAS", "3 PERSONAS", "4 PERSONAS", "5 Y MAS PERSONAS"]:
+        return "Número de personas del hogar"
+    elif variable in ["ALTA Y MEDIA ALTA", "MEDIA", "MEDIA BAJA", "BAJA"]:
+        return "Clase social del hogar"
+    elif variable in ["SIN NIÑOS", "NIÑOS - 6 AÑOS", "NIÑOS 6 A 15 AÑOS"]:
+        return "Edad de los niños en el hogar"
+    elif variable in ["ACTIVA", "NO ACTIVA"]:
+        return "Actividad del responsable de la compra del hogar"
+    elif variable in ["MENOS DE 35 AÑOS", "DE 35 A 49 AÑOS", "DE 50 A 64 AÑOS", "65 Y MAS AÑOS"]:
+        return "Edad del responsable de la compra del hogar"
+    else:
+        return "Tipo de hogar"
+
+
+df_total["ANALISIS"] = df_total["CONDICIONES SOCIOECONÓMICAS"].apply(mapeo)
+
+# Cambia el formato de los valores en la columna CONDICIONES SOCIOECONÓMICAS a título
+
+df_total["CONDICIONES SOCIOECONÓMICAS"] = df_total["CONDICIONES SOCIOECONÓMICAS"].str.title()
+
+# Realizo EDA en cada marco de datos
+
+print(df_total.info())
+if df_total.isna().any().any():
+    print("Hay valores NA en la tabla de datos" + "\n")
+else:
+    print("No hay valores NA en la tabla de datos" + "\n")
 
 """
 5) EXPORTACIÓN DEL MARCO RESULTANTE
- 
+
 Finalmente, del marco de datos resultantes, creo un documento con extensión .csv, que, posteriormente, voy a guardar en
 la carpeta de descarga de la máquina local
 """
@@ -313,7 +286,7 @@ csv_content = df_total.to_csv(index=False)
 
 # Obtengo la ruta de la carpeta de descargas del usuario
 download_folder = os.path.expanduser('~')
-csv_filename = 'tabla_procesada_territorios.csv'
+csv_filename = 'tabla_procesada_socioeconómico.csv'
 csv_path = os.path.join(download_folder, csv_filename)
 
 # Guardo el contenido del archivo CSV en la ubicación deseada
