@@ -1,5 +1,4 @@
 """
-
 1) ImportarÉ las librerías que se van a utilizar
 2) Cargaré los documentos .xlsx en marcos de datos de Pandas.
 3) Realizaré un EDA de cada marco de datos para detectar las transformaciones a realizar
@@ -14,7 +13,6 @@ import pandas as pd
 import requests as rq
 import os
 
-
 """
 2) CARGA DE ARCHIVO
 
@@ -22,11 +20,11 @@ En este apartado procederé a cargar los archivos excel, alojados en el reposito
 Pandas. Para ello sigo el siguiente plan de trabajo:
 
 1) Creo la lista con el nombre de los documentos .xlsx.
-2) Creo las funciones para cargar cada documento en un marco de datos de Pandas.
-3) Realizo la llamada de cada una de las funciones para cargar los datos.
+2) Creo la funcion para cargar cada documento en un marco de datos de Pandas.
+3) Realizo la llamada para cargar los datos.
 4) Uno los marcos de datos según corresponda a los años. 
 
-Antes que nada, hay que tener en cuenta que las hojas de los archivos 2020, 2021 y 2022 etan colocadas de forma
+Antes que nada, hay que tener en cuenta que las hojas de los archivos 2004, 2005 etan colocadas de forma
 diferente a las demás. Con lo que habría que tenerlo en cuenta a la hora de crear las funciones.
 """
 
@@ -34,7 +32,6 @@ diferente a las demás. Con lo que habría que tenerlo en cuenta a la hora de cr
 
 lista_archivos = ["2000", "2001", "2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011",
                   "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022"]
-
 
 # Creo las funciones que me permitirá cargar los datos de los archivos alojados en el repositorio de GitHub
 
@@ -45,7 +42,10 @@ def carga_consumoxcapita(nombre_archivo):
     repositorio = "portafolios/main/Consumo alimentos hogares españoles por Comunidades Autónomas/datos_origen"
     ruta_archivo = f"{base_url}/{usuario_git}/{repositorio}/{nombre_archivo}.xlsx"
     response = rq.get(ruta_archivo)
-    df_valor = pd.read_excel(response.content, sheet_name=13, header=2, engine="openpyxl")
+    if nombre_archivo in ["2004", "2005"]:
+        df_valor = pd.read_excel(response.content, sheet_name=12, header=2, engine="openpyxl")
+    else:
+        df_valor = pd.read_excel(response.content, sheet_name=13, header=2, engine="openpyxl")
     return df_valor
 
 # Cargo los datos correspondientes con las hojas valor de cada archivo
@@ -62,10 +62,8 @@ for archivo in lista_archivos:
 
 A continuación realizó un Análisis Exploratorio de Datos (EDA) en cada marco de datos de la lista_df, para obtener
 información y anomalías de las mismas.
-
 """
 
-"""
 # Realizo EDA en cada marco de datos
 
 for i, df in enumerate(lista_df):
@@ -77,7 +75,7 @@ for i, df in enumerate(lista_df):
     else:
         print("No hay valores NA en la tabla de datos" + "\n")
 
-"""
+
 """
 Revisando la información de cada marco de datos, encontramos las siguientes anomalías:
 
@@ -88,8 +86,6 @@ los dos marcos de datos
 eliminar.
 
 3) El nombre de las variables no coincide en todas los marcos de datos
-
-
 """
 
 """
@@ -161,19 +157,6 @@ for df in lista_df:
     df.columns = df.columns.str.replace("DE DE 50 A 64 AÑOS", "DE 50 A 64 AÑOS", regex=False)
     df.loc[:, sorted(df.columns)] = df.loc[:, df.columns]
 
-"""
-# Realizo EDA en cada marco de datos
-
-for i, df in enumerate(lista_df):
-    tabla_nombre = f"df_{2000 + i}"
-    print("Nombre de la tabla de datos:", tabla_nombre)
-    print(df.info())
-    if df.isna().any().any():
-        print("Hay valores NA en la tabla de datos" + "\n")
-    else:
-        print("No hay valores NA en la tabla de datos" + "\n")
-"""
-
 # Añado la columna AÑO con los valores correspondiente al año del marco de datos
 
 for i, df in enumerate(lista_df):
@@ -201,9 +184,7 @@ lista_categoria = ["T.HUEVOS KGS", "MIEL", "TOTAL CARNE", "TOTAL PESCA", "TOTAL 
 
 df_total = df_total[df_total["CATEGORIAS"].isin(lista_categoria)]
 
-
 # Corrijo el nombre de la categoría de los alimentos
-
 
 nuevas_categorias = {"T.HUEVOS KGS": "Huevos", "MIEL": "Miel", "TOTAL CARNE": "Carne",
                      "TOTAL PESCA": "Pescados y mariscos", "TOTAL LECHE LIQUIDA": "Leche líquida",
@@ -226,14 +207,6 @@ nuevas_categorias = {"T.HUEVOS KGS": "Huevos", "MIEL": "Miel", "TOTAL CARNE": "C
                      "OTROS PROD.EN VOLUMEN": "Otros productos en volumen"}
 
 df_total["CATEGORIAS"] = df_total["CATEGORIAS"].replace(nuevas_categorias)
-
-# Realizo EDA en cada marco de datos
-
-print(df_total.info())
-if df_total.isna().any().any():
-    print("Hay valores NA en la tabla de datos" + "\n")
-else:
-    print("No hay valores NA en la tabla de datos" + "\n")
 
 # Transformo el formato de ancho a largo, manteniendo las columnas "AÑO", "CATEGORIAS" como identificadores
 
