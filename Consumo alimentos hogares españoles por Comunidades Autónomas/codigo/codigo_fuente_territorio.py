@@ -1,5 +1,4 @@
 """
-
 1) ImportarÉ las librerías que se van a utilizar
 2) Cargaré los documentos .xlsx en marcos de datos de Pandas.
 3) Realizaré un EDA de cada marco de datos para detectar las transformaciones a realizar
@@ -149,7 +148,7 @@ for archivo in lista_archivos:
     df = carga_precio(archivo)
     lista_df_precio.append(df)
 
-# uno los marcos de datos según el año y los incluyo en la lista_df
+# Uno los marcos de datos según el año y los incluyo en la lista_df
 
 lista_df = []
 
