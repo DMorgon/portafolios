@@ -179,7 +179,7 @@ df_total = pd.concat(objs=lista_df, axis=0)
 
 columnas_eliminar = [".TOTAL ESPAÑA", "T.ESPAÑA", "HIPERMERCADOS", "SUPER/AUTOS/G.ALM.", "SUPER+AUTOS", "DISCOUNTS",
                      "TDA.TRADICIONAL", "PESCADERIA", "TDA.CONGELADOS", "HERBORISTERIA", "FARMACIA",
-                     "CARNICERIA/CHARC.", "MERCADOS Y PLAZAS", "LECHERIA", "PANADERIA", "BAR-BODEGA"]
+                     "CARNICERIA/CHARC.", "MERCADOS Y PLAZAS", "LECHERIA", "PANADERIA", "BAR-BODEGA", "MERCADOS/AMBULANT."]
 
 df_total.drop(columns=columnas_eliminar, errors="ignore", inplace=True)
 
