@@ -89,7 +89,7 @@ En este cuadro de mando, además, he utilizado las siguientes tipos de visualiza
 
 - **Las gráficas de anillos** representa datos circulares o proporcionales de una manera fácilmente comprensible.
 
-![Gráficas de anillos](visualizaciones/grafico_anillos.jpg.jpg)
+![Gráficas de anillos](visualizaciones/grafico_anillos.jpg)
 
 - ** Los gráfico de barras** son una de las visualizaciones de datos más comunes y versátiles. Se utilizan para representar datos en forma de barra rectanguales que muestran la cantidad o frecuencia de una categoría o variable determinada. 
 
