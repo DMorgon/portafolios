@@ -32,14 +32,18 @@ La desagregación en tres categorías, territorial, sociodemográfica y por cana
 
 ## 3. **Herramientas**
 
-Para la preparación de los datos he utilizado el lenguaje de programación Python, en el entorno de desarrollo integrado PyCharm. Las librerías que he empleado han sido:
+Para la preparación de los datos he utilizado el lenguaje de programación Python, en el entorno de desarrollo integrado PyCharm. 
+
+Las librerías que he empleado han sido:
 
   - **Pandas**: que es una biblioteca que utilizo para la manipulación y análisis de datos.
   - **Request**: me permite enviar solicitudes HTTP a través de la red, es decir, me permite poder acceder a los datos de origen, alojados en el repositorio.
   - **Os**: es una biblioteca estándar de Python, que me proporciona una interface parainteractural con el sistema operativo subyacente, en este caso Windows, y que utilizó para exportar los modelos de datos resultantes.
   - **Openpyxl**: permite leer y escribir archivos XLSX, así como manipular hojas de cálculo y celdas en esos archivos.
 
-Los script con el código fuente resultantes, pueden consultarse en la carpeta código de este repositorio, y los archivos .csv resultantes con los datos en formato tabular se pueden consultar en la carpeta tablas_preprocesadas.
+Los script con el código fuente resultantes, pueden consultarse en la carpeta "codigo" de este repositorio.
+
+Los archivos .csv se pueden consultar en la carpeta archivos_preprocesados del repositorio.
 
 Para la creación de las visualizaciones, he creado un cuadro de mandos, que he alojado en Google Looker Studio, que es una plataforma de análisis y visualización de datos que permite no sólo explorar y analizarlos, sino además compartir la información. Esta plataforma se enfoca en la creación de paneles de visualizaciones interactivas. 
 
