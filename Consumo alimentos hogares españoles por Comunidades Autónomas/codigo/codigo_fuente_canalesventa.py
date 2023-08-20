@@ -179,9 +179,11 @@ df_total = pd.concat(objs=lista_df, axis=0)
 
 columnas_eliminar = [".TOTAL ESPAÑA", "T.ESPAÑA", "HIPERMERCADOS", "SUPER/AUTOS/G.ALM.", "SUPER+AUTOS", "DISCOUNTS",
                      "TDA.TRADICIONAL", "PESCADERIA", "TDA.CONGELADOS", "HERBORISTERIA", "FARMACIA",
-                     "CARNICERIA/CHARC.", "MERCADOS Y PLAZAS", "LECHERIA", "PANADERIA", "BAR-BODEGA", "MERCADOS/AMBULANT."]
+                     "CARNICERIA/CHARC.", "MERCADOS Y PLAZAS", "LECHERIA", "PANADERIA", "BAR-BODEGA",
+                     "MERCADOS/AMBULANT.", "INTERNET"]
 
 df_total.drop(columns=columnas_eliminar, errors="ignore", inplace=True)
+
 
 # Modifico el nombre de la variable Unamed: 0 a CATEGORIAS.
 
@@ -233,6 +235,12 @@ df_total["CATEGORIAS"] = df_total["CATEGORIAS"].replace(nuevas_categorias)
 df_total = df_total.melt(id_vars=["AÑO", "CATEGORIAS", "ANALISIS"], var_name="CANALES DE VENTA",
                          value_name="CANTIDAD")
 
+# Modifico el formato de los valores de la variable ANALISIS a formato título
+
+df_total["CANALES DE VENTA"] = df_total["CANALES DE VENTA"].str.title()
+
+print(df_total["CANALES DE VENTA"])
+
 """
 5) EXPORTACIÓN DEL MARCO RESULTANTE
 
@@ -253,4 +261,3 @@ with open(csv_path, "w", encoding="utf-8") as f:
     f.write(csv_content)
 
 print(f'Archivo CSV guardado en: {csv_path}')
-
