@@ -26,7 +26,7 @@ En resumen, este proyecto busca destacar mi capacidad para abordar un análisis 
 
 Los datos utilizados en este proyecto se obtienen de la serie histórica de datos de consumo alimentario en hogares españoles a nivel agregado anual, proporcionada por el [Ministerior de Agricultura, Pesca y Alimentación (MAPA)](https://www.mapa.gob.es/es/alimentacion/temas/consumo-tendencias/panel-de-consumo-alimentario/series-anuales/).
 
-Estos conjuntos de datos, disponibles en formato XLSX (Excel), se encuentran alojados en la carpeta "Datos_origen" de este repositorio y contienen información relevante sobre las principales variables. Los datos se presentan tanto a nivel total como desagregados según la Comunidad Autónoma, el perfil sociodemográfico y el canal de compra.
+Estos conjuntos de datos, disponibles en formato XLSX (Excel), se encuentran alojados en la carpeta "datos_origen" de este repositorio y contienen información relevante sobre las principales variables. Los datos se presentan tanto a nivel total como desagregados según la Comunidad Autónoma, el perfil sociodemográfico y el canal de compra.
 
 La desagregación en tres categorías, territorial, sociodemográfica y por canal de compra, es esencial, ya que influye tanto en la preparación de los datos como en la creación de visualizaciones. Este enfoque nos permitá explorar y analizar patrones y tendencias desde diversas perspectivas, enriqueciendo así la comprensión de los datos.
 
