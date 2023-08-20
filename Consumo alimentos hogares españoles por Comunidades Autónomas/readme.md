@@ -41,13 +41,11 @@ Las librerías que he empleado han sido:
   - **Os**: es una biblioteca estándar de Python, que me proporciona una interface parainteractural con el sistema operativo subyacente, en este caso Windows, y que utilizó para exportar los modelos de datos resultantes.
   - **Openpyxl**: permite leer y escribir archivos XLSX, así como manipular hojas de cálculo y celdas en esos archivos.
 
-Los script con el código fuente resultantes, pueden consultarse en la carpeta "codigo" de este repositorio.
+Los script con el código fuente resultantes, pueden consultarse en la carpeta "codigo" del repositorio.
 
-Los archivos .csv se pueden consultar en la carpeta archivos_preprocesados del repositorio.
+Los archivos .csv se pueden consultar en la carpeta "datos_preprocesados" del repositorio.
 
-Para la creación de las visualizaciones, he creado un cuadro de mandos, que he alojado en Google Looker Studio, que es una plataforma de análisis y visualización de datos que permite no sólo explorar y analizarlos, sino además compartir la información. Esta plataforma se enfoca en la creación de paneles de visualizaciones interactivas. 
-
-Puede consultar el cuadro de mandos en el siguiente enlace: [Consumo de alimentos de los hogares españoles](https://lookerstudio.google.com/reporting/2bb1555c-8d3d-4611-99c2-22dc4da3b0d7/page/p_tw2zngzu8c)
+Para la creación de las visualizaciones, he creado un cuadro de mandos, que he alojado en Google Looker Studio, que es una plataforma de análisis y visualización de datos que permite no sólo explorar y analizarlos, sino además compartir la información. Esta plataforma se enfoca en la creación de paneles de visualizaciones interactivas. Puede consultar el cuadro de mandos en el siguiente enlace: [Consumo de alimentos de los hogares españoles](https://lookerstudio.google.com/reporting/2bb1555c-8d3d-4611-99c2-22dc4da3b0d7/page/p_tw2zngzu8c)
 
 ## 4. **Preparación de los datos**
 
