@@ -49,9 +49,55 @@ Para la creación de las visualizaciones, he creado un cuadro de mandos, que he 
 
 ## 4. **Preparación de los datos**
 
+Los datos que voy a utilizar en el proyecto estan en 22 archivos en formato .XLSX. Cada archivo corresponde a un año, desdel el 2000 al 2022. En cada archivo existen diferentes hojas, que están colocadas de forma diferente. 
+
+Los datos, que voy a utilizar, los he clasificado en tres categorias: territorios, socioeconómicos y canales de venta. 
+
+En la clase territorio preprara los datos referente al consumo de alimento de las familias españolas por Comunidades Autónomas. En esta categoria corresponde las hojas VALOR, CONSUMO, GASTOXCAPITA Y CONSUMOXCAPITA.
+
+En la clase socioeconómicos guardo los datos referente al consumo de alimentos de los hogares españoles segun ciertas variables socioeconómicas, como son: el tamaño de hogar, clase social, niños en el hogar, etc. En estacategoría corresponde las hojas  SOCIOECONOMICO VALOR, SOCIOECONOMICO VOLUMENT y SOCIOECONOMICO CONSUMOXCAPITA.
+
+Por útlimo, en la clase canales de venta almaceno los datos referente al canal de venta de los alimentos consumidos por los hogares españoles. En esta categoria corresponde a las hojas CANALES VOLUMEN y CANALES VALOR.
+
+Como se ha indicado anteriormente, en la carpeta "codigo" de este repositorio puedes encontrar los script que he elaborada para la preparación de los datos de cada categoria y donde podrá encontrar comentados los pasos que he ido realizando, que son:
+
+- Instalación e importación de las librerías que he utilizado.
+
+- Importación de los datos y su transformación en DataFrame.
+
+- Analisis Exploratorio de los Datos (EDA) que me permite entender y localizar errores en los datos.
+
+- Tansformación de los datos.
+
+- Modelado de los datos.
+
+- Exportación del modelo de datos resultante a un archivo .csv que se cargarán posteriormente como fuente de datos en Google Looker.
+
 ## 5. **Visualizaciones**
 
+Para la elaboración de las visualizaciones he creado un cuadro de mandos con Google Looker. Este informe esta compuesto de tres hojas, una paraca categoria de datos, es decir, la primera hoja para el analisis territorial, la segunda para el análisis socioeconómico y la tercera para el análisis según el canal de venta. 
+
+En este cuadro de mando, además, he utilizado las siguientes tipos de visualizaciones o gráficas:
+
+- **Cuadros de control con lista de tamaño fijo** permiten filtrar y seleccionar datos específicos de una lista predefinida. 
+
 ![Cuadro de control](visualizaciones/cuadro_control.jpg)
+
+- **Las tablas** muestran datos de una manera tabular y estructurada 
+
+![Tablas](visualizaciones/tablas.jpg)
+
+- **Las gráficas de anillos** representa datos circulares o proporcionales de una manera fácilmente comprensible.
+
+![Gráficas de anillos](visualizaciones/grafico_anillos.jpg.jpg)
+
+- ** Los gráfico de barras** son una de las visualizaciones de datos más comunes y versátiles. Se utilizan para representar datos en forma de barra rectanguales que muestran la cantidad o frecuencia de una categoría o variable determinada. 
+
+![Gráfico de barras](visualizaciones/grafico_barras.jpg)
+
+- **El gráfico de línes** se utilizan para representar la tendencia o cambio en los datos a lo largo del tiempo.
+
+![Cuadro de control](visualizaciones/grafico_lineas.jpg)
 
 
 ## 6. **Conclusiones**
