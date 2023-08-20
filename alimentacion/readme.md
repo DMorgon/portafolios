@@ -53,6 +53,7 @@ Para la creación de las visualizaciones, he creado un cuadro de mandos, que he 
 
 ![Cuadro de control](https://github.com/DMorgon/portafolios/alimentacion/visualizaciones/cuadro_control.jpg)
 
+
 ## 6. **Conclusiones**
 
 
