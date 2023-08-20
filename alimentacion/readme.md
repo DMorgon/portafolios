@@ -51,7 +51,7 @@ Para la creación de las visualizaciones, he creado un cuadro de mandos, que he 
 
 ## 5. **Visualizaciones**
 
-![Cuadro de control](cuadro_control.jpg)
+![Cuadro de control](visualizaciones/cuadro_control.jpg)
 
 
 ## 6. **Conclusiones**
