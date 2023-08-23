@@ -4,27 +4,177 @@ author: "David Moreno"
 date: "2023-08-23"
 output: pdf_document
 ---
+## Introducción
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+## Instalación e importación de las librerias
+
+Configuro el repositorio de CRAN de manera no interactiva
+
+```{r}
+options(repos = c(CRAN = "https://cran.r-project.org"))
 ```
 
-## R Markdown
+Instalo y cargo las librerías que voy a utilizar
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+```{r}
+install.packages("readxl")
+install.packages("tidyverse")
+install.packages("httr")
+install.packages("rmarkdown")
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+library(readxl)
+library(tidyverse)
+library(httr)
+library(rmarkdown)
 
-```{r cars}
-summary(cars)
 ```
 
-## Including Plots
+## Importación de los datos
 
-You can also embed plots, for example:
+Importo los archivos a un dataframe que anido en una lista
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+
+lista_archivo <- c("2000", "2001", "2002", "2003", "2004", "2005", "2006",
+                  "2007", "2008", "2009", "2010", "2011", "2012", "2013",
+                  "2014", "2015", "2016", "2017", "2018", "2019", "2020",
+                  "2021", "2022")
+
+ruta <- "https://github.com/DMorgon/portafolios/raw/main"
+rama <- "alimentacion/datos_origen"
+
+lista_df <- list()
+
+for (i in seq(from = 1, to = 23, by = 1)) {
+  archivo_url <- paste0(ruta, "/", rama, "/", lista_archivo[i], ".xlsx")
+  
+  response <- GET(archivo_url)
+  archivo_temporal <- tempfile(fileext = ".xlsx")
+  writeBin(content(response, "raw"), archivo_temporal)
+  
+  if (i <= 20)
+    df <- read_excel(path = archivo_temporal, sheet = 4, skip = 2)
+  else
+    df <- read_excel(path = archivo_temporal, sheet = 5, skip = 2)
+  lista_df[[i]] <- df
+}
+
+```
+## Preparación de los datos
+
+A continuación, examino la estructura interna de cada marco de datos
+
+```{r}
+for (i in seq(from = 1, to = 23, by = 1)) {
+  nombre_df <- paste0("df_", lista_archivo[i])
+  cat("\n", "Nombre de la tabla de datos:", nombre_df, "\n")
+  str(lista_df[[i]])
+}
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Revisando los datos, he localizado los siguientes errores:
+
+- Los marcos de datos df_2000, df_2001, df_2002, df_2003, df_2019, df_2020, df_2021 y df_2022 tienen 19 variables, mientras que los restantes tiene 27.
+
+- El nombre de las variables difieren de un marco de datos de otros. 
+
+- Toda las variables son de tipo número, a excepción de  "...1" que es de tipo cadena de texto, ya que contiene las categorías de alimentos.
+
+- El numero de registro de cada marco de datos varía, con lo que la categorías de alimentos también.
+
+A continuación, procedo a eliminar las variables de más que he podido localizar
+
+```{r}
+for (i in seq(from = 1, to = 23, by = 1)) {
+  if (i  >= 5 && i <= 19)
+    lista_df[[i]] <- lista_df[[i]][, -c(2, 8, 12, 20, 21,23, 25, 26, 27)]
+  else
+        lista_df[[i]] <- lista_df[[i]][, -c(2)]
+}
+```
+
+Ahora, unifico el nombre de las variables de los marcos de datos
+
+```{r}
+for (i in seq(from = 1, to = 23, by = 1)) {
+  if (i >= 5 && i <=19)
+    colnames(lista_df[[i]]) <- c("Categorias", "Cataluña", "Aragon", "Baleares",
+                                 "Valencia", "Murcia", "Madrid", "Castilla La Mancha",
+                                 "Extremadura", "Galicia", "Asturias", "Cantabria",
+                                 "Pais Vasco", "La Rioja", "Navarra", "Canarias",
+                                 "Andalucia", "Castilla Y Leon")
+  else
+    colnames(lista_df[[i]]) <- c("Categorias", "Cataluña", "Aragon", "Baleares",
+                             "Valencia", "Murcia", "Andalucia", "Madrid",
+                             "Castilla La Mancha", "Extremadura", "Castilla Y Leon",
+                             "Galicia", "Asturias", "Cantabria", "Pais Vasco",
+                             "La Rioja", "Navarra", "Canarias")
+}
+```
+
+Añado la variable "Año" en cada marco de datos y le asigno el valor del año que le corresponde
+
+```{r}
+for (i in seq(from = 1, to = 23, by = 1)) {
+  lista_df[[i]] <- cbind(lista_df[[i]], Año = as.numeric(x = lista_archivo[[i]]))
+}
+```
+
+Ordeno cada marco de datos por el nombre de las variables
+
+```{r}
+for (i in seq(from = 1, to = 23, by = 1)) {
+  lista_df[[i]] <- lista_df[[i]][, order(colnames(lista_df[[i]]))]
+}
+```
+
+Junto todos los marcos de datos en uno sólo denominado df_final
+
+```{r}
+df_final <- data.frame()
+
+for (i in seq(from = 1, to = 23, by = 1)) {
+  df_final <- rbind(df_final, lista_df[[i]])
+}
+```
+
+Realizo un filtro, para sólo quedarme con determinadas categorias dea alimentos
+
+```{r}
+
+filtro <- c("T.HUEVOS KGS", "MIEL", "TOTAL CARNE", "TOTAL PESCA",
+            "TOTAL LECHE LIQUIDA", "TOTAL OTRAS LECHES", "DERIVADOS LACTEOS",
+            "PAN", "BOLL.PAST.GALLET.CERE", "PRODUCTOS NAVIDEÑOS",
+            "CHOCOLATES/CACAOS/SUC", "ARROZ", "TOTAL PASTAS", "AZUCAR",
+            "EDULCORANTES", "LEGUMBRES", "TOTAL ACEITE", "MARGARINA",
+            "ACEITUNAS", "BEBIDAS DERIVADAS VI", "TOTAL VINOS", "CERVEZAS",
+            "SIDRAS", "T.BEBIDAS ESPIRITUOSA", "VINAGRE", "TOTAL ZOMO Y NECTAR",
+            "TOTAL PATATAS", "T.HORTALIZAS FRESCAS", "T.FRUTAS FRESCAS",
+            "FRUTOS SECOS", "T.FRUTA&HORTA.TRANSF", "PLATOS PREPARADOS",
+            "CAFES E INFUSIONES", "CALDOS", "SALSAS", "AGUA DE BEBIDA ENVAS.",
+            "GASEOSAS Y BEBID.REFR", "BASES PIZZAS&MASAS HO",
+            "HARINAS Y SEMOLAS", "ENCURTIDOS", "ESPECIAS Y CONDIMENTO", "SAL",
+            "OTROS PROD.EN PESO", "OTROS PROD.EN VOLUMEN", "ALGAS")
+
+df_filtrado <- subset(df_final, Categorias %in% filtro)
+
+```
+
+
+## Detección y tratamiento de los datos ausentes
+
+A continuación, examino la estructura interna de df_final
+
+```{r}
+str(df_filtrado)
+```
+
+```{r}
+summary(df_filtrado)
+```
+
+Ahora compruebo que df_final tiene 910 registros y 19 variables.
+
+Todas las variables son numéricas a excepción de "Categorias" que es una cadena de texto.
+
+Además, Asturias, Canarias, Cantabria, Castilla La Mancha, Extremadura, La Rioja y Navarra tienen datos ausentes. 
