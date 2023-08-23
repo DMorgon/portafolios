@@ -215,7 +215,7 @@ consumoxcapita_año_territorio <- df_largo  %>%
     consumoxcapita = sum(Consumo),
   )
 
-print(año_consumoxcapita)
+print(consumoxcapita_año_territorio)
 
 mean_consumoxcapita_año <- consumoxcapita_año_territorio  %>%
   group_by(Año) %>%
