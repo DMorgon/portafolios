@@ -5,3 +5,24 @@ date: "2023-08-23"
 output: pdf_document
 ---
 
+Instalo las librerías que voy a utilizar
+
+```{r}
+install.packages("readxl")
+install.packages("httr")
+```
+
+Cargo las librerias
+
+```{r}
+library(readxl)
+library(httr)
+```
+
+A continuación importo los archivos excel que contienen la información
+
+
+```{r}
+
+```
+
