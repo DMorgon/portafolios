@@ -8,10 +8,7 @@ output: pdf_document
 Instalo las librerías que voy a utilizar
 
 ```{r}
-options(repos = c(CRAN = "https://cran.rstudio.com/"))
-
 install.packages("readxl")
-install.packages("httr")
 ```
 
 Cargo las librerias
@@ -23,9 +20,4 @@ library(httr)
 ```
 
 A continuación importo los archivos excel que contienen la información
-
-
-```{r}
-
-```
 
