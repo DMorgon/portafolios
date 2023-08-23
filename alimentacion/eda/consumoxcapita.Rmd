@@ -58,9 +58,9 @@ for (i in seq(from = 1, to = 23, by = 1)) {
   writeBin(content(response, "raw"), archivo_temporal)
   
   if (i <= 20)
-    df <- read_excel(path = archivo_temporal, sheet = 4, skip = 2)
-  else
     df <- read_excel(path = archivo_temporal, sheet = 5, skip = 2)
+  else
+    df <- read_excel(path = archivo_temporal, sheet = 6, skip = 2)
   lista_df[[i]] <- df
 }
 
@@ -182,46 +182,66 @@ He comprobado que df_filtrado tiene 910 registros y 19 variables.
 
 Todas las variables son numéricas a excepción de "Categorias" que es una cadena de texto.
 
-Además, Asturias, Canarias, Cantabria, Castilla La Mancha, Extremadura, La Rioja y Navarra tienen datos ausentes. 
-
-Localizo los registros donde existen valores ausentes
+Además, no se han localizados datos ausentes
 
 ```{r}
-
-df_filtrado %>%
-  rowwise() %>%
-  filter(any(is.na(c_across(where(is.numeric)))))
+View(df_filtrado)
 ```
 
-Compruebo que faltan datos en los años 2020, 2021 y 2022. Pero sólo en alguanas Comunidades Autónomas
-
-```{r}
-df_filtrado %>%
-  select("Categorias", "Año") %>%
-  filter(Categorias == "ALGAS")
-```
-
-
-Aquí compruebo que sólo en los años 2019, 2020, 2021 y 2022 se incorporaron la Categoría ALGAS en la contabilidad. Los demás años no. Teniendo en cuenta que faltan todos los demás años, procedo a quitar los registros referentes a ALGAS.
-
-```{r}
-df_filtrado <- df_filtrado %>%
-  filter(Categorias != "ALGAS")
-```
 
 ## Analizo  gráficamente el marco de datos resultantes.
 
-A continuación transformo 
+En este apartado, voy a anlizar, con gráficos, el consumo per capita de alimentos de los hogares españoles. Como se trata de los hogares españoles, en general, no me detendre en ir viendo los datos por territorios.
+
+Para ello, en primer lugar continuación transformo el marco de datos de forma ancho a formato largo
 
 ```{r}
-df_filtrado %>%
+df_largo <- df_filtrado %>%
   pivot_longer(
     cols = -c("Categorias", "Año"),
     names_to = "Territorios",
     values_to = "Consumo"
   )
+
 ```
 
+Analizo el consumo per cápita por año.
 
+```{r}
+consumoxcapita_año_territorio <- df_largo  %>%
+  select("Año", "Territorios", "Consumo")  %>%
+  group_by(Año, Territorios)  %>%
+  summarise(
+    consumoxcapita = sum(Consumo),
+  )
+
+print(año_consumoxcapita)
+
+mean_consumoxcapita_año <- consumoxcapita_año_territorio  %>%
+  group_by(Año) %>%
+  summarise(
+    mean_consumoxcapita = mean(consumoxcapita),
+  )
+
+print(mean_consumoxcapita_año)
+
+median_consumoxcapita_año <- consumoxcapita_año_territorio  %>%
+  group_by(Año) %>%
+  summarise(
+    median_consumoxcapita = median(consumoxcapita),
+  )
+
+print(median_consumoxcapita_año)
+```
+
+```{r}
+ggplot(
+  data = median_consumoxcapita_año,
+  aes(
+    x = Año,
+    y = median_consumoxcapita,
+    color = "sthhedeuh")) +
+  geom_line()
+```
 
 
