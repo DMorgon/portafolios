@@ -14,19 +14,24 @@ Configuro el repositorio de CRAN de manera no interactiva
 options(repos = c(CRAN = "https://cran.r-project.org"))
 ```
 
-Instalo y cargo las librerías que voy a utilizar
+Instalo las librerías que voy a utilizar
 
 ```{r}
 install.packages("readxl")
 install.packages("tidyverse")
 install.packages("httr")
 install.packages("rmarkdown")
+install.packages("dplyr")
+```
 
+Y ahora las cargo
+
+```{r}
 library(readxl)
 library(tidyverse)
 library(httr)
 library(rmarkdown)
-
+library(dplyr)
 ```
 
 ## Importación de los datos
@@ -131,10 +136,10 @@ for (i in seq(from = 1, to = 23, by = 1)) {
 Junto todos los marcos de datos en uno sólo denominado df_final
 
 ```{r}
-df_final <- data.frame()
+df_total <- data.frame()
 
 for (i in seq(from = 1, to = 23, by = 1)) {
-  df_final <- rbind(df_final, lista_df[[i]])
+  df_total <- rbind(df_total, lista_df[[i]])
 }
 ```
 
@@ -156,7 +161,7 @@ filtro <- c("T.HUEVOS KGS", "MIEL", "TOTAL CARNE", "TOTAL PESCA",
             "HARINAS Y SEMOLAS", "ENCURTIDOS", "ESPECIAS Y CONDIMENTO", "SAL",
             "OTROS PROD.EN PESO", "OTROS PROD.EN VOLUMEN", "ALGAS")
 
-df_filtrado <- subset(df_final, Categorias %in% filtro)
+df_filtrado <- subset(df_total, Categorias %in% filtro)
 
 ```
 
@@ -168,13 +173,55 @@ A continuación, examino la estructura interna de df_final
 ```{r}
 str(df_filtrado)
 ```
+Y ahora obtengo un resumen de cada variable
 
 ```{r}
 summary(df_filtrado)
 ```
-
-Ahora compruebo que df_final tiene 910 registros y 19 variables.
+He comprobado que df_filtrado tiene 910 registros y 19 variables.
 
 Todas las variables son numéricas a excepción de "Categorias" que es una cadena de texto.
 
 Además, Asturias, Canarias, Cantabria, Castilla La Mancha, Extremadura, La Rioja y Navarra tienen datos ausentes. 
+
+Localizo los registros donde existen valores ausentes
+
+```{r}
+
+df_filtrado %>%
+  rowwise() %>%
+  filter(any(is.na(c_across(where(is.numeric)))))
+```
+
+Compruebo que faltan datos en los años 2020, 2021 y 2022. Pero sólo en alguanas Comunidades Autónomas
+
+```{r}
+df_filtrado %>%
+  select("Categorias", "Año") %>%
+  filter(Categorias == "ALGAS")
+```
+
+
+Aquí compruebo que sólo en los años 2019, 2020, 2021 y 2022 se incorporaron la Categoría ALGAS en la contabilidad. Los demás años no. Teniendo en cuenta que faltan todos los demás años, procedo a quitar los registros referentes a ALGAS.
+
+```{r}
+df_filtrado <- df_filtrado %>%
+  filter(Categorias != "ALGAS")
+```
+
+## Analizo  gráficamente el marco de datos resultantes.
+
+A continuación transformo 
+
+```{r}
+df_filtrado %>%
+  pivot_longer(
+    cols = -c("Categorias", "Año"),
+    names_to = "Territorios",
+    values_to = "Consumo"
+  )
+```
+
+
+
+
