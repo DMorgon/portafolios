@@ -46,298 +46,81 @@ data <- read_csv(rawToChar(response$content))
 ```
 
 ## 3. Análisis descriptivo de los datos
+
+```{r}
+View(data)
+```
+
+```{r}
+str(data)
+```
+```{r}
+summary(data)
+```
+
+Según los resultados obtenidos, las principales caracterisitas que presenta la tabla de datos son:
+
+- El número total de observaciones del conjunto de datos es de 260.802
+- El número total de variables son 6 de las cuales la variable respuesta es CONSUMOXCAPITA
+- El tipo de variables son:
+  - Númericas: AÑO, CONSUMOXCAPITA, GASTOXCAPITA, PRECIO
+  - Categóricas: CATEGORIAS y REGION
+- El rango temporal abarca desde el 2000 hasta el 2022
+- Las variables CONSUMOXCAPITA, GASTOXCAPITA y PRECIO tienen valores ausentes.
+
 ## 4. Ajuste de tipo de variables
-## 5. Detección y tratamiento de valores ausentes
-## 6. Identificación de valores atípicos
-## 7. Correlación de variables
-## 8. Modelado de datos
 
-A continuación, examino la estructura interna de cada marco de datos
+En el conjunto de datos he encontrado tres variables donde el tipo de datos no se corresponde con la naturaleza del valor que contiene:
+- Año debería ser de tipo fecha ya que almacena el año en la que se recogieron los datos para el resto de variables.
+- CATEGORIAS y REGION cuyo tipo de datos son cadenas de caracter pero que hay que transformar factor para que sea una variable categórica.
 
-```{r}
-for (i in seq(from = 1, to = 23, by = 1)) {
-  nombre_df <- paste0("df_", lista_archivo[i])
-  cat("\n", "Nombre de la tabla de datos:", nombre_df, "\n")
-  str(lista_df[[i]])
-}
-```
-
-Revisando los datos, he localizado los siguientes errores:
-
-- Los marcos de datos df_2000, df_2001, df_2002, df_2003, df_2019, df_2020, df_2021 y df_2022 tienen 19 variables, mientras que los restantes tiene 27.
-
-- El nombre de las variables difieren de un marco de datos de otros. 
-
-- Toda las variables son de tipo número, a excepción de  "...1" que es de tipo cadena de texto, ya que contiene las categorías de alimentos.
-
-- El numero de registro de cada marco de datos varía, con lo que la categorías de alimentos también.
-
-A continuación, procedo a eliminar las variables de más que he podido localizar
+Transformo la variable año a tipo fecha: 
 
 ```{r}
-for (i in seq(from = 1, to = 23, by = 1)) {
-  if (i  >= 5 && i <= 19)
-    lista_df[[i]] <- lista_df[[i]][, -c(8, 12, 20, 21,23, 25, 26, 27)]
-}
-```
-
-Ahora, unifico el nombre de las variables de los marcos de datos
-
-```{r}
-for (i in seq(from = 1, to = 23, by = 1)) {
-  if (i >= 5 && i <=19)
-    colnames(lista_df[[i]]) <- c("Categorias", "España", "Cataluña", "Aragon",
-                                 "Baleares", "Valencia", "Murcia", "Madrid",
-                                 "Castilla La Mancha", "Extremadura", "Galicia",
-                                 "Asturias", "Cantabria", "Pais Vasco",
-                                 "La Rioja", "Navarra", "Canarias", "Andalucia",
-                                 "Castilla Y Leon")
-  else
-    colnames(lista_df[[i]]) <- c("Categorias", "España", "Cataluña", "Aragon",
-                                 "Baleares", "Valencia", "Murcia", "Andalucia",
-                                 "Madrid", "Castilla La Mancha", "Extremadura",
-                                 "Castilla Y Leon", "Galicia", "Asturias",
-                                 "Cantabria", "Pais Vasco", "La Rioja",
-                                 "Navarra", "Canarias")
-}
-```
-
-Añado la variable "Año" en cada marco de datos y le asigno el valor del año que le corresponde
-
-```{r}
-for (i in seq(from = 1, to = 23, by = 1)) {
-  lista_df[[i]] <- cbind(lista_df[[i]], Año = as.numeric(x = lista_archivo[[i]]))
-}
-```
-
-Ordeno cada marco de datos por el nombre de las variables
-
-```{r}
-for (i in seq(from = 1, to = 23, by = 1)) {
-  lista_df[[i]] <- lista_df[[i]][, order(colnames(lista_df[[i]]))]
-}
-```
-
-Junto todos los marcos de datos en uno sólo denominado df_total
-
-```{r}
-df_total <- data.frame()
-
-for (i in seq(from = 1, to = 23, by = 1)) {
-  df_total <- rbind(df_total, lista_df[[i]])
-}
-```
-
-Ahora voy a transformar los datos de formato ancho a estrecho.
-
-```{r}
-df_largo <- df_total  %>%
-  pivot_longer(
-    cols = -c("Categorias", "Año"),
-    names_to = "Region",
-    values_to = "Valor"
-  )
-```
-
-## Análisis descriptivo
-
-Una vez que he obtenido el conjunto de datos final, procedo a realizar un análisis descriptivo de df_largo
-
-En primer lugar realizo una visualización del conjunto de datos
-
-```{r}
-View(df_largo)
-```
-
-A continuación examino la extructura interna de df_largo
-
-```{r}
-str(df_largo)
-```
-
-Y por último, obtengo un resumen estadístico de las variables de df_largo.
-
-```{r}
-summary(df_largo)
-```
-Las conclusiones son las siguientes:
-
-- df_largo tiene 221,706 registros y 4 variables.
-
-- Categorias y Región son variables categóricas.
-
-- El rango temporal abarca desde el 2000 hasta el 2022.
-
-- En la variable Valor existen 830 valores ausentes.
-
-## Ajustes de tipo de variable
-
-En primer lugar ajusto la variable Año a tipo date.
-
-```{r}
-df_largo[["Año"]] <- as.Date(as.character(df_largo[["Año"]]), format = "%Y")
+data[["AÑO"]] <- as.Date(as.character(data[["AÑO"]]), format = "%Y")
 ```
 
 A continuación transformo las variables categóricas Categorias y Región a factor
 
 ```{r}
-df_largo[["Region"]] <- as.factor(df_largo[["Region"]])
-df_largo[["Categorias"]] <- as.factor(df_largo[["Categorias"]])
+data[["REGION"]] <- as.factor(data[["REGION"]])
+data[["CATEGORIAS"]] <- as.factor(data[["CATEGORIAS"]])
 
 ```
 
-```{r}
-str(df_largo)
-```
+## 5. Detección y tratamiento de valores ausentes
 
-## Detección y tratamiento de los valores ausentes
-
-Como se ha visto anteriormente, la variable Valor tiene 830 valores ausentes. En primer lugar voy a detectar en que registros se encuentran dichos valores y luego procederé a realizar su tratamiento.
+Como he visto anteriormente, existen valores ausentes. A continuación, calculo los valores ausentes por variable y total del conjunto de datos
 
 ```{r}
-summary(df_largo)
-  
-```
-```{r}
-sum(is.na(df_largo))
-mean(is.na(df_largo))
-colSums(is.na(df_largo))
-colMeans(is.na(df_largo))
-```
-
-
-
-He comprobado que df_total tiene 12317 registros y 20 variables.
-
-Todas las variables son numéricas a excepción de "Categorias" que es una cadena de texto.
-
-Además, en las variables que hacen referencia a los territorios existen valores ausentes
-
-A continuación voy a localizar los valores ausentes
-
-```{r}
-df_largo  %>%
-  group_by(Año) %>%
+data %>%
   summarise(
-    total_na = sum(is.na(Valor)),
-    porcentaje_na = (total_na / n()) * 100
-  ) %>%
-  filter(porcentaje_na > 0) %>%
-  arrange(desc(total_na))
-
-```
-
-
-
-
-```{r}
-df_largo %>%
-  filter(Año %in% c("2000-08-24", "2001-08-24", "2002-08-24", "2003-08-24")) %>%
-  summarise(
-    total_registro = n(),
-    porcentaje_registro = (n()*100)/221706
-  )
-```
-
-
-Por lo que se ve, sólo en los años 2000, 2001, 2003 y 2004 existen valores NA. Para el año 2002, los valores ausentes son el 9.17% mientras que para los restantes años van del 1.1 al 1.4.
-
-```{r}
-df_largo  %>%
-  group_by(Categorias) %>%
-  filter(Año == "2000-08-24) %>%
-  summarise(
-    total_na = sum(is.na(Valor)),
-    porcentaje_na = (total_na / n()) * 100
-  ) %>%
-  filter(porcentaje_na > 0) %>%
-  arrange(desc(total_na))
-
-```
-```{r}
-df_largo %>%
-  group_by(Region) %>%
-  filter(Año == "2000-08-24", Categorias == "ACEITE DE SOJA") %>%
-  summarise(
-    total_na = sum(is.na(Valor)),
-    porcentaje_na = (total_na / n()) * 100
-  ) %>%
-  filter(porcentaje_na > 0) %>%
-  arrange(desc(total_na))
-
-```
-```{r}
-españa_leche <- df_largo %>% 
-  filter(Region == "España", Categorias == "ACEITE DE SOJA") %>%
-  select(Año, Valor)
-
-print(españa_leche)
-```
-
-```{r}
-ggplot(
-  data = españa_leche,
-  aes(
-    x = Año,
-    y = Valor,
-    color = "sthhedeuh")) +
-  geom_line()
-```
-
-
-## Analizo  gráficamente el marco de datos resultantes.
-
-En este apartado, voy a anlizar, con gráficos, el consumo per capita de alimentos de los hogares españoles. Como se trata de los hogares españoles, en general, no me detendre en ir viendo los datos por territorios.
-
-Para ello, en primer lugar continuación transformo el marco de datos de forma ancho a formato largo
-
-```{r}
-df_largo <- df_filtrado %>%
-  pivot_longer(
-    cols = -c("Categorias", "Año"),
-    names_to = "Territorios",
-    values_to = "Consumo"
+    Variable = c("CONSUMOXCAPITA", "GASTOXCAPITA", "PRECIO", "TOTAL"),
+    Suma_NA = c(
+      sum(is.na(CONSUMOXCAPITA)),
+      sum(is.na(GASTOXCAPITA)),
+      sum(is.na(PRECIO)),
+      sum(rowSums(is.na(.)))
+    ),
+    Porcentaje_NA = c(
+      mean(is.na(CONSUMOXCAPITA)) * 100,
+      mean(is.na(GASTOXCAPITA)) * 100,
+      mean(is.na(PRECIO)) * 100,
+      mean(rowMeans(is.na(.))) * 100
+    )
   )
 
 ```
 
-Analizo el consumo per cápita por año.
+Como se puede ver, el porcentaje de valores ausentes en total es el 0.92 por 100 y si nos fijamos por variables, ninguno sobrepasa el 5 por 100. La variable que está más cerca es PRECIO con el 4.93 por 100.
+
+## 6. Identificación de valores atípicos
+
+## 7. Análisis de la variable respuesta: CONSUMOXCAPITA
+## 7. Correlación de variables
+## 8. Modelado de datos
 
 ```{r}
-consumoxcapita_año_territorio <- df_largo  %>%
-  select("Año", "Territorios", "Consumo")  %>%
-  group_by(Año, Territorios)  %>%
-  summarise(
-    consumoxcapita = sum(Consumo),
-  )
-
-print(consumoxcapita_año_territorio)
-
-mean_consumoxcapita_año <- consumoxcapita_año_territorio  %>%
-  group_by(Año) %>%
-  summarise(
-    mean_consumoxcapita = mean(consumoxcapita),
-  )
-
-print(mean_consumoxcapita_año)
-
-median_consumoxcapita_año <- consumoxcapita_año_territorio  %>%
-  group_by(Año) %>%
-  summarise(
-    median_consumoxcapita = median(consumoxcapita),
-  )
-
-print(median_consumoxcapita_año)
+rm(list = ls())
 ```
-
-```{r}
-ggplot(
-  data = median_consumoxcapita_año,
-  aes(
-    x = Año,
-    y = median_consumoxcapita,
-    color = "sthhedeuh")) +
-  geom_line()
-```
-
 
