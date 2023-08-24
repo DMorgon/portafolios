@@ -212,6 +212,14 @@ Como se ha visto anteriormente, la variable Valor tiene 830 valores ausentes. En
 summary(df_largo)
   
 ```
+```{r}
+sum(is.na(df_largo))
+mean(is.na(df_largo))
+colSums(is.na(df_largo))
+colMeans(is.na(df_largo))
+```
+
+
 
 He comprobado que df_total tiene 12317 registros y 20 variables.
 
@@ -232,19 +240,62 @@ df_largo  %>%
   arrange(desc(total_na))
 
 ```
-Por lo que se ve, sólo en los años 2000, 2001, 2003 y 2004 existen valores NA. Para el año 2002, los valores ausentes son el 9.17% mientras que para los restantes años van del 1.1 al 1.4.
 
-Procedo a eliminar los años con valores ausentes del conjunto de los datos
+
+
 
 ```{r}
-df_sina <- df_largo %>%
-  filter(!(Año %in% c("2002-08-24", "2003-08-24", "2001-08-24", "2000-08-24")))
+df_largo %>%
+  filter(Año %in% c("2000-08-24", "2001-08-24", "2002-08-24", "2003-08-24")) %>%
+  summarise(
+    total_registro = n(),
+    porcentaje_registro = (n()*100)/221706
+  )
 ```
 
-# Detección y tratamiento de valores atípicos
+
+Por lo que se ve, sólo en los años 2000, 2001, 2003 y 2004 existen valores NA. Para el año 2002, los valores ausentes son el 9.17% mientras que para los restantes años van del 1.1 al 1.4.
 
 ```{r}
-boxplot(df_sina$Valor)
+df_largo  %>%
+  group_by(Categorias) %>%
+  filter(Año == "2000-08-24) %>%
+  summarise(
+    total_na = sum(is.na(Valor)),
+    porcentaje_na = (total_na / n()) * 100
+  ) %>%
+  filter(porcentaje_na > 0) %>%
+  arrange(desc(total_na))
+
+```
+```{r}
+df_largo %>%
+  group_by(Region) %>%
+  filter(Año == "2000-08-24", Categorias == "ACEITE DE SOJA") %>%
+  summarise(
+    total_na = sum(is.na(Valor)),
+    porcentaje_na = (total_na / n()) * 100
+  ) %>%
+  filter(porcentaje_na > 0) %>%
+  arrange(desc(total_na))
+
+```
+```{r}
+españa_leche <- df_largo %>% 
+  filter(Region == "España", Categorias == "ACEITE DE SOJA") %>%
+  select(Año, Valor)
+
+print(españa_leche)
+```
+
+```{r}
+ggplot(
+  data = españa_leche,
+  aes(
+    x = Año,
+    y = Valor,
+    color = "sthhedeuh")) +
+  geom_line()
 ```
 
 
