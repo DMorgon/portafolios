@@ -1,12 +1,12 @@
 ---
-title: "Consumo per cápita"
+title: "EDA del consumo de alimentos de los hogares españoles"
 author: "David Moreno"
 date: "2023-08-23"
 output: pdf_document
 ---
 ## Introducción
 
-## Instalación e importación de las librerias
+## 1. Instalación e importación de las librerias
 
 Configuro el repositorio de CRAN de manera no interactiva
 
@@ -17,54 +17,40 @@ options(repos = c(CRAN = "https://cran.r-project.org"))
 Instalo las librerías que voy a utilizar
 
 ```{r}
-install.packages("readxl")
+install.packages("readr")
 install.packages("tidyverse")
 install.packages("httr")
 install.packages("rmarkdown")
 install.packages("dplyr")
 ```
 
-Y ahora las cargo
+Ahora cargo las librerías.
 
 ```{r}
-library(readxl)
+library(readr)
 library(tidyverse)
 library(httr)
 library(rmarkdown)
 library(dplyr)
 ```
 
-## Importación de los datos
-
-Importo los archivos a un dataframe que anido en una lista
+## 2. Carga de los datos
 
 ```{r}
-
-lista_archivo <- c("2000", "2001", "2002", "2003", "2004", "2005", "2006",
-                  "2007", "2008", "2009", "2010", "2011", "2012", "2013",
-                  "2014", "2015", "2016", "2017", "2018", "2019", "2020",
-                  "2021", "2022")
-
 ruta <- "https://github.com/DMorgon/portafolios/raw/main"
-rama <- "alimentacion/datos_origen"
-
-lista_df <- list()
-
-for (i in seq(from = 1, to = 23, by = 1)) {
-  archivo_url <- paste0(ruta, "/", rama, "/", lista_archivo[i], ".xlsx")
-  
-  response <- GET(archivo_url)
-  archivo_temporal <- tempfile(fileext = ".xlsx")
-  writeBin(content(response, "raw"), archivo_temporal)
-  
-  if (i <= 20)
-    df <- read_excel(path = archivo_temporal, sheet = 5, skip = 2)
-  else
-    df <- read_excel(path = archivo_temporal, sheet = 6, skip = 2)
-  lista_df[[i]] <- df
-}
-
+rama <- "alimentacion/datos_preprocesados"
+archivo <- "tabla_procesada"
+archivo_url <- paste0(ruta, "/", rama, "/", archivo, ".csv")
+response <- GET(archivo_url)
+data <- read_csv(rawToChar(response$content))
 ```
+
+## 3. Análisis descriptivo de los datos
+## 4. Ajuste de tipo de variables
+## 5. Detección y tratamiento de valores ausentes
+## 6. Identificación de valores atípicos
+## 7. Correlación de variables
+## 8. Modelado de datos
 
 A continuación, examino la estructura interna de cada marco de datos
 
