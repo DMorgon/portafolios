@@ -65,7 +65,6 @@ for (i in seq(from = 1, to = 23, by = 1)) {
 }
 
 ```
-## Preparación de los datos
 
 A continuación, examino la estructura interna de cada marco de datos
 
@@ -92,9 +91,7 @@ A continuación, procedo a eliminar las variables de más que he podido localiza
 ```{r}
 for (i in seq(from = 1, to = 23, by = 1)) {
   if (i  >= 5 && i <= 19)
-    lista_df[[i]] <- lista_df[[i]][, -c(2, 8, 12, 20, 21,23, 25, 26, 27)]
-  else
-        lista_df[[i]] <- lista_df[[i]][, -c(2)]
+    lista_df[[i]] <- lista_df[[i]][, -c(8, 12, 20, 21,23, 25, 26, 27)]
 }
 ```
 
@@ -103,17 +100,19 @@ Ahora, unifico el nombre de las variables de los marcos de datos
 ```{r}
 for (i in seq(from = 1, to = 23, by = 1)) {
   if (i >= 5 && i <=19)
-    colnames(lista_df[[i]]) <- c("Categorias", "Cataluña", "Aragon", "Baleares",
-                                 "Valencia", "Murcia", "Madrid", "Castilla La Mancha",
-                                 "Extremadura", "Galicia", "Asturias", "Cantabria",
-                                 "Pais Vasco", "La Rioja", "Navarra", "Canarias",
-                                 "Andalucia", "Castilla Y Leon")
+    colnames(lista_df[[i]]) <- c("Categorias", "España", "Cataluña", "Aragon",
+                                 "Baleares", "Valencia", "Murcia", "Madrid",
+                                 "Castilla La Mancha", "Extremadura", "Galicia",
+                                 "Asturias", "Cantabria", "Pais Vasco",
+                                 "La Rioja", "Navarra", "Canarias", "Andalucia",
+                                 "Castilla Y Leon")
   else
-    colnames(lista_df[[i]]) <- c("Categorias", "Cataluña", "Aragon", "Baleares",
-                             "Valencia", "Murcia", "Andalucia", "Madrid",
-                             "Castilla La Mancha", "Extremadura", "Castilla Y Leon",
-                             "Galicia", "Asturias", "Cantabria", "Pais Vasco",
-                             "La Rioja", "Navarra", "Canarias")
+    colnames(lista_df[[i]]) <- c("Categorias", "España", "Cataluña", "Aragon",
+                                 "Baleares", "Valencia", "Murcia", "Andalucia",
+                                 "Madrid", "Castilla La Mancha", "Extremadura",
+                                 "Castilla Y Leon", "Galicia", "Asturias",
+                                 "Cantabria", "Pais Vasco", "La Rioja",
+                                 "Navarra", "Canarias")
 }
 ```
 
@@ -133,7 +132,7 @@ for (i in seq(from = 1, to = 23, by = 1)) {
 }
 ```
 
-Junto todos los marcos de datos en uno sólo denominado df_final
+Junto todos los marcos de datos en uno sólo denominado df_total
 
 ```{r}
 df_total <- data.frame()
@@ -143,49 +142,109 @@ for (i in seq(from = 1, to = 23, by = 1)) {
 }
 ```
 
-Realizo un filtro, para sólo quedarme con determinadas categorias dea alimentos
+Ahora voy a transformar los datos de formato ancho a estrecho.
 
 ```{r}
+df_largo <- df_total  %>%
+  pivot_longer(
+    cols = -c("Categorias", "Año"),
+    names_to = "Region",
+    values_to = "Valor"
+  )
+```
 
-filtro <- c("T.HUEVOS KGS", "MIEL", "TOTAL CARNE", "TOTAL PESCA",
-            "TOTAL LECHE LIQUIDA", "TOTAL OTRAS LECHES", "DERIVADOS LACTEOS",
-            "PAN", "BOLL.PAST.GALLET.CERE", "PRODUCTOS NAVIDEÑOS",
-            "CHOCOLATES/CACAOS/SUC", "ARROZ", "TOTAL PASTAS", "AZUCAR",
-            "EDULCORANTES", "LEGUMBRES", "TOTAL ACEITE", "MARGARINA",
-            "ACEITUNAS", "BEBIDAS DERIVADAS VI", "TOTAL VINOS", "CERVEZAS",
-            "SIDRAS", "T.BEBIDAS ESPIRITUOSA", "VINAGRE", "TOTAL ZOMO Y NECTAR",
-            "TOTAL PATATAS", "T.HORTALIZAS FRESCAS", "T.FRUTAS FRESCAS",
-            "FRUTOS SECOS", "T.FRUTA&HORTA.TRANSF", "PLATOS PREPARADOS",
-            "CAFES E INFUSIONES", "CALDOS", "SALSAS", "AGUA DE BEBIDA ENVAS.",
-            "GASEOSAS Y BEBID.REFR", "BASES PIZZAS&MASAS HO",
-            "HARINAS Y SEMOLAS", "ENCURTIDOS", "ESPECIAS Y CONDIMENTO", "SAL",
-            "OTROS PROD.EN PESO", "OTROS PROD.EN VOLUMEN", "ALGAS")
+## Análisis descriptivo
 
-df_filtrado <- subset(df_total, Categorias %in% filtro)
+Una vez que he obtenido el conjunto de datos final, procedo a realizar un análisis descriptivo de df_largo
+
+En primer lugar realizo una visualización del conjunto de datos
+
+```{r}
+View(df_largo)
+```
+
+A continuación examino la extructura interna de df_largo
+
+```{r}
+str(df_largo)
+```
+
+Y por último, obtengo un resumen estadístico de las variables de df_largo.
+
+```{r}
+summary(df_largo)
+```
+Las conclusiones son las siguientes:
+
+- df_largo tiene 221,706 registros y 4 variables.
+
+- Categorias y Región son variables categóricas.
+
+- El rango temporal abarca desde el 2000 hasta el 2022.
+
+- En la variable Valor existen 830 valores ausentes.
+
+## Ajustes de tipo de variable
+
+En primer lugar ajusto la variable Año a tipo date.
+
+```{r}
+df_largo[["Año"]] <- as.Date(as.character(df_largo[["Año"]]), format = "%Y")
+```
+
+A continuación transformo las variables categóricas Categorias y Región a factor
+
+```{r}
+df_largo[["Region"]] <- as.factor(df_largo[["Region"]])
+df_largo[["Categorias"]] <- as.factor(df_largo[["Categorias"]])
 
 ```
 
+```{r}
+str(df_largo)
+```
 
-## Detección y tratamiento de los datos ausentes
+## Detección y tratamiento de los valores ausentes
 
-A continuación, examino la estructura interna de df_final
+Como se ha visto anteriormente, la variable Valor tiene 830 valores ausentes. En primer lugar voy a detectar en que registros se encuentran dichos valores y luego procederé a realizar su tratamiento.
 
 ```{r}
-str(df_filtrado)
+summary(df_largo)
+  
 ```
-Y ahora obtengo un resumen de cada variable
 
-```{r}
-summary(df_filtrado)
-```
-He comprobado que df_filtrado tiene 910 registros y 19 variables.
+He comprobado que df_total tiene 12317 registros y 20 variables.
 
 Todas las variables son numéricas a excepción de "Categorias" que es una cadena de texto.
 
-Además, no se han localizados datos ausentes
+Además, en las variables que hacen referencia a los territorios existen valores ausentes
+
+A continuación voy a localizar los valores ausentes
 
 ```{r}
-View(df_filtrado)
+df_largo  %>%
+  group_by(Año) %>%
+  summarise(
+    total_na = sum(is.na(Valor)),
+    porcentaje_na = (total_na / n()) * 100
+  ) %>%
+  filter(porcentaje_na > 0) %>%
+  arrange(desc(total_na))
+
+```
+Por lo que se ve, sólo en los años 2000, 2001, 2003 y 2004 existen valores NA. Para el año 2002, los valores ausentes son el 9.17% mientras que para los restantes años van del 1.1 al 1.4.
+
+Procedo a eliminar los años con valores ausentes del conjunto de los datos
+
+```{r}
+df_sina <- df_largo %>%
+  filter(!(Año %in% c("2002-08-24", "2003-08-24", "2001-08-24", "2000-08-24")))
+```
+
+# Detección y tratamiento de valores atípicos
+
+```{r}
+boxplot(df_sina$Valor)
 ```
 
 
