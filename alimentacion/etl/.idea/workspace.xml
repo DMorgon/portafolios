@@ -1,28 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="d744ab2a-fedc-486a-b771-7dae18e1ac1e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/etl.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../codigo/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../codigo/.idea/codigo.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../codigo/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../codigo/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../codigo/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../codigo/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../codigo/.ipynb_checkpoints/territorios-checkpoint.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../codigo/codigo_fuente_canalesventa.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../codigo/codigo_fuente_socioeconómico.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../codigo/codigo_fuente_territorio.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../codigo/readme.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../codigo/territorios.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../eda/consumoxcapita.Rmd" beforeDir="false" afterPath="$PROJECT_DIR$/../eda/consumoxcapita.Rmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/etl.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/etl.pyi" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/etl.py" beforeDir="false" afterPath="$PROJECT_DIR$/etl.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
