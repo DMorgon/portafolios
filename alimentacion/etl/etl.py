@@ -69,104 +69,12 @@ for archivo in lista_archivos:
     df = carga_consumoxcapita(archivo)
     lista_df_consumoxcapita.append(df)
 
-# Realizo EDA en cada marco de datos
-
-for i, df in enumerate(lista_df_consumoxcapita):
-    tabla_nombre = f"df_{2000 + i}"
-    print("Nombre de la tabla de datos:", tabla_nombre)
-    print(df.info())
-
-# Elimino las variables correspondientes a los territorios que no voy a utilizar
-
-columnas_eliminar = ["T.ANDALUCIA", "ANDALUCÍA", "CASTILLA LEON", "CASTILLA Y LEÓN", "NORESTE", "LEVANTE", "CENTRO-SUR",
-                     "NOROESTE", "NORTE", "T.CANARIAS"]
-
-
-for i, df in enumerate(lista_df_consumoxcapita):
-    if 4 <= i <= 18:
-        df.drop(columns=columnas_eliminar, errors="ignore", inplace=True)
-
-# Corrijo el nombre de las variables correspondientes a las comunidades autónomas.
-
-for df in lista_df_consumoxcapita:
-    df.columns = df.columns.str.replace("Unnamed: 0", "CATEGORIAS", regex=False)
-    df.columns = df.columns.str.replace(".TOTAL ESPAÑA", "ESPAÑA", regex=False)
-    df.columns = df.columns.str.replace("T.ESPAÑA", "ESPAÑA", regex=False)
-    df.columns = df.columns.str.replace("CASTILLA-LA MANCHA", "CASTILLA LA MANCHA", regex=False)
-    df.columns = df.columns.str.replace("RIOJA", "LA RIOJA", regex=False)
-    df.columns = df.columns.str.replace("ARAGÓN", "ARAGON", regex=False)
-    df.columns = df.columns.str.replace("ILLES BALEARS", "BALEARES", regex=False)
-    df.columns = df.columns.str.replace("COMUNITAT VALENCIANA", "VALENCIA", regex=False)
-    df.columns = df.columns.str.replace("CASTILLA - LA MANCHA", "CASTILLA LA MANCHA", regex=False)
-    df.columns = df.columns.str.replace("PRINCIPADO DE ASTURIAS", "ASTURIAS", regex=False)
-    df.columns = df.columns.str.replace("C. FORAL DE NAVARRA", "NAVARRA", regex=False)
-    df.columns = df.columns.str.replace("REGIÓN DE MURCIA", "MURCIA", regex=False)
-    df.columns = df.columns.str.replace("CASTILLA Y LEÓN", "CASTILLA Y LEON", regex=False)
-    df.columns = df.columns.str.replace("ANDALUCÍA", "ANDALUCIA", regex=False)
-    df.columns = df.columns.str.replace("COMUNIDAD DE MADRID", "MADRID", regex=False)
-    df.columns = df.columns.str.replace("LA LA RIOJA", "LA RIOJA", regex=False)
-    df.sort_index(axis=1, inplace=True)
-
-# Transformo el formato de ancho a largo, manteniendo las columnas "AÑO", "CATEGORIAS" y "ANALISIS" como identificadores
-
-for i, df in enumerate(lista_df_consumoxcapita):
-    lista_df_consumoxcapita[i] = df.melt(id_vars=["AÑO", "CATEGORIAS"], var_name="REGION", value_name="CONSUMOXCAPITA")
-
-
-# Cargo los datos correspondientes con las hojas gastoxcapita de cada archivo.
-
 
 lista_df_gastoxcapita = []
 
 for archivo in lista_archivos:
     df = carga_gastoxcapita(archivo)
     lista_df_gastoxcapita.append(df)
-
-# Realizo EDA en cada marco de datos
-
-for i, df in enumerate(lista_df_gastoxcapita):
-    tabla_nombre = f"df_{2000 + i}"
-    print("Nombre de la tabla de datos:", tabla_nombre)
-    print(df.info())
-
-# Elimino las variables correspondientes a los territorios que no voy a utilizar
-
-columnas_eliminar = ["T.ANDALUCIA", "ANDALUCÍA", "CASTILLA LEON", "CASTILLA Y LEÓN", "NORESTE", "LEVANTE", "CENTRO-SUR",
-                     "NOROESTE", "NORTE", "T.CANARIAS"]
-
-
-for i, df in enumerate(lista_df_gastoxcapita):
-    if 4 <= i <= 18:
-        df.drop(columns=columnas_eliminar, errors="ignore", inplace=True)
-
-# Corrijo el nombre de las variables correspondientes a las comunidades autónomas.
-
-for df in lista_df_gastoxcapita:
-    df.columns = df.columns.str.replace("Unnamed: 0", "CATEGORIAS", regex=False)
-    df.columns = df.columns.str.replace(".TOTAL ESPAÑA", "ESPAÑA", regex=False)
-    df.columns = df.columns.str.replace("T.ESPAÑA", "ESPAÑA", regex=False)
-    df.columns = df.columns.str.replace("CASTILLA-LA MANCHA", "CASTILLA LA MANCHA", regex=False)
-    df.columns = df.columns.str.replace("RIOJA", "LA RIOJA", regex=False)
-    df.columns = df.columns.str.replace("ARAGÓN", "ARAGON", regex=False)
-    df.columns = df.columns.str.replace("ILLES BALEARS", "BALEARES", regex=False)
-    df.columns = df.columns.str.replace("COMUNITAT VALENCIANA", "VALENCIA", regex=False)
-    df.columns = df.columns.str.replace("CASTILLA - LA MANCHA", "CASTILLA LA MANCHA", regex=False)
-    df.columns = df.columns.str.replace("PRINCIPADO DE ASTURIAS", "ASTURIAS", regex=False)
-    df.columns = df.columns.str.replace("C. FORAL DE NAVARRA", "NAVARRA", regex=False)
-    df.columns = df.columns.str.replace("REGIÓN DE MURCIA", "MURCIA", regex=False)
-    df.columns = df.columns.str.replace("CASTILLA Y LEÓN", "CASTILLA Y LEON", regex=False)
-    df.columns = df.columns.str.replace("ANDALUCÍA", "ANDALUCIA", regex=False)
-    df.columns = df.columns.str.replace("COMUNIDAD DE MADRID", "MADRID", regex=False)
-    df.columns = df.columns.str.replace("LA LA RIOJA", "LA RIOJA", regex=False)
-    df.sort_index(axis=1, inplace=True)
-
-# Transformo el formato de ancho a largo, manteniendo las columnas "AÑO", "CATEGORIAS" y "ANALISIS" como identificadores
-
-for i, df in enumerate(lista_df_gastoxcapita):
-    lista_df_gastoxcapita[i] = df.melt(id_vars=["AÑO", "CATEGORIAS"], var_name="REGION", value_name="GASTOXCAPITA")
-
-
-# Cargo los datos correspondientes con las hojas precio de cada archivo
 
 
 lista_df_precio = []
@@ -175,72 +83,108 @@ for archivo in lista_archivos:
     df = carga_precio(archivo)
     lista_df_precio.append(df)
 
-# Realizo EDA en cada marco de datos
+# TRANSFORMACIÓN DE LOS DATOS
 
-for i, df in enumerate(lista_df_precio):
-    tabla_nombre = f"df_{2000 + i}"
-    print("Nombre de la tabla de datos:", tabla_nombre)
-    print(df.info())
+# Elimino las columnas que no se van a necesitar
 
-# Elimino las variables correspondientes a los territorios que no voy a utilizar
+columnas_eliminar = ["T.ANDALUCIA", "CASTILLA LEON", "NORESTE", "LEVANTE", "CENTRO-SUR", "NOROESTE", "NORTE",
+                     "T.CANARIAS", "ANDALUCÍA", "CASTILLA Y LEÓN"]
 
-columnas_eliminar = ["T.ANDALUCIA", "ANDALUCÍA", "CASTILLA LEON", "CASTILLA Y LEÓN", "NORESTE", "LEVANTE", "CENTRO-SUR",
-                     "NOROESTE", "NORTE", "T.CANARIAS"]
+
+for i, df in enumerate(lista_df_consumoxcapita):
+    if 4 <= i <= 18:
+        df.drop(columns=columnas_eliminar, errors="ignore", inplace=True)
+
+
+for i, df in enumerate(lista_df_gastoxcapita):
+    if 4 <= i <= 18:
+        df.drop(columns=columnas_eliminar, errors="ignore", inplace=True)
 
 
 for i, df in enumerate(lista_df_precio):
     if 4 <= i <= 18:
         df.drop(columns=columnas_eliminar, errors="ignore", inplace=True)
 
-# Corrijo el nombre de las variables correspondientes a las comunidades autónomas.
+# Unifico el nombre de las variables
 
-for df in lista_df_precio:
-    df.columns = df.columns.str.replace("Unnamed: 0", "CATEGORIAS", regex=False)
+for df in lista_df_consumoxcapita:
+    df.columns = df.columns.str.replace("Unnamed: 0", "ALIMENTOS", regex=False)
     df.columns = df.columns.str.replace(".TOTAL ESPAÑA", "ESPAÑA", regex=False)
     df.columns = df.columns.str.replace("T.ESPAÑA", "ESPAÑA", regex=False)
     df.columns = df.columns.str.replace("CASTILLA-LA MANCHA", "CASTILLA LA MANCHA", regex=False)
+    df.columns = df.columns.str.replace("CASTILLA - LA MANCHA", "CASTILLA LA MANCHA", regex=False)
+    df.columns = df.columns.str.replace("CASTILLA Y LEÓN", "CASTILLA Y LEON", regex=False)
     df.columns = df.columns.str.replace("RIOJA", "LA RIOJA", regex=False)
-    df.columns = df.columns.str.replace("ARAGÓN", "ARAGON", regex=False)
     df.columns = df.columns.str.replace("ILLES BALEARS", "BALEARES", regex=False)
     df.columns = df.columns.str.replace("COMUNITAT VALENCIANA", "VALENCIA", regex=False)
-    df.columns = df.columns.str.replace("CASTILLA - LA MANCHA", "CASTILLA LA MANCHA", regex=False)
+    df.columns = df.columns.str.replace("REGIÓN DE MURCIA", "MURCIA", regex=False)
+    df.columns = df.columns.str.replace("COMUNIDAD DE MADRID", "MADRID", regex=False)
     df.columns = df.columns.str.replace("PRINCIPADO DE ASTURIAS", "ASTURIAS", regex=False)
     df.columns = df.columns.str.replace("C. FORAL DE NAVARRA", "NAVARRA", regex=False)
-    df.columns = df.columns.str.replace("REGIÓN DE MURCIA", "MURCIA", regex=False)
-    df.columns = df.columns.str.replace("CASTILLA Y LEÓN", "CASTILLA Y LEON", regex=False)
-    df.columns = df.columns.str.replace("ANDALUCÍA", "ANDALUCIA", regex=False)
-    df.columns = df.columns.str.replace("COMUNIDAD DE MADRID", "MADRID", regex=False)
-    df.columns = df.columns.str.replace("LA LA RIOJA", "LA RIOJA", regex=False)
-    df.sort_index(axis=1, inplace=True)
+    df.columns = df.columns.str.replace("ARAGÓN", "ARAGON", regex=False)
+    df.loc[:, sorted(df.columns)] = df.loc[:, df.columns]
 
-# Transformo el formato de ancho a largo, manteniendo las columnas "AÑO", "CATEGORIAS" y "ANALISIS" como identificadores
+for df in lista_df_gastoxcapita:
+    df.columns = df.columns.str.replace("Unnamed: 0", "ALIMENTOS", regex=False)
+    df.columns = df.columns.str.replace(".TOTAL ESPAÑA", "ESPAÑA", regex=False)
+    df.columns = df.columns.str.replace("T.ESPAÑA", "ESPAÑA", regex=False)
+    df.columns = df.columns.str.replace("CASTILLA-LA MANCHA", "CASTILLA LA MANCHA", regex=False)
+    df.columns = df.columns.str.replace("CASTILLA - LA MANCHA", "CASTILLA LA MANCHA", regex=False)
+    df.columns = df.columns.str.replace("CASTILLA Y LEÓN", "CASTILLA Y LEON", regex=False)
+    df.columns = df.columns.str.replace("RIOJA", "LA RIOJA", regex=False)
+    df.columns = df.columns.str.replace("ILLES BALEARS", "BALEARES", regex=False)
+    df.columns = df.columns.str.replace("COMUNITAT VALENCIANA", "VALENCIA", regex=False)
+    df.columns = df.columns.str.replace("REGIÓN DE MURCIA", "MURCIA", regex=False)
+    df.columns = df.columns.str.replace("COMUNIDAD DE MADRID", "MADRID", regex=False)
+    df.columns = df.columns.str.replace("PRINCIPADO DE ASTURIAS", "ASTURIAS", regex=False)
+    df.columns = df.columns.str.replace("C. FORAL DE NAVARRA", "NAVARRA", regex=False)
+    df.columns = df.columns.str.replace("ARAGÓN", "ARAGON", regex=False)
+    df.loc[:, sorted(df.columns)] = df.loc[:, df.columns]
+
+for df in lista_df_precio:
+    df.columns = df.columns.str.replace("Unnamed: 0", "ALIMENTOS", regex=False)
+    df.columns = df.columns.str.replace(".TOTAL ESPAÑA", "ESPAÑA", regex=False)
+    df.columns = df.columns.str.replace("T.ESPAÑA", "ESPAÑA", regex=False)
+    df.columns = df.columns.str.replace("CASTILLA-LA MANCHA", "CASTILLA LA MANCHA", regex=False)
+    df.columns = df.columns.str.replace("CASTILLA - LA MANCHA", "CASTILLA LA MANCHA", regex=False)
+    df.columns = df.columns.str.replace("CASTILLA Y LEÓN", "CASTILLA Y LEON", regex=False)
+    df.columns = df.columns.str.replace("RIOJA", "LA RIOJA", regex=False)
+    df.columns = df.columns.str.replace("ILLES BALEARS", "BALEARES", regex=False)
+    df.columns = df.columns.str.replace("COMUNITAT VALENCIANA", "VALENCIA", regex=False)
+    df.columns = df.columns.str.replace("REGIÓN DE MURCIA", "MURCIA", regex=False)
+    df.columns = df.columns.str.replace("COMUNIDAD DE MADRID", "MADRID", regex=False)
+    df.columns = df.columns.str.replace("PRINCIPADO DE ASTURIAS", "ASTURIAS", regex=False)
+    df.columns = df.columns.str.replace("C. FORAL DE NAVARRA", "NAVARRA", regex=False)
+    df.columns = df.columns.str.replace("ARAGÓN", "ARAGON", regex=False)
+    df.loc[:, sorted(df.columns)] = df.loc[:, df.columns]
+
+# Transformo de formato ancho a largo los marcos de datos
+
+for i, df in enumerate(lista_df_consumoxcapita):
+    lista_df_consumoxcapita[i] = df.melt(id_vars=["AÑO", "ALIMENTOS"], var_name="REGION", value_name="CONSUMOXCAPITA")
+
+for i, df in enumerate(lista_df_gastoxcapita):
+    lista_df_gastoxcapita[i] = df.melt(id_vars=["AÑO", "ALIMENTOS"], var_name="REGION", value_name="GASTOXCAPITA")
 
 for i, df in enumerate(lista_df_precio):
-    lista_df_precio[i] = df.melt(id_vars=["AÑO", "CATEGORIAS"], var_name="REGION", value_name="PRECIO")
+    lista_df_precio[i] = df.melt(id_vars=["AÑO", "ALIMENTOS"], var_name="REGION", value_name="PRECIO")
+
+# Uno verticalmente los marcos de datos de cada lista
+
+consumoxcapita = pd.concat(lista_df_consumoxcapita, axis=0)
+
+gastoxcapita = pd.concat(lista_df_gastoxcapita, axis=0)
+
+precio = pd.concat(lista_df_precio, axis=0)
 
 
-# Ahora merged_df contendrá la unión horizontal de los tres DataFrames
+# Uno los marcos de datos resultantes horizontalmente
 
-lista_df = []
+df_total = pd.concat([consumoxcapita[['AÑO', 'ALIMENTOS', 'REGION', 'CONSUMOXCAPITA']],
+                      gastoxcapita[['GASTOXCAPITA']],
+                      precio[['PRECIO']]], axis=1)
 
-for i in range (0, 23, 1):
-    df = lista_df_consumoxcapita[i].merge(lista_df_gastoxcapita[i], on=['AÑO', 'CATEGORIAS', 'REGION'], how='outer')
-    df = df.merge(lista_df_precio[i], on=['AÑO', 'CATEGORIAS', 'REGION'], how='outer')
-    lista_df.append(df)
-
-
-# Uno todas las tablas en una sola df_total de forma vertical
-
-df_total = pd.concat(objs=lista_df, axis=0)
-
-# Realizo EDA en cada marco de datos
-
-print(df_total.info())
-
-"""
-5) CARGA
-
-"""
+#  CARGO LOS DATOS
 
 # Convierto df_total  a un archivo CSV
 csv_content = df_total.to_csv(index=False)
@@ -253,5 +197,3 @@ csv_path = os.path.join(download_folder, csv_filename)
 # Guardo el contenido del archivo CSV en la ubicación deseada
 with open(csv_path, "w", encoding="utf-8") as f:
     f.write(csv_content)
-
-print(f"Archivo CSV guardado en: {csv_path}")
