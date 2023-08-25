@@ -44,7 +44,7 @@ def carga_gastoxcapita(nombre_archivo):
         df_gastoxcapita["AÑO"] = int(nombre_archivo)
     return df_gastoxcapita
 
-
+"""
 def carga_precio(nombre_archivo):
     base_url = "https://raw.githubusercontent.com"
     usuario_git = "DMorgon"
@@ -59,7 +59,7 @@ def carga_precio(nombre_archivo):
         df_precio["AÑO"] = int(nombre_archivo)
     return df_precio
 
-
+"""
 # Cargo los datos correspondientes con las hojas consumoxcapita de cada archivo.
 
 
@@ -76,12 +76,13 @@ for archivo in lista_archivos:
     df = carga_gastoxcapita(archivo)
     lista_df_gastoxcapita.append(df)
 
-
+"""
 lista_df_precio = []
 
 for archivo in lista_archivos:
     df = carga_precio(archivo)
     lista_df_precio.append(df)
+"""
 
 # TRANSFORMACIÓN DE LOS DATOS
 
@@ -100,11 +101,11 @@ for i, df in enumerate(lista_df_gastoxcapita):
     if 4 <= i <= 18:
         df.drop(columns=columnas_eliminar, errors="ignore", inplace=True)
 
-
+"""
 for i, df in enumerate(lista_df_precio):
     if 4 <= i <= 18:
         df.drop(columns=columnas_eliminar, errors="ignore", inplace=True)
-
+"""
 # Unifico el nombre de las variables
 
 for df in lista_df_consumoxcapita:
@@ -140,7 +141,7 @@ for df in lista_df_gastoxcapita:
     df.columns = df.columns.str.replace("C. FORAL DE NAVARRA", "NAVARRA", regex=False)
     df.columns = df.columns.str.replace("ARAGÓN", "ARAGON", regex=False)
     df.loc[:, sorted(df.columns)] = df.loc[:, df.columns]
-
+"""
 for df in lista_df_precio:
     df.columns = df.columns.str.replace("Unnamed: 0", "ALIMENTOS", regex=False)
     df.columns = df.columns.str.replace(".TOTAL ESPAÑA", "ESPAÑA", regex=False)
@@ -157,6 +158,7 @@ for df in lista_df_precio:
     df.columns = df.columns.str.replace("C. FORAL DE NAVARRA", "NAVARRA", regex=False)
     df.columns = df.columns.str.replace("ARAGÓN", "ARAGON", regex=False)
     df.loc[:, sorted(df.columns)] = df.loc[:, df.columns]
+"""
 
 # Transformo de formato ancho a largo los marcos de datos
 
@@ -165,24 +167,23 @@ for i, df in enumerate(lista_df_consumoxcapita):
 
 for i, df in enumerate(lista_df_gastoxcapita):
     lista_df_gastoxcapita[i] = df.melt(id_vars=["AÑO", "ALIMENTOS"], var_name="REGION", value_name="GASTOXCAPITA")
-
+"""
 for i, df in enumerate(lista_df_precio):
     lista_df_precio[i] = df.melt(id_vars=["AÑO", "ALIMENTOS"], var_name="REGION", value_name="PRECIO")
-
+"""
 # Uno verticalmente los marcos de datos de cada lista
 
 consumoxcapita = pd.concat(lista_df_consumoxcapita, axis=0)
 
 gastoxcapita = pd.concat(lista_df_gastoxcapita, axis=0)
-
+"""
 precio = pd.concat(lista_df_precio, axis=0)
-
+"""
 
 # Uno los marcos de datos resultantes horizontalmente
 
 df_total = pd.concat([consumoxcapita[['AÑO', 'ALIMENTOS', 'REGION', 'CONSUMOXCAPITA']],
-                      gastoxcapita[['GASTOXCAPITA']],
-                      precio[['PRECIO']]], axis=1)
+                      gastoxcapita[['GASTOXCAPITA']]], axis=1)
 
 #  CARGO LOS DATOS
 
@@ -191,7 +192,7 @@ csv_content = df_total.to_csv(index=False)
 
 # Obtengo la ruta de la carpeta de descargas del usuario
 download_folder = os.path.expanduser("~")
-csv_filename = "tabla_procesada.csv"
+csv_filename = "datos.csv"
 csv_path = os.path.join(download_folder, csv_filename)
 
 # Guardo el contenido del archivo CSV en la ubicación deseada
