@@ -26,7 +26,36 @@ En resumen, este proyecto busca destacar mi capacidad para abordar un análisis 
 
 Los datos utilizados en este proyecto se obtienen de la serie histórica de datos de consumo alimentario en hogares españoles a nivel agregado anual, proporcionada por el [Ministerior de Agricultura, Pesca y Alimentación (MAPA)](https://www.mapa.gob.es/es/alimentacion/temas/consumo-tendencias/panel-de-consumo-alimentario/series-anuales/).
 
-Estos conjuntos de datos, disponibles en formato XLSX (Excel), se encuentran alojados en la carpeta "datos_origen" de este repositorio y contienen información relevante sobre las principales variables. Los datos se presentan tanto a nivel total como desagregados según la Comunidad Autónoma, el perfil sociodemográfico y el canal de compra.
+Estos conjuntos de datos, se encuentran alojados en la carpeta "datos_origen" de este repositorio. El conjunto de datos consta de 22 documentos en formato .XLSX. Cada documento almacena los datos para un año, desde el 2000 hasta el 2022. Además, cada archivo tiene 14 hojas que son:
+- Portada
+- VALOR: contiene el valor en euros de los alimentos que han tenido que pagar los hogares españoles
+- VOLUMEN: contiene el volumen, es decir, la candidad de alimentos consumidos por los hogares españoles, medidos en kilos o litros
+- PENETRACIÓN: representa la proporción de la población que ha consumido un alimento específico
+- PRECIO: representa el precio de cada alimento. Se calcula dividiendo el valor entre el volumen.
+- CONSUMOXCÁPITA: refiere al promedio de consumo de un alimento específico por cada individuo durante un período de tiempo determinado. Se calcula dividiendo el volumen de un alimento entre la población total
+- GASTOXCÁPITA: se refiere al promedio de gasto total realizado en un determinado alimento por cada individuo durante un período de tiempo específico. La fórmula para calcular el gasto per cápita es la siguiente: Gasto per cápita = Gasto total en un bien o servicio / Población total
+- CANALES VALOR: diferentes vías o canales a través de los cuales los alimentos llegan a los consumidores finales y cómo contribuyen al valor económico en la cadena de suministro de alimentos
+- CANALES VOLUMEN: representa en como contribuyen en terminos de volumen a la distribución de alimentos cada canal de comercialización
+- CANALES PENETRACIÓN: Representa la proporción en la que los diferentes canales distribuyen un alimento determinado.
+- SOCIOECONÓMICO VALOR: representa el valor en euros de los alimentos que consumen los hogares españoles dependiendo de ciertas condiciones socioeconómicas de los mismo.
+- SOCIOECONÓMIVO VOLUMEN: representa el valomen de alimentos que consumen los hogares españoles dependiendo de ciertas condiciones socioeconómicas de los mismo. 
+- SOCIOECONÓMICO CONSUMOXCAPITA: refiere al promedio de consumo de un alimento específico por cada individuo durante un período de tiempo determinado, teniendo encuenta ciertas condiciones socieconómica. 
+
+Las hojas VALOR, VOLUMEN, PENETRACIÓN, PRECIO, CONSUMOXCÁPITA y GASTOXCÁPITA incluyen 18 variables, que se refiere, en primer lugar a los alimentos, en segundo lugar a los datos del total de España, luego 17 columnas una para cada comunidad autónoma. Los archivos de los años 2004 al 2019, además de estas variables incluyen 8 columnas más que se refieren a regiones de España.
+
+Las hojas CANALES VALOR, CANALES VOLUMEN y CANALES PENETRACIÓN incluye 22 variables, a parte, claro esta, la de los alimentos y la de total España. Estas variables son: TDA.TRADICIONAL, ECONOMATO/COOP, HERPERCADOS, SUPER/AUTOS/G.ALM, SUPER+AUTOS, DISCOUNTS, TDA.CONGELADOS, HERBORISTERIA, FARMACIA, VTA.DOMICILIO, PESCADERIA, CARNICERIA/CHARC. MERCADOS, RESTO  e INTERNET. Estas variables no son comunes a todas los archivos ya que existieron moficaciones en la contabilidad. 
+
+Por último, las hojas SOCIOECONÓMICO VALOR, SOCIOECONÓMIVO VOLUMEN y SOCIOECONÓMICO CONSUMOXCAPITA incluye 8 situaciones ocioeconómicas, que son:
+- CLASE SOCIAL: ALTA Y MEDIA ALTA, MEDIA, MEDIA BAJA y BAJA
+- NIÑOS EN EL HOGAR: SIN NIÑOS, NIÑOS-6AÑOS y NIÑOS 6 A 15 AÑOS
+- ACTIVIDAD RESPONSABLE DE COMPRA: ACTIVA y NO ACTIVA
+- EDAD RESPONSABLE DE COMPRA: -35 AÑOS, 35 A 49 AÑOS, 50 A 64 AÑOS y 65 Y MAS AÑOS.
+- TAMAÑO DE HOGAR: 1 PERSONA, 2 PERSONAS, 3 PERSONAS, 4 PERSONAS, 5 Y MAS PERSONAS
+- REGIÓN: NORESTE, LEVANTE, ANDALUCIA, CENTRO-SUR, CASTILLA Y LEON, NOROESTE, NORTE y T.CANARIAS
+- TAMAÑÓ DE HÁBITAR: <2000 HABIT., 2000 A 10000, 10001 A 100000, 100001 A 500000, + DE 500000.
+- TIPO DE HOGAR: JOVENES INDEPENDIENTES, PAREJ.JOVENES SIN HIJOS, PARJ.CON HIJOS PEQUEÑOS, PAREJ.CON HIJOS EDAD EMEDIA, PAREJ CON HIJOS MAYORES, HOGARES MONOPARENTALES, PAREJAS ADULTAS SIN HIJOS, ADULTOS INDEPENDIENTES y RETIRADOS.
+
+
 
 La desagregación en tres categorías, territorial, sociodemográfica y por canal de compra, es esencial, ya que influye tanto en la preparación de los datos como en la creación de visualizaciones. Este enfoque nos permitá explorar y analizar patrones y tendencias desde diversas perspectivas, enriqueciendo así la comprensión de los datos.
 
