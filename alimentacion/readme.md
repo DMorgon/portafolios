@@ -14,7 +14,7 @@ El propósito fundamental de este proyecto es demostrar mi hailidad para tabajar
 
 Los obetivos específicos de este proyecto son los siguientes:
 
-1. **Visualización de Datos**: en primer lugar crearé un cuadro de mando interactivo, que  permitiria no sólo a los usuarios explorar los datos por sí mismo sino que, además, obtendré las visualizaciones necesarias para la comunicación de las conclusiones obtenidas.
+1. **Visualización de Datos**: crearé un cuadro de mando interactivo, que  permitiria no sólo a los usuarios explorar los datos por sí mismo sino que, además, obtendré las visualizaciones necesarias para la comunicación de las conclusiones obtenidas.
 
 2. **Análisis Descriptivo**: Utilizaré el cuadro de mandos para realizar un análisis detallado y descriptivo del comportamiento en el consumo de alimentos de los hogares españoles, permitiendome contestar a preguntas como:
   - **¿Cuáles son las tendencias generales en el consumo de alimentos en los hogares españoles a lo largo de los años?** Esto permitirá identificar patrones de consumo que han evolucionado con el tiempo.
