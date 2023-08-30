@@ -62,11 +62,11 @@ Por último, las hojas SOCIOECONÓMICO VALOR, SOCIOECONÓMIVO VOLUMEN y SOCIOECO
 - TAMAÑÓ DE HÁBITAR: <2000 HABIT., 2000 A 10000, 10001 A 100000, 100001 A 500000, + DE 500000.
 - TIPO DE HOGAR: JOVENES INDEPENDIENTES, PAREJ.JOVENES SIN HIJOS, PARJ.CON HIJOS PEQUEÑOS, PAREJ.CON HIJOS EDAD EMEDIA, PAREJ CON HIJOS MAYORES, HOGARES MONOPARENTALES, PAREJAS ADULTAS SIN HIJOS, ADULTOS INDEPENDIENTES y RETIRADOS.
 
-La desagregación en tres categorías, territorial, sociodemográfica y por canal de compra, es esencial, ya que influye tanto en la preparación de los datos como en la creación de visualizaciones. Este enfoque nos permitá explorar y analizar patrones y tendencias desde diversas perspectivas, enriqueciendo así la comprensión de los datos.
+En resumen, estos datos son altamente detallados y permiten un análisis exhaustivo de los patrones de consumo alimentario en hogares españoles desde diversas perspectivas, incluyendo geografía, demografía y condiciones socioeconómicas
 
 ## 3. **Herramientas**
 
-En primer lugar, realicé un Analisis Exploratorio de los Datos (EDA) con R, más concretamente con la IDE RStudio. El informe del EDA se puede consultar en la carpeta eda del repositorio. 
+En primer lugar, realicé un Analisis Exploratorio de los Datos (EDA) con R, más concretamente con la IDE RStudio. El informe del EDA se puede consultar en la carpeta eda del repositorio, en formato pdf ya que se trata de un documento redactado con RMarkdown. 
 
 En este proyecto he utilizando las siguientes bibliotecas:
   - readxl: se utiliza para importar datos desde arvhics de Excel.
@@ -90,19 +90,13 @@ Para la creación de las visualizaciones, como he indicado anteriormente,  he cr
 
 ## 4. **Análisis Exploratorio de los datos**
 
-## 5. **Preparación de los datos**
+## 5. **Preparación de los datos (ETL)**
 
 Los datos que voy a utilizar en el proyecto, como se ha indicado anteriormente,  estan en 22 archivos en formato .XLSX. Cada archivo corresponde a un año, desdel el 2000 al 2022. En cada archivo existen diferentes hojas, que están colocadas de forma diferente. Los datos, que voy a utilizar, los he clasificado en cuatro categorias:
   - VALOR y VOLUMEN: estas hojas son fundamentales para comprender cuánto se gasta en alimentos yc uanto se consume en terminos de cantidad. Son esenciales para evaluar las tendencias generales en el consumo de alimentos y cómo han evolucionado con el tiempo.
   - CONSUMOXCÁPITA y GASTOXCÁPITA: estas hojas te permitirán analizar el consumo y gasto promedio por persona en alimentos.
   - CANALES VALOR, CANALES VOLUMEN Y CANALES PENETRACIÓN: proporcionan información sobre qué canales de comercializaon son los más importantes en téminos de valor y volumen.
   - SOCIOECONÓMICO VALOR, SOCIOECONÓMICO VOLUMEN Y SOCIOECONÓMICO CONSUMOXCAPITA: permiten evaluar cómo varía elconsumo y el gasto según factores como la clase social, la edad y otros.
-
-En la clase territorio preprara los datos referente al consumo de alimento de las familias españolas por Comunidades Autónomas. En esta categoria corresponde las hojas VALOR, CONSUMO, GASTOXCAPITA Y CONSUMOXCAPITA.
-
-En la clase socioeconómicos guardo los datos referente al consumo de alimentos de los hogares españoles segun ciertas variables socioeconómicas, como son: el tamaño de hogar, clase social, niños en el hogar, etc. En estacategoría corresponde las hojas  SOCIOECONOMICO VALOR, SOCIOECONOMICO VOLUMENT y SOCIOECONOMICO CONSUMOXCAPITA.
-
-Por útlimo, en la clase canales de venta almaceno los datos referente al canal de venta de los alimentos consumidos por los hogares españoles. En esta categoria corresponde a las hojas CANALES VOLUMEN y CANALES VALOR.
 
 Como se ha indicado anteriormente, en la carpeta "codigo" de este repositorio puedes encontrar los script que he elaborada para la preparación de los datos de cada categoria y donde podrá encontrar comentados los pasos que he ido realizando, que son:
 
