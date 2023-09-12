@@ -131,8 +131,8 @@ df_total = df_total[df_total["CATEGORIAS"].isin(lista_categoria)]
 # Transformo el formato de ancho a largo, manteniendo las columnas "AÑO", "CATEGORIAS" y "ANALISIS" como identificadores
 
 
-df_total = df_total.melt(id_vars=["AÑO", "CATEGORIAS"], var_name="COMUNIDAD AUTONOMA",
-                         value_name="CANTIDAD")
+df_total = df_total.melt(id_vars=["AÑO", "CATEGORIAS"], var_name="REGIONES",
+                         value_name="VOLUMEN")
 
 """
 4) EXPORTACIÓN DEL MARCO RESULTANTE
