@@ -128,7 +128,7 @@ lista_categoria = ["ARROZ", "PAN", "BOLL./PAST.ENVASADA", "BOLL./PAST.GRANEL", "
 
 df_total = df_total[df_total["ALIMENTOS"].isin(lista_categoria)]
 
-# Transformo el formato de ancho a largo, manteniendo las columnas "AÑO", "CATEGORIAS" y "ANALISIS" como identificadores
+# Transformo el formato de ancho a largo, manteniendo las columnas "AÑO" y "ALIMENTOS"  como identificadores
 
 
 df_total = df_total.melt(id_vars=["AÑO", "ALIMENTOS"], var_name="REGIONES",
