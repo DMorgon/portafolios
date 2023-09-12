@@ -56,7 +56,7 @@ for i, df in enumerate(lista_df_volumen):
 for df in lista_df_volumen:
     df.columns = df.columns.str.replace(".TOTAL ESPAÑA", "ESPAÑA", regex=False)
     df.columns = df.columns.str.replace("T.ESPAÑA", "ESPAÑA", regex=False)
-    df.columns = df.columns.str.replace("Unnamed: 0", "CATEGORIAS", regex=False)
+    df.columns = df.columns.str.replace("Unnamed: 0", "ALIMENTOS", regex=False)
     df.columns = df.columns.str.replace("CASTILLA-LA MANCHA", "CASTILLA LA MANCHA", regex=False)
     df.columns = df.columns.str.replace("RIOJA", "LA RIOJA", regex=False)
     df.columns = df.columns.str.replace("ARAGÓN", "ARAGON", regex=False)
@@ -79,7 +79,7 @@ for i, df in enumerate(lista_df_volumen):
 # Corrijo el nombre de algunas categorias de alimentos
 
 for i in range(23):
-    lista_df_volumen[i]['CATEGORIAS'] = lista_df_volumen[i]['CATEGORIAS'].replace({
+    lista_df_volumen[i]['ALIMENTOS'] = lista_df_volumen[i]['ALIMENTOS'].replace({
         "ACEITE DE OLIVA": "TOTAL ACEITES DE OLIVA",
         "HUEVOS KGS": "T.HUEVOS KGS",
         "AGUA MINERAL": "AGUA DE BEBIDA ENVAS.",
@@ -126,12 +126,12 @@ lista_categoria = ["ARROZ", "PAN", "BOLL./PAST.ENVASADA", "BOLL./PAST.GRANEL", "
                    "POLEO", "OTRAS INFUSIONES", "AGUA DE BEBIDA ENVAS.", "GASEOSAS Y BEBID.REFR", "TOTAL ZUMO Y NECTAR",
                    "ZUMOS DE HORTALIZAS", "VINAGRE", "OTROS PROD.EN VOLUMEN"]
 
-df_total = df_total[df_total["CATEGORIAS"].isin(lista_categoria)]
+df_total = df_total[df_total["ALIMENTOS"].isin(lista_categoria)]
 
 # Transformo el formato de ancho a largo, manteniendo las columnas "AÑO", "CATEGORIAS" y "ANALISIS" como identificadores
 
 
-df_total = df_total.melt(id_vars=["AÑO", "CATEGORIAS"], var_name="REGIONES",
+df_total = df_total.melt(id_vars=["AÑO", "ALIMENTOS"], var_name="REGIONES",
                          value_name="VOLUMEN")
 
 """
