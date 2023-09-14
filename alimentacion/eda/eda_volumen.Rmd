@@ -29,8 +29,6 @@ install.packages("httr")
 install.packages("tidyverse")
 install.packages("rmarkdown")
 install.packages("dplyr")
-install.packages("ggplot2")
-install.packages("scales")
 install.packages("corrplot")
 ```
 
@@ -42,10 +40,9 @@ library(httr)
 library(tidyverse)
 library(rmarkdown)
 library(dplyr)
-library(ggplot2)
-library(scales)
 library(corrplot)
 ```
+
 ## 2. Obtención de los datos
 ### 2.1 Extracción de los datos
 
@@ -119,9 +116,7 @@ En consecuencia, las tareas que se llevarán a cabo a continuación son las sigu
 
 - **Normalización de las variables**: Dado que existen diferencias en el número de variables y en sus nombres, se procederá a eliminar las 8 variables relacionadas con las regiones y a corregir el nombre de las variables restantes para asegurar consistencia.
 
-- **Normalización de los registros**: existe una disparidad en la cantidad de alimentos registrados y en sus nombres en diferentes años debido a cambios en la metodología es por ello que se realizará una selección de registros. En primer lugar se corregirán los nombres de los registros seleccionados para que sean consistentes en todos los dataframes y posteriormente se realizará un filtro en los dataframe con la selección de la categorias de alimentos. Esta metodología simplificará la complejidad de los datos, aunque conllevará la pérdida de algunos detalles específicos de los alimentos.
-
-- **Creación de un conjunto de datos consolidado**: Una vez normalizados los datos, se combinarán todos los dataframes en un conjunto consolidado, especificando además el año al que corresponde cada registro.
+- **Creación de un conjunto de datos consolidado**: Una vez normalizados las variables, se combinarán todos los dataframes en un conjunto consolidado, especificando además el año al que corresponde cada registro.
 
 ### 2.3 Transformación de los datos
 
@@ -147,7 +142,7 @@ A continuación corrijo el nombre de las variables para que todas sean iguales
 for (i in seq(1, 23)){
   colnames(lista_df_volumen[[i]])[colnames(lista_df_volumen[[i]]) == ".TOTAL ESPAÑA"] <- "ESPAÑA"  
   colnames(lista_df_volumen[[i]])[colnames(lista_df_volumen[[i]]) == "T.ESPAÑA"] <- "ESPAÑA"
-  colnames(lista_df_volumen[[i]])[colnames(lista_df_volumen[[i]]) == "...1"] <- "CATEGORIAS"
+  colnames(lista_df_volumen[[i]])[colnames(lista_df_volumen[[i]]) == "...1"] <- "PRODUCTOS"
   colnames(lista_df_volumen[[i]])[colnames(lista_df_volumen[[i]]) == "CASTILLA-LA MANCHA"] <- "CASTILLA LA MANCHA"
   colnames(lista_df_volumen[[i]])[colnames(lista_df_volumen[[i]]) == "RIOJA"] <- "LA RIOJA"
   colnames(lista_df_volumen[[i]])[colnames(lista_df_volumen[[i]]) == "ARAGÓN"] <- "ARAGON"
@@ -188,96 +183,17 @@ for (i in seq(1, 23)){
 rm(i)
 ```
 
-A continuación, corrijo el nombre de algunas categorias de alimentos
-
-```{r}
-for (i in seq(1, 23)){
-  lista_df_volumen[[i]] <-lista_df_volumen[[i]] %>%
-  mutate(CATEGORIAS = case_when(
-    CATEGORIAS == "ACEITE DE OLIVA" ~ "TOTAL ACEITES DE OLIVA",
-    CATEGORIAS == "HUEVOS KGS" ~ "T.HUEVOS KGS",
-    CATEGORIAS == "AGUA MINERAL" ~ "AGUA DE BEBIDA ENVAS.",
-    CATEGORIAS == "LECHE LIQUIDA RECONST" ~ "PREPARADOS LACTEOS",
-    CATEGORIAS == "BASES PIZZAS&MASAS HO" ~ "BASES PIZZAS Y MASAS HO",
-    TRUE ~ CATEGORIAS))
-}
-
-rm(i)
-```
-
 Ahora, uno de forma vertical todos los dataframe en uno sólo que llamare df_volumen
 
 ```{r}
 df_volumen <- bind_rows(lista_df_volumen)
 ```
 
-Filtro df_volumen por las categorias de alimentos seleccionadas.
-
-```{r}
-categorias <- c("ARROZ", "PAN", "BOLL./PAST.ENVASADA", "BOLL./PAST.GRANEL",
-             "GALLETAS ENVASADAS", "GALLETAS GRANEL", "P.P.PASTA RESTO",
-             "P.P.CONSERVA PASTA", "P.P.CONGELADO PASTA", "TOTAL PASTAS",
-             "OTROS P.P.CONGELADO", "P.P.PIZZA", "O.PASTEL/TARTA GRA",
-             "O.PASTEL/TARTA ENV", "CEREALES DESAY.ENV.",
-             "BASES PIZZAS Y MASAS HO", "HARINAS Y SEMOLAS", "CARNE VACUNO",
-             "C.CONG.VACA", "CARNE CERDO", "C.CONG.CERDO",
-             "CARNE OVINO/CAPRINO", "CARNE POLLO", "AVESTRUZ", "PAVO",
-             "OTRAS AVES", "C.CONG.POLLO", "CARNE TRANSFORMADA",
-             "P.P.CONSERVA CARNE", "P.P.CONGELADO CARNE", "PLAT.PREP.OTROS",
-             "SALCHICHAS FRESCAS", "SALCHICHAS CONGELAD", "CARNE DESPOJOS",
-             "CARNE CONEJO", "OTRAS CARNES FRESCA", "CARNE CONGELADA",
-             "PESCADOS FRESCOS", "PESCADOS CONGELADOS",
-             "MARISCO/MOLUSCO/CRUS", "SALMON AHUMADO", "TRUCHA AHUMADA",
-             "OTROS AHUMADOS", "PESCADO SALADO", "CONS.PESCADO/MOLUSCO",
-             "P.P.CONSERV PESCADO", "P.P.CONGEL.PESCADO",
-             "LECHE CRUDA", "LECHE ENTERA", "LECHE SEMIDESNATAD",
-             "LECHE DESNATADA", "TOTAL OTRAS LECHES", "PREPARADOS LACTEOS",
-             "LECHES FERMENTADAS", "BATIDOS DE YOGURT", "CUAJADAS", "QUESO",
-             "NATA", "NATILLAS", "FLANES PREPARADOS", "CREMA DE CHOCOLATE",
-             "CREMA CATALANA", "POSTRES CON NATA", "OT.DERIVADOS LACTEOS",
-             "BATIDOS DE LECHE", "T.HUEVOS KGS", "TORTILLAS REFRIGERAD",
-             "MANTEQUILLA", "MARGARINA", "TOTAL ACEITES DE OLIVA",
-             "ACEITE DE ORUJO", "ACEITE DE GIRASOL", "ACEITE DE MAIZ",
-             "ACEITE DE SOJA", "ACEITE DE SEMILLA", "TOCINO Y MANTECA",
-             "NARANJAS", "MANDARINAS", "LIMONES", "PLATANOS", "MANZANAS",
-             "MANZANAS", "MELOCOTONES", "ALBARICOQUES", "CIRUELAS", "CEREZAS",
-             "AGUACATE", "FRESAS/FRESON", "UVAS", "MELON", "SANDIA", "KIWI",
-             "PIÑA", "OTRAS FRUTAS FRESCAS", "FRUTOS SECOS",
-             "FRUTA CONS/ALMIBAR", "RESTO FRUTA CONSER", "FRUTAS CONGELADAS",
-             "LECHUGA/ESC./ENDIVIA", "VERDURAS DE HOJA", "COLES", "TOMATES",
-             "JUDIAS VERDES", "PIMIENTOS", "PEPINOS",
-             "BERENJENAS", "CALABACINES", "CEBOLLAS", "AJOS", "ZANAHORIAS",
-             "ESPARRAGOS", "CHAMPIÑONES+O.SETAS", "OTR.HORTALIZAS/VERD.",
-             "LEGUMBRES SECAS", "P.P.CONGEL.VEGETAL", "VERD./HORT.CONGELAD",
-             "LEGUMBRES COCIDAS", "ACEITUNAS", "GUISANTES", "JUDIAS VERDES",
-             "PIMIENTOS", "ESPARRAGOS", "ALCACHOFAS", "CHAMPIÑOSNES+SETAS",
-             "MAIZ DULCE", "MENESTRA", "TOMATES", "OTRA VERD/HORT.CON",
-             "P.P.CONGEL.VEGETAL", "ENCURTIDOS", "TOMATE FRITO",
-             "PATATAS FRESCAS", "PATATAS CONGELADAS", "PATATAS PROCESADAS",
-             "AZUCAR", "EDULCORANTES", "MIEL", "MERMELADAS,CONFIT.",
-             "CHOCOLATES/CACAOS/SUC", "TURRON DE CHOCOLATE", "CACAO SOLUBLE",
-             "PRODUCTOS NAVIDEÑOS", "FRUTA ESCARCHADA",
-             "HELADOS Y TARTAS", "SALSAS", "SAL",
-             "ESPECIAS Y CONDIMENTO", "CALDOS", "P.P.SOPAS Y CREMAS", 
-             "OTROS PROD.EN PESO", "CAFE G. O M.TORREFAC",
-             "CAFE G. O M.NATURAL", "CAFE G. O M.MEZCLA", "CAFE G. O M.DESCA",
-             "CAFE SOLUBLE", "SUCEDANEOS DE CAFE", "TE", "MANZANILLA", "POLEO",
-             "OTRAS INFUSIONES", "AGUA DE BEBIDA ENVAS.",
-             "GASEOSAS Y BEBID.REFR", "TOTAL ZUMO Y NECTAR",
-             "ZUMOS DE HORTALIZAS", "VINAGRE", "OTROS PROD.EN VOLUMEN")
-
-
-df_volumen <- df_volumen %>%
-  filter(CATEGORIAS %in% categorias)
-
-rm(categorias)
-```
-
 Modifico el formato de df_volumen de formato ancho a largo
 
 ```{r}
 df_volumen <- df_volumen %>%
-  pivot_longer(cols = -c(CATEGORIAS, AÑO), 
+  pivot_longer(cols = -c(PRODUCTOS, AÑO), 
                names_to = "REGIONES",
                values_to = "VOLUMEN")
 ```
@@ -288,8 +204,6 @@ Hago una copia de df_volumen llamada data, con la que trabajaré a continuación
 
 ```{r}
 data <- df_volumen
-
-rm(lista_df_volumen)
 ```
 
 ## 3. Analisis descriptivo
@@ -314,7 +228,7 @@ summary(data)
 Valores únicos de CATEGORIAS
 
 ```{r}
-cat("El número de valores únicos de CATEGORIAS es: ", length(unique(x = data$CATEGORIAS)), "\n")
+cat("El número de valores únicos de PRODUCTOS es: ", length(unique(x = data$PRODUCTOS)), "\n")
 
 cat("El número de valores únicos de AÑO es: ", length(unique(x = data$AÑO)), "\n")
 
@@ -329,23 +243,25 @@ hist(
   main = "Histograma de VOLUMEN",
   xlab = "Valores",
   ylab = "Frecuencia",
-  breaks = 100
+  breaks = 100,
+  axes = TRUE
 )
+
 ```
 
 Según los resultados obetenidos, las principales caracteristicas del conjunto de datos son los siguientes:
 
-- El conjunto de datos tiene 65.4847 registros y 4 variables.
+- El conjunto de datos tiene 221,706 registros y 4 variables.
   
 - Las variables son:
 
-  - AÑO: contine valores numéricos que representan años. El rango temporal abarca desde el año 2000 hasta el 2022, en total, 23 años diferentes.
+  - **AÑO**: contine valores numéricos que representan años. El rango temporal abarca desde el año 2000 hasta el 2022, en total, 23 años diferentes.
   
-  - CATEGORIAS: contiene valores de tipo cadena de texto, que representa los tipos de alimentos. Por lo que parece existen 160 tipos de alimentos únicos.
+  - **PRODUCTOS**: contiene valores de tipo cadena de texto, que representa los tipos de alimentos. Por lo que parece existen 791 tipos de alimentos únicos.
   
-  - REGIONES: es otra variable, que también admite valores de tipo caracter, y que representa las diferentes regiones geográficas, esto es, las Comunidades Autónomas y España, en total 18 regiones.
+  - **REGIONES**: es otra variable, que también admite valores de tipo caracter, y que representa las diferentes regiones geográficas, esto es, las Comunidades Autónomas y España, en total 18 regiones.
   
-  - VOLUMEN: contiene valores numéricos y representa la cantidad de alimentos que se consumen por los hogares españoles. En este caso, nuestra variable respuesta es VOLUMEN ya que la pregunta a responder sería como varía la cantidad de alimento consumida por los hogares españoles por año, región y tipo de alimento.
+  - **VOLUMEN**: contiene valores numéricos y representa la cantidad de alimentos que se consumen por los hogares españoles. En este caso, nuestra variable respuesta es VOLUMEN ya que la pregunta a responder sería como varía la cantidad de alimento consumida por los hogares españoles por año, región y tipo de alimento.
   
 - Los valores de la variable VOLUMEN presentan una distribución sesgada hacia la izquierda, esto quiere decir que la mayoría de sus valores se situan cerca del cero.
 
@@ -355,11 +271,11 @@ Tras el analisis descriptivo del conjunto de datos, conviene ajustar algunas de 
 
 En este caso, la variable AÑO, que es numérica, no voy a modificarla, ya que esto me podría ayudar a realizar alguna operación matemética en el futuro.
 
-Con respecto a las variables REGIONES y CATEGORIAS voy a factorizarla.
+Con respecto a las variables REGIONES y PRODUCTOS voy a factorizarla.
 
 ```{r}
 data$REGIONES <- as.factor(data$REGIONES)
-data$CATEGORIAS <- as.factor(data$CATEGORIAS)
+data$PRODUCTOS <- as.factor(data$PRODUCTOS)
 ```
 
 ## 5. Detección y tratamiento de datos ausentes
@@ -394,6 +310,8 @@ for (region in regiones_unicas) {
     horizontal = TRUE,
     main = paste(region))
 }
+
+rm(region, regiones_unicas, data_region)
 ```
 
 En conclusión, al examinar los valores atípicos en los gráficos de boxplot de "VOLUMEN" por región y año, hemos observado la presencia de variabilidad significativa en el consumo de alimentos a lo largo del tiempo y en diferentes regiones geográficas, lo cual era de esperar debido a las diferencias en las preferencias alimenticias y las influencias socioeconómicas. Si bien es cierto que hemos identificado valores que se desvían de la norma, es importante destacar que no todos los valores atípicos son necesariamente errores o anomalías; muchos de ellos reflejan patrones genuinos en los datos. La interpretación adecuada de estos valores atípicos requiere un conocimiento profundo del contexto y el dominio, y puede proporcionar información valiosa para entender las tendencias y las diferencias regionales en el consumo de alimentos a lo largo del tiempo. Por lo tanto, en lugar de descartar automáticamente los valores atípicos, debemos considerarlos como una parte esencial de la riqueza de nuestros datos y explorar sus implicaciones en el análisis.
@@ -422,101 +340,56 @@ barplot(table(data$REGIONES),
         las = 2,  # Rotar etiquetas en el eje x
         cex.names = 0.5,  # Tamaño de las etiquetas de las regiones
         xlim = c(0, length(unique(data$REGIONES)) + 3), # Ajustar límites del eje x
-        ylim = c(0, 4000)) # Ajustar límites del eje y
+        ylim = c(0, 15000)) # Ajustar límites del eje y
 ```
 
 ```{r}
 # Crear un gráfico de barras para la variable "REGIONES" con etiquetas personalizadas
-barplot(table(data$CATEGORIAS), 
-        main = "Histográma de CATEGORIAS",
+barplot(table(data$PRODUCTOS), 
+        main = "Histográma de PRODUCTOS",
         ylab = "Frecuencia",
         col = "blue",
         border = "black",
         las = 2,  # Rotar etiquetas en el eje x
         cex.names = 0.2,  # Tamaño de las etiquetas de las regiones
-        xlim = c(0, length(unique(data$CATEGORIAS)) + 3), # Ajustar límites del eje x
+        xlim = c(0, length(unique(data$PRODUCTOS)) + 3), # Ajustar límites del eje x
         ylim = c(0, 1000)) # Ajustar límites del eje y
 ```
 
 Trasa realizar el análisis de los gráficos boxplot e histogramas, he llegado a las siguientes conclusiones:
 
-- Los valores únicos de las variables REGIONES y AÑOS se repite nel mismo número de veces cada uno de ellos.
+- Los valores únicos de las variables REGIONES y AÑOS se repiten el mismo número de veces cada uno de ellos.
 
 - Con respecto a los valores de la variable CATEGORIAS, por regla general se repiten el mismo número de veces, a excepción de unos cuantos, pero esto se debe a modificaciones en la metodología en la toma de los datos, de tal forma, que algunas categorías de alimentos se empezaron a contabilizar en unos años y otros en otros. 
 
 - Con respecto a lo valores atípicos en los gráficos de boxplot de "VOLUMEN" por región y año, he observado la presencia de variabilidad significativa en el consumo de alimentos a lo largo del tiempo y en diferentes regiones geográficas, lo cual era de esperar debido a las diferencias en las preferencias alimenticias. Si bien es cierto que hemos identificado valores que se desvían de la norma, es importante destacar que no todos los valores atípicos son necesariamente errores o anomalías; muchos de ellos reflejan patrones genuinos en los datos. La interpretación adecuada de estos valores atípicos requiere un conocimiento profundo del contexto y el dominio, y puede proporcionar información valiosa para entender las tendencias y las diferencias regionales en el consumo de alimentos a lo largo del tiempo. Por lo tanto, en lugar de descartar automáticamente los valores atípicos, debemos considerarlos como una parte esencial de la riqueza de nuestros datos y explorar sus implicaciones en el análisis.
 
-## 7. Análisis de correlación entre las variables
-
-En primer lugar realizo un analisis decorrelación entre AÑO y VOLUMEN.
-
-```{r}
-# Calcular la correlación entre AÑO y VOLUMEN
-correlation_year_volume <- cor(data$AÑO, data$VOLUMEN)
-
-# Imprimir el resultado
-cat("Correlación entre AÑO y VOLUMEN:", correlation_year_volume)
-
-```
-
-A continuación, sigo con CATEGORIAS y VOLUMEN
-
-```{r}
-# Crear un dataframe con variables numéricas para categorías de alimentos y volumen
-data_numeric <- data.frame(
-  CATEGORIAS = as.numeric(factor(data$CATEGORIAS)),
-  VOLUMEN = data$VOLUMEN
-)
-
-# Calcular la correlación entre CATEGORIAS y VOLUMEN
-correlation_categories_volume <- cor(data_numeric$CATEGORIAS, data_numeric$VOLUMEN)
-
-# Imprimir el resultado
-cat("Correlación entre CATEGORIAS de Alimentos y VOLUMEN:", correlation_categories_volume)
-
-```
-
-Y por último entre REGIONES y VOLUMEN
-
-```{r}
-# Crear un dataframe con variables numéricas para regiones y volumen
-data_numeric <- data.frame(
-  REGIONES = as.numeric(factor(data$REGIONES)),
-  VOLUMEN = data$VOLUMEN
-)
-
-# Calcular la correlación entre REGIONES y VOLUMEN
-correlation_regions_volume <- cor(data_numeric$REGIONES, data_numeric$VOLUMEN)
-
-# Imprimir el resultado
-cat("Correlación entre REGIONES y VOLUMEN:", correlation_regions_volume)
-
-```
-
-Basándonos en los resultados de los análisis de correlación realizados anteriormente en tu conjunto de datos, podemos llegar a las siguientes conclusiones:
-
-- **Correlación entre Año y Volumen**: La correlación entre el año y el volumen de alimentos consumidos es cercana a cero (-0.0118). Esto sugiere que no hay una relación lineal fuerte entre el año y la cantidad de alimentos consumidos en los hogares españoles durante el período analizado. En otras palabras, el año no parece ser un predictor significativo del volumen de alimentos consumidos.
-
-- **Correlación entre Categorías de Alimentos y Volumen**: La correlación entre las categorías de alimentos y el volumen de alimentos consumidos también es cercana a cero (-0.0023). Esto indica que, en términos de una relación lineal simple, no existe una correlación significativa entre los diferentes tipos de alimentos y la cantidad de alimentos consumidos. Esto puede significar que la elección de categorías de alimentos no es un predictor sólido del volumen de consumo.
-
-- **Correlación entre Regiones y Volumen**: La correlación entre las regiones geográficas y el volumen de alimentos consumidos es muy baja (0.0036). Esto sugiere que, en un contexto de correlación lineal simple, las diferencias geográficas no tienen una influencia fuerte en la cantidad de alimentos consumidos en las diferentes regiones.
-
-En general, los resultados de correlación sugieren que las variables "Año", "Categorías de Alimentos" y "Regiones" no están fuertemente relacionadas de manera lineal con el volumen de alimentos consumidos en el conjunto de datos. 
-
 ## 8. Conclusiones
 
-El análisis exploratorio de datos se llevó a cabo en un conjunto de datos que abarca el volumen de alimentos consumidos por hogares españoles durante el período de 2000 a 2022. Estos datos se extrajeron de 22 archivos Excel, uno para cada año, disponibles en un repositorio de GitHub. Durante el EDA, se obtuvieron las siguientes conclusiones:
+El análisis exploratorio de datos se llevó a cabo en un conjunto de datos que abarca el volumen de alimentos consumidos por hogares españoles durante el período de 2000 a 2022. Estos datos se extrajeron de las hojas VOLUMEN, de 22 archivos Excel, uno para cada año, disponibles en un repositorio de GitHub
 
-- **Variabilidad en la Cantidad de Registros**: Se observó una variabilidad significativa en la cantidad de registros de alimentos entre los distintos dataframes. Algunos contenían 19 variables, mientras que otros presentaban 27 debido a cambios en la metodología a partir de 2004.
+En una exploración inicial de los diferentes dataframe, e observó una variabilidad significativa en la cantidad de variables entre los distintos dataframes. Algunos contenían 19 variables, mientras que otros presentaban 27. Esta variablilidaden las variables se podía deber a cambios en la metodología introducidos a partir de 2004 y 2019. Se redujo el número de variables, conservando solo las que corresponden a España y las Comunidades Autónomas.
 
-- **Normalización de Datos**: Para simplificar la complejidad de los datos y permitir análisis basados en categorías establecidas por la COICOP, se optó por una selección de registros priorizando los tipos de alimentos. Esto conllevó la pérdida de algunos detalles específicos.
+De la misma forma, dependiendo de la metodología adoptada, el núermo de registros, e incluso su denominanción, varían según los años. La selección de estos registros dependerán en medida de los objetivos del análisis. Así, si se pretende un análisis general, se podrá seleccionar aquellas categorias, como TOTAL CARNE, TOTAL PESCA, etc, que faciliten ese fin. Sin embargo, si se quiere un análisis más detallado, se podrá seleccionar productos más concreto, como carne de vaca congelada, etc.
 
-- **Reducción de Variables**: Se redujo el número de variables, conservando solo las que corresponden a España y las Comunidades Autónomas, resultando en un conjunto de datos con 65,4847 observaciones y 4 variables: AÑO, CATEGORIAS, REGIONES y VOLUMEN.
+Una vez transformado los datos, se unieron todos los dataframe en uno sólo, dando lugar a un nuevo conjunto dedatos cuyas principales caracteristicas son la siguientes: 
 
-- **Datos Completos**: No se encontraron datos faltantes en el conjunto de datos resultante.
+- El conjunto de datos tiene 221,706 registros y 4 variables.
+  
+- Las variables son:
 
-- **Datos Atípicos**: Los gráficos de boxplot de "VOLUMEN" por región y año revelaron una variabilidad significativa en el consumo de alimentos a lo largo del tiempo y en diferentes regiones geográficas. Si bien se identificaron valores atípicos, estos reflejan patrones genuinos en los datos y deben considerarse como parte integral de la riqueza de la información.
+  - **AÑO**: contine valores numéricos que representan años. El rango temporal abarca desde el año 2000 hasta el 2022, en total, 23 años diferentes.
+  
+  - **PRODUCTOS**: contiene valores de tipo cadena de texto, que representa los tipos de alimentos. Existen 791 tipos de alimentos únicos.
+  
+  - **REGIONES**: es otra variable, que también admite valores de tipo caracter, y que representa las diferentes regiones geográficas, esto es, las Comunidades Autónomas y España, en total 18 regiones.
+  
+  - **VOLUMEN**: contiene valores numéricos y representa la cantidad de alimentos que se consumen por los hogares españoles. En este caso, nuestra variable respuesta es VOLUMEN ya que la pregunta a responder sería como varía la cantidad de alimento consumida por los hogares españoles por año, región y tipo de alimento.
+  
+- Los valores de la variable VOLUMEN presentan una distribución sesgada hacia la izquierda, esto quiere decir que la mayoría de sus valores se situan cerca del cero.
 
-- **Correlaciones**: No se encontraron correlaciones significativas entre el volumen de alimentos consumidos y la región, el año o el tipo de alimento, lo que sugiere que estas variables no son determinantes en la cantidad de alimentos consumidos.
+- No se encontraron datos faltantes en el conjunto de datos resultante.
 
-En resumen, el análisis exploratorio de datos proporciona una sólida base para futuras investigaciones relacionadas con el consumo de alimentos en hogares españoles. Se enfatiza la importancia de considerar la variabilidad y los cambios en los datos a lo largo del tiempo y se destaca la necesidad de mantener registros completos.
+- Los gráficos de boxplot de "VOLUMEN" por región y año revelaron una variabilidad significativa en el consumo de alimentos a lo largo del tiempo y en diferentes regiones geográficas. Si bien se identificaron valores atípicos, estos reflejan patrones genuinos en los datos y deben considerarse como parte integral de la riqueza de la información.
+
+En resumen, el análisis exploratorio de datos proporciona una sólida base para futuras investigaciones relacionadas con el consumo de alimentos en hogares españoles. Se enfatiza la importancia de considerar la variabilidad y los cambios en los datos a lo largo del tiempo y se destaca la necesidad de mantener registros completos. 

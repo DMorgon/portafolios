@@ -56,7 +56,7 @@ for i, df in enumerate(lista_df_volumen):
 for df in lista_df_volumen:
     df.columns = df.columns.str.replace(".TOTAL ESPAÑA", "ESPAÑA", regex=False)
     df.columns = df.columns.str.replace("T.ESPAÑA", "ESPAÑA", regex=False)
-    df.columns = df.columns.str.replace("Unnamed: 0", "ALIMENTOS", regex=False)
+    df.columns = df.columns.str.replace("Unnamed: 0", "PRODUCTOS", regex=False)
     df.columns = df.columns.str.replace("CASTILLA-LA MANCHA", "CASTILLA LA MANCHA", regex=False)
     df.columns = df.columns.str.replace("RIOJA", "LA RIOJA", regex=False)
     df.columns = df.columns.str.replace("ARAGÓN", "ARAGON", regex=False)
@@ -76,62 +76,14 @@ for df in lista_df_volumen:
 for i, df in enumerate(lista_df_volumen):
     df["AÑO"] = int(lista_archivos[i])
 
-# Corrijo el nombre de algunas categorias de alimentos
-
-for i in range(23):
-    lista_df_volumen[i]['ALIMENTOS'] = lista_df_volumen[i]['ALIMENTOS'].replace({
-        "ACEITE DE OLIVA": "TOTAL ACEITES DE OLIVA",
-        "HUEVOS KGS": "T.HUEVOS KGS",
-        "AGUA MINERAL": "AGUA DE BEBIDA ENVAS.",
-        "LECHE LIQUIDA RECONST": "PREPARADOS LACTEOS",
-        "BASES PIZZAS&MASAS HO": "BASES PIZZAS Y MASAS HO"
-    })
-
 # Uno todas las tablas en una sola df_total
 
 df_total = pd.concat(objs=lista_df_volumen, axis=0)
 
-# Realizó un filtro en df_total para sólo quedarme con las categorías de alimentos que voy a utilizar
+# Transformo el formato de ancho a largo, manteniendo las columnas "AÑO" y "PRODUCTOS" como identificadores
 
-lista_categoria = ["ARROZ", "PAN", "BOLL./PAST.ENVASADA", "BOLL./PAST.GRANEL", "GALLETAS ENVASADAS", "GALLETAS GRANEL",
-                   "P.P.PASTA RESTO", "P.P.CONSERVA PASTA", "P.P.CONGELADO PASTA", "TOTAL PASTAS",
-                   "OTROS P.P.CONGELADO", "P.P.PIZZA", "O.PASTEL/TARTA GRA", "O.PASTEL/TARTA ENV",
-                   "CEREALES DESAY.ENV.", "BASES PIZZAS Y MASAS HO", "HARINAS Y SEMOLAS", "CARNE VACUNO", "C.CONG.VACA",
-                   "CARNE CERDO", "C.CONG.CERDO", "CARNE OVINO/CAPRINO", "CARNE POLLO", "AVESTRUZ", "PAVO",
-                   "OTRAS AVES", "C.CONG.POLLO", "CARNE TRANSFORMADA", "P.P.CONSERVA CARNE", "P.P.CONGELADO CARNE",
-                   "PLAT.PREP.OTROS", "SALCHICHAS FRESCAS", "SALCHICHAS CONGELAD", "CARNE DESPOJOS", "CARNE CONEJO",
-                   "OTRAS CARNES FRESCA", "CARNE CONGELADA", "PESCADOS FRESCOS", "PESCADOS CONGELADOS",
-                   "MARISCO/MOLUSCO/CRUS", "SALMON AHUMADO", "TRUCHA AHUMADA", "OTROS AHUMADOS", "PESCADO SALADO",
-                   "CONS.PESCADO/MOLUSCO", "P.P.CONSERV PESCADO", "P.P.CONGEL.PESCADO", "LECHE CRUDA", "LECHE ENTERA",
-                   "LECHE SEMIDESNATAD", "LECHE DESNATADA", "TOTAL OTRAS LECHES", "PREPARADOS LACTEOS",
-                   "LECHES FERMENTADAS", "BATIDOS DE YOGURT", "CUAJADAS", "QUESO", "NATA", "NATILLAS",
-                   "FLANES PREPARADOS", "CREMA DE CHOCOLATE", "CREMA CATALANA", "POSTRES CON NATA",
-                   "OT.DERIVADOS LACTEOS", "BATIDOS DE LECHE", "T.HUEVOS KGS", "TORTILLAS REFRIGERAD", "MANTEQUILLA",
-                   "MARGARINA", "TOTAL ACEITES DE OLIVA", "ACEITE DE ORUJO", "ACEITE DE GIRASOL", "ACEITE DE MAIZ",
-                   "ACEITE DE SOJA", "ACEITE DE SEMILLA", "TOCINO Y MANTECA", "NARANJAS", "MANDARINAS", "LIMONES",
-                   "PLATANOS", "MANZANAS", "MANZANAS", "MELOCOTONES", "ALBARICOQUES", "CIRUELAS", "CEREZAS", "AGUACATE",
-                   "FRESAS/FRESON", "UVAS", "MELON", "SANDIA", "KIWI", "PIÑA", "OTRAS FRUTAS FRESCAS", "FRUTOS SECOS",
-                   "FRUTA CONS/ALMIBAR", "RESTO FRUTA CONSER", "FRUTAS CONGELADAS", "LECHUGA/ESC./ENDIVIA",
-                   "VERDURAS DE HOJA", "COLES", "TOMATES", "JUDIAS VERDES", "PIMIENTOS", "PEPINOS", "BERENJENAS",
-                   "CALABACINES", "CEBOLLAS", "AJOS", "ZANAHORIAS", "ESPARRAGOS", "CHAMPIÑONES+O.SETAS",
-                   "OTR.HORTALIZAS/VERD.", "LEGUMBRES SECAS", "P.P.CONGEL.VEGETAL", "VERD./HORT.CONGELAD",
-                   "LEGUMBRES COCIDAS", "ACEITUNAS", "GUISANTES", "JUDIAS VERDES", "PIMIENTOS", "ESPARRAGOS",
-                   "ALCACHOFAS", "CHAMPIÑOSNES+SETAS", "MAIZ DULCE", "MENESTRA", "TOMATES", "OTRA VERD/HORT.CON",
-                   "P.P.CONGEL.VEGETAL", "ENCURTIDOS", "TOMATE FRITO", "PATATAS FRESCAS", "PATATAS CONGELADAS",
-                   "PATATAS PROCESADAS", "AZUCAR", "EDULCORANTES", "MIEL", "MERMELADAS,CONFIT.",
-                   "CHOCOLATES/CACAOS/SUC", "TURRON DE CHOCOLATE", "CACAO SOLUBLE", "PRODUCTOS NAVIDEÑOS",
-                   "FRUTA ESCARCHADA", "HELADOS Y TARTAS", "SALSAS", "SAL", "ESPECIAS Y CONDIMENTO", "CALDOS",
-                   "P.P.SOPAS Y CREMAS",  "OTROS PROD.EN PESO", "CAFE G. O M.TORREFAC", "CAFE G. O M.NATURAL",
-                   "CAFE G. O M.MEZCLA", "CAFE G. O M.DESCA", "CAFE SOLUBLE", "SUCEDANEOS DE CAFE", "TE", "MANZANILLA",
-                   "POLEO", "OTRAS INFUSIONES", "AGUA DE BEBIDA ENVAS.", "GASEOSAS Y BEBID.REFR", "TOTAL ZUMO Y NECTAR",
-                   "ZUMOS DE HORTALIZAS", "VINAGRE", "OTROS PROD.EN VOLUMEN"]
-
-df_total = df_total[df_total["ALIMENTOS"].isin(lista_categoria)]
-
-# Transformo el formato de ancho a largo, manteniendo las columnas "AÑO" y "ALIMENTOS"  como identificadores
-
-
-df_total = df_total.melt(id_vars=["AÑO", "ALIMENTOS"], var_name="REGIONES",
+df_total = df_total.melt(id_vars=["AÑO", "PRODUCTOS"],
+                         var_name="REGIONES",
                          value_name="VOLUMEN")
 
 """
