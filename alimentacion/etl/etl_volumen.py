@@ -35,19 +35,12 @@ for archivo in lista_archivos:
 
 # Elimino las variables correspondientes a los territorios que no voy a utilizar
 
-columnas_eliminar_1 = ["NORESTE", "LEVANTE", "ANDALUCIA", "CENTRO-SUR", "CASTILLA Y LEON", "NOROESTE", "NORTE",
-                       "T.CANARIAS"]
+# Lista de columnas a eliminar para los primeros 19 DataFrames
+columns_to_drop = ["T.ANDALUCIA", "CASTILLA LEON", "NORESTE", "LEVANTE", "CENTRO-SUR", "NOROESTE", "NORTE",
+                   "T.CANARIAS", "ANDALUCÍA", "CASTILLA Y LEÓN"]
 
-for i, df in enumerate(lista_df_volumen):
-    if i <= 12:
-        # Eliminar columnas para los primeros 13 DataFrames
-        columns_to_drop = ["T.ANDALUCIA", "CASTILLA LEON", "NORESTE", "LEVANTE", "CENTRO-SUR", "NOROESTE", "NORTE",
-                           "T.CANARIAS"]
-    else:
-        # Eliminar columnas para los DataFrames restantes
-        columns_to_drop = ["ANDALUCÍA", "CASTILLA Y LEÓN", "NORESTE", "LEVANTE", "CENTRO-SUR", "NOROESTE", "NORTE",
-                           "T.CANARIAS"]
-
+# Iterar a través de los DataFrames y las columnas a eliminar
+for i, df in enumerate(lista_df_volumen[:19]):
     # Utilizar el método drop para eliminar las columnas especificadas
     df.drop(columns=columns_to_drop, errors="ignore", inplace=True)
 
