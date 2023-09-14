@@ -59,6 +59,7 @@ for df in lista_df_volumen:
     df.columns = df.columns.str.replace("CASTILLA-LA MANCHA", "CASTILLA LA MANCHA", regex=False)
     df.columns = df.columns.str.replace("CASTILLA - LA MANCHA", "CASTILLA LA MANCHA", regex=False)
     df.columns = df.columns.str.replace("CASTILLA Y LEÓN", "CASTILLA Y LEON", regex=False)
+    df.columns = df.columns.str.replace("PRINCIPADO DE ASTURIAS", "ASTURIAS", regex=False)
     df.columns = df.columns.str.replace("RIOJA", "LA RIOJA", regex=False)
     df.columns = df.columns.str.replace("C. FORAL DE NAVARRA", "NAVARRA", regex=False)
     df.loc[:, sorted(df.columns)] = df.loc[:, df.columns]
