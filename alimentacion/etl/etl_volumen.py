@@ -35,14 +35,14 @@ for archivo in lista_archivos:
 
 # Elimino las variables correspondientes a los territorios que no voy a utilizar
 
-# Lista de columnas a eliminar para los primeros 19 DataFrames
-columns_to_drop = ["T.ANDALUCIA", "CASTILLA LEON", "NORESTE", "LEVANTE", "CENTRO-SUR", "NOROESTE", "NORTE",
-                   "T.CANARIAS", "ANDALUCÍA", "CASTILLA Y LEÓN"]
-
 # Iterar a través de los DataFrames y las columnas a eliminar
-for i, df in enumerate(lista_df_volumen[:19]):
-    # Utilizar el método drop para eliminar las columnas especificadas
-    df.drop(columns=columns_to_drop, errors="ignore", inplace=True)
+for i, df in enumerate(lista_df_volumen):
+    if i>=4 and i<=12:
+        df.drop(columns=["T.ANDALUCIA", "CASTILLA LEON", "NORESTE", "LEVANTE", "CENTRO-SUR", "NOROESTE", "NORTE",
+                         "T.CANARIAS"], errors="ignore", inplace=True)
+    if i>=13 and i<=18:
+        df.drop(columns=["ANDALUCIA", "CASTILLA Y LEÓN", "NORESTE", "LEVANTE", "CENTRO-SUR", "NOROESTE", "NORTE",
+                         "T.CANARIAS"], errors="ignore", inplace=True)
 
 # Corrijo el nombre de las variables correspondientes a las comunidades autónomas.
 
@@ -50,17 +50,16 @@ for df in lista_df_volumen:
     df.columns = df.columns.str.replace(".TOTAL ESPAÑA", "ESPAÑA", regex=False)
     df.columns = df.columns.str.replace("T.ESPAÑA", "ESPAÑA", regex=False)
     df.columns = df.columns.str.replace("Unnamed: 0", "PRODUCTOS", regex=False)
-    df.columns = df.columns.str.replace("CASTILLA-LA MANCHA", "CASTILLA LA MANCHA", regex=False)
-    df.columns = df.columns.str.replace("RIOJA", "LA RIOJA", regex=False)
     df.columns = df.columns.str.replace("ARAGÓN", "ARAGON", regex=False)
     df.columns = df.columns.str.replace("ILLES BALEARS", "BALEARES", regex=False)
     df.columns = df.columns.str.replace("COMUNITAT VALENCIANA", "VALENCIA", regex=False)
     df.columns = df.columns.str.replace("REGIÓN DE MURCIA", "MURCIA", regex=False)
     df.columns = df.columns.str.replace("ANDALUCÍA", "ANDALUCIA", regex=False)
     df.columns = df.columns.str.replace("COMUNIDAD DE MADRID", "MADRID", regex=False)
+    df.columns = df.columns.str.replace("CASTILLA-LA MANCHA", "CASTILLA LA MANCHA", regex=False)
     df.columns = df.columns.str.replace("CASTILLA - LA MANCHA", "CASTILLA LA MANCHA", regex=False)
     df.columns = df.columns.str.replace("CASTILLA Y LEÓN", "CASTILLA Y LEON", regex=False)
-    df.columns = df.columns.str.replace("PRINCIPADO DE ASTURIAS", "ASTURIAS", regex=False)
+    df.columns = df.columns.str.replace("RIOJA", "LA RIOJA", regex=False)
     df.columns = df.columns.str.replace("C. FORAL DE NAVARRA", "NAVARRA", regex=False)
     df.loc[:, sorted(df.columns)] = df.loc[:, df.columns]
 
