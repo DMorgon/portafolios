@@ -36,3 +36,63 @@ library(rmarkdown)
 library(dplyr)
 library(corrplot)
 ```
+
+## 2. Obtención de los datos
+### 2.1 Extracción de los datos
+
+```{r}
+
+# Datos de la ruta
+ruta <- "https://github.com/DMorgon/portafolios/raw/main"
+rama <- "alimentacion/datos_procesados"
+nombre_archivo <- "volumen.csv"
+
+# Creo la ruta desde donde se descargaran los archivos
+archivo_url <- paste0(ruta, "/", rama, "/", nombre_archivo)
+
+# Creo el nombre del archivo local
+archivo_local <- "volumen_categoria.csv"
+
+# Descargar el archivo desde la URL
+response <- GET(archivo_url, write_disk(archivo_local, overwrite = TRUE))
+  
+# Creo el df con los datos del archivo local
+data <- read.csv(archivo_local)
+
+# Borro el archivo local
+file.remove(archivo_local)
+
+
+# Elimino las variables que ya no se utilizará.
+rm(ruta, rama, nombre_archivo, archivo_url, archivo_local, response, df, i)
+
+```
+
+### 2.2 Exploración inicial de los datos
+
+```{r}
+View(data)
+```
+
+```{r}
+str(data)
+```
+
+```{r}
+summary(data)
+```
+
+### 2.3 Transformación de los datos
+
+
+### 2.4 Carga de los datos
+
+
+
+
+## 3. Analisis descriptivo
+## 4. Ajuste de variables
+## 5. Detección y tratamiento de valores ausentes
+## 6. Identificación de valores atípicos
+## 7. Análisis de correlación
+## 8. Conclusiones
