@@ -7,6 +7,25 @@ output: pdf_document
 ---
 
 ## Introducción
+
+El presente análisis exploratorio de datos (EDA) se inscribe en un proyecto más amplio destinado a examinar el patrón de consumo de alimentos por parte de los hogares españoles. Los datos en consideración fueron recopilados a partir de la fuente oficial del Ministerio de Agricultura, Pesca y Alimentación, un tesoro de información que se presentó en 22 archivos Excel, cada uno de los cuales contenía hasta 14 hojas de datos. En particular, nos enfocamos en la hoja "VOLUMEN", que almacena información sobre la cantidad de alimentos consumidos por los hogares en diferentes regiones y categorías de alimentos.
+
+Este viaje de exploración de datos se ha dividido en pasos meticulosos para garantizar un análisis riguroso y comprensivo:
+
+Preparación del Entorno de Trabajo: Configuramos nuestro entorno de análisis, estableciendo las herramientas y bibliotecas necesarias para este estudio.
+
+Obtención de los Datos: Realizamos la extracción, exploración inicial, transformación y carga de los datos desde las múltiples fuentes, consolidando así un conjunto de datos coherente que denominamos "volumen".
+
+Análisis Descriptivo: Comenzamos con un análisis descriptivo de los datos, identificando el número de observaciones, variables y el rango temporal que abarca desde el año 2000 hasta 2022. Además, examinamos la distribución de las variables numéricas y las características únicas de las variables categóricas.
+
+Ajuste de Variables: Realizamos ajustes necesarios en las variables para garantizar que se adapten a los objetivos de nuestro análisis.
+
+Gestión de Datos Faltantes y Valores Atípicos: Detectamos y tratamos cuidadosamente los valores ausentes, que representan el 3.1% de los datos totales, y los valores atípicos, que se esperaban en las variables relacionadas con las categorías de alimentos debido a las diferencias regionales en el consumo.
+
+Exploración de Correlaciones: Exploramos las relaciones entre las variables numéricas mediante una matriz de correlación, revelando patrones y conexiones potencialmente significativas.
+
+A lo largo de este proceso, hemos descubierto observaciones clave sobre la estructura y la naturaleza de nuestros datos, proporcionando una base sólida para análisis posteriores. Este EDA es fundamental para comprender mejor los patrones de consumo de alimentos en los hogares españoles y tomar decisiones informadas en nuestro proyecto global. ¡Continuemos nuestro análisis con estas valiosas perspectivas!
+
 ## 1. Preparación del entorno de trabajo.
 
 Configuro el repositorio de CRAN de manera no interactiva
@@ -57,42 +76,345 @@ archivo_local <- "volumen_categoria.csv"
 response <- GET(archivo_url, write_disk(archivo_local, overwrite = TRUE))
   
 # Creo el df con los datos del archivo local
-data <- read.csv(archivo_local)
+volumen <- read.csv(archivo_local)
 
 # Borro el archivo local
 file.remove(archivo_local)
 
 
 # Elimino las variables que ya no se utilizará.
-rm(ruta, rama, nombre_archivo, archivo_url, archivo_local, response, df, i)
-
+rm(ruta, rama, nombre_archivo, archivo_url, archivo_local, response)
 ```
 
 ### 2.2 Exploración inicial de los datos
 
 ```{r}
+View(volumen)
+```
+
+```{r}
+str(volumen)
+```
+
+```{r}
+summary(volumen)
+```
+
+
+```{r}
+produtos <- unique(volumen$PRODUCTOS)
+regiones <- unique(volumen$REGIONES)
+
+cat("La variable PRODUCTOS contien ", length(produtos), " valores únicos", "\n")
+cat("La variable REGIONES contien ", length(regiones), " valores únicos", "\n")
+
+
+rm(produtos, regiones)
+```
+
+El conjunto de los datos contiene 234.023 observaciones y 4 variables, que son:
+
+- **AÑO**: admite valores numéricos y representa cada año de la seria, que va desde el año 2000 hasta el año 2022.
+
+- **PRODUCTOS**: admite cadena de texto y representa a cada una de las categorias y alimentos que consumen los hogares españoles. Existen 791 productos únicos.
+
+- **REGIONES**: admite cadeta de texto y representa las regiones. Existen 19 regiones únicas.
+
+- **VOLUMEN**: admite valores numéricos que representa la cantiad de alimentos consumen los hogares españoles. 
+
+En definitiva, el conjunto de datos tiene dos variables numéricas y dos categóricas.  La variable VOLUMEN sería la variable respuesta.
+
+### 2.3 Transformación de los datos
+
+A continuación realizaré un filtro de los registros del conjunto de los datos.
+
+Los registros seleccionados que he seleccionado me permitarirán corresponden a las categorías más generales. Esto me permitirá realizar un análisis general del consumo de alimentos por los hogares españoles.
+
+En primer lugar, corrijo el nombre de algunos productos.
+
+```{r}
+volumen <- volumen %>%
+  mutate(PRODUCTOS = case_when(
+    PRODUCTOS == "HUEVOS KGS" ~ "T.HUEVOS KGS",
+    PRODUCTOS == "LECHE LIQUIDA RECONST" ~ "PREPARADOS LACTEOS",
+    PRODUCTOS == "AGUA MINERAL" ~ "AGUA DE BEBIDA ENVAS.",
+    PRODUCTOS == "BASES PIZZAS&MASAS HO" ~ "BASES PIZZAS Y MASAS HO",
+    PRODUCTOS == "T.FRUTA&HORTA.TRANSF" ~ "T.FRUTA Y HORTA.TRANSF",
+    TRUE ~ PRODUCTOS))
+```
+
+A continuación, filtro el conjunto de datos por la lista de productos seleccionados
+
+```{r}
+# Crear la lista de productos
+categorias <- c("T.HUEVOS KGS", "MIEL", "TOTAL CARNE", "TOTAL PESCA",
+                "TOTAL LECHE LIQUIDA", "TOTAL OTRAS LECHES",
+                "PREPARADOS LACTEOS", "DERIVADOS LACTEOS", "PAN",
+                "BOLL.PAST.GALLET.CERE", "CHOCOLATES/CACAOS/SUC", "ARROZ",
+                "TOTAL PASTAS", "AZUCAR", "EDULCORANTES", "LEGUMBRES",
+                "TOTAL ACEITE", "MARGARINA", "ACEITUNAS", "VINAGRE",
+                "TOTAL ZUMO Y NECTAR", "TOTAL PATATAS", "T.HORTALIZAS FRESCAS",
+                "T.FRUTAS FRESCAS", "FRUTOS SECOS", "T.FRUTA Y HORTA.TRANSF",
+                "PLATOS PREPARADOS", "CAFES E INFUSIONES", "CALDOS", "SALSAS",
+                "AGUA DE BEBIDA ENVAS.", "GASEOSAS Y BEBID.REFR",
+                "BASES PIZZAS Y MASAS HO", "HARINAS Y SEMOLAS", "ENCURTIDOS",
+                "ESPECIAS Y CONDIMENTO", "SAL", "OTROS PROD.EN PESO",
+                "OTROS PROD.EN VOLUMEN")
+
+# Filtro el conjunto de los datos en base a la lista de productos
+volumen <- volumen %>%
+  filter(PRODUCTOS %in% categorias)
+
+rm(categorias)
+```
+
+Por último paso de formato largo a ancho la variable PRODUCTO
+```{r}
+# Utiliza pivot_wider para convertir el formato de largo a ancho
+volumen <- volumen %>%
+  pivot_wider(names_from = PRODUCTOS, values_from = VOLUMEN)
+```
+
+### 2.3 Carga de los datos
+
+Hago una copia de df_volumen llamada data, con la que trabajaré a continuación 
+
+```{r}
+data <- volumen
+```
+
+## 3. Analisis descriptivo
+
+Obtengo una vista preliminar del marco de datos
+
+```{r}
 View(data)
 ```
+
+Examino la estructura interna del marco de datos:
 
 ```{r}
 str(data)
 ```
 
+Creo un resumen estadistico de las variables del conjunto de datos
+
 ```{r}
 summary(data)
 ```
 
-### 2.3 Transformación de los datos
+```{r}
+regiones <- unique(data$REGIONES)
+año <- unique(data$AÑO)
 
+cat("La variable REGIONES contien ", length(regiones), " valores únicos", "\n")
+cat(regiones, "\n", "\n")
 
-### 2.4 Carga de los datos
+cat("La variable AÑO contien ", length(año), " valores únicos", "\n")
+cat(año, "\n", "\n")
 
+rm(regiones, año)
+```
 
+Creo un histográma para examinar la distribución de los datos de la variable VOLUMEN
 
+```{r}
+# Configurar la disposición de los gráficos (1 fila, 2 columnas)
+for (i in seq(3, 41, 1)){
+  hist(
+  data[[i]],
+  xlab = "Valores",
+  ylab = "Frecuencia",
+  breaks = 100,
+  main = paste0("Histográma de ", colnames(data)[i]))
+}
 
-## 3. Analisis descriptivo
+rm(i)
+```
+Creo un histográma para examinar la distribución de los datos de la variable REGIONES
+
+```{r}
+barplot(
+  table(data$REGIONES),
+  xlab = "",
+  ylab = "Frecuencia",
+  main = "Frecuencia de Regiones",
+  las = 2,
+  cex.names = 0.4,
+  ylim = c(0, 25))
+```
+
+Creo un histográma para examinar la distribución de los datos de la variable AÑO
+
+```{r}
+barplot(
+  table(data$AÑO),
+  xlab = "Año",
+  ylab = "Frecuencia",
+  main = "Frecuencia de Año",
+  las = 2,
+  cex.names = 0.5,
+  ylim = c(0, 20))
+```
+
+Tras examinar el marco de datos he llegado a la siguiente conclusión:
+
+- El número total de observaciones del conjunto de datos es de 391.
+
+- El número total de variables son 41, de las cuales una, REGIONES, es de tipo categórico y las restantes numéricas. De éstas últicas cabe diferencia la variable AÑO, que como su nombre indica, representa el año, y las restantes variables, que representa la categoría de alimentos.
+
+- El rango temporal abarca desde el año 2000 hasta el año 2022.
+
+- Las variables numéricas, que representan categorías de alimentos, presentan una distribución sesgada a la izquierda, es deicir, sus valores se aproximan más a la izquierda.
+
+- Los valores de REGIONES y AÑO se repiten el mismo número de veces, es deicir, cada región se repite 23 y cada año 17 veces. 
+
 ## 4. Ajuste de variables
+
+Dentro de las numericas cabe destacar la variable AÑO, que es una variable temporal. Por regla general es conveniente trasformar estas variables a tipo fecha. Sin embargo, debido a que son años, no las modificaré.
+
+En cuanto a las variables REGIONES convendría transformarla a tipo factor.
+
+```{r}
+data$REGIONES <- factor(data$REGIONES)
+```
+
 ## 5. Detección y tratamiento de valores ausentes
+
+Consulto si el conjunto de datos tiene valores ausentes:
+
+```{r}
+any(is.na(data))
+```
+Compruebo el número de valores ausentes y su porcentaje del total del conjunto de los datos
+
+```{r}
+# Calcular el número de valores ausentes
+num_valores_ausentes <- sum(is.na(data))
+
+# Calcular el porcentaje de valores ausentes
+porcentaje_valores_ausentes <- mean(is.na(data)) * 100
+
+# Imprimir los resultados
+cat("El número de valores ausentes es de:", num_valores_ausentes, "\n")
+cat("El porcentaje de valores ausentes es de:", porcentaje_valores_ausentes, "%\n")
+
+rm(num_valores_ausentes, porcentaje_valores_ausentes)
+
+```
+
+Consulto el número de valores ausentes por variable.
+
+```{r}
+colSums(is.na(data))
+```
+Consulto el porcentaje de valores ausentes pos variable.
+
+```{r}
+colMeans(is.na(data))
+```
+
+Tas analizar los valores ausentes, la conclusiones son las siguientes:
+
+- El conjunto de datos contiene 493 valores ausentes que representan el 3.1% con respecto al total de los datos.
+
+- La variable VINAGRE contiene 68 valores ausentes, esto es, el 17%
+
+- Las variables BASES PIZZAS Y MASAS HO, HARINAS Y SEMOLAS, ENCURTIDOS, SAL y ESPECIAS Y CONDIMENTO tienen 85 valores ausentes cada una, esto es un 22%.
+
+La razon de estos valores ausentes es el cambio de metodologia a la hora de tomar los datos, que se produjo, lo más proble, en el 2003 y 2004. 
+
 ## 6. Identificación de valores atípicos
+
+```{r}
+par(mfrow = c(2, 3))
+
+for (i in seq(3, 41)){
+  
+  # Calculo las estadísticas necesarias para reproducir el gráfico
+  estadisticas <- boxplot.stats(data[[i]])
+
+  # Construyo el gráfico de cajas y bigotes
+  boxplot(
+    data[[i]],
+    horizontal = TRUE,
+    xlab = paste0(colnames(data)[i]))
+}
+
+rm(estadisticas, i)
+```
+
+Los gráficos muestra la existencia de valores atípicos en todas las variables que hacen referencia a clases de alimentos, cosa que era de esperar ya que, como es lógico, existen regiones en las que se consuman muchos más alimentos que en otras regiones. Así, por ejemplo, es normal que en regiones como Andalucia, Madrid o Barcelona, regiones con mucha población, se consuman muchos más alimentos que en regiones con menos población.
+
 ## 7. Análisis de correlación
+
+A continuación, mediante una matriz de correlación analizo la relación entre las variables numéricas, que hacen referencia a las categorias de alimetnos.
+
+```{r}
+# Seleccionar las variables numéricas
+indice <- seq(3, 41, 1)
+num_variable <- data[, indice]
+
+# Calcular la matriz de correlación
+correlacion <- cor(num_variable, use = "pairwise.complete.obs") # Ignorar valores faltantes
+
+# Cargar la librería corrplot si aún no está cargada
+# install.packages("corrplot") # Instala la librería si es necesario
+# library(corrplot)
+
+# Visualizar la matriz de correlación
+corrplot(
+  correlacion,
+  method = "square",
+  tl.cex = 0.3, # Tamaño de la fuente en las etiquetas
+  diag = FALSE, # No mostrar correlaciones en la diagonal
+  tl.col = "black" # Color de las etiquetas
+)
+
+rm(indice, num_variable, correlacion)
+```
+
+```{r}
+# Seleccionar las variables numéricas
+indice <- seq(3, 41, 1)
+num_variable <- data[, indice]
+
+# Calcular la matriz de correlación
+correlacion <- cor(num_variable, use = "pairwise.complete.obs") # Ignorar valores faltantes
+
+# Convertir la matriz de correlación en un dataframe
+correlacion_df <- as.data.frame(correlacion)
+
+# Mostrar la tabla de correlaciones
+print(correlacion_df)
+```
+
+Como se puede apreciar en la matriz, por regla general, todos los categorias de alimentos parecen mantener alguna relación entre sí, a excepción de PREPARADOS LACTEOS y OTROS PROD.EN PESO y, luego, en menor medida, OTROS PROD.EN VOLUMEN, EDULCORANTES y TOTAL OTRAS LECHES.
+
 ## 8. Conclusiones
+
+Tras un minucioso análisis de los datos relativos al consumo de alimentos en hogares españoles, se han obtenido importantes conclusiones que arrojan luz sobre la naturaleza y las particularidades de este conjunto de datos. A continuación, se resumen los hallazgos clave:
+
+Características del Conjunto de Datos:
+
+El conjunto de datos consta de 391 observaciones y 41 variables.
+La variable "REGIONES" es categórica, mientras que las demás son numéricas. "AÑO" representa el año, y las demás variables abarcan diversas categorías de alimentos.
+El período de registro abarca desde el año 2000 hasta 2022.
+Distribución de Variables Numéricas:
+
+Las variables numéricas relacionadas con las categorías de alimentos exhiben una distribución sesgada hacia la izquierda, lo que indica que los valores tienden a concentrarse en el extremo inferior.
+Valores Únicos y Repetición:
+
+Tanto las variables "REGIONES" como "AÑO" presentan una repetición constante, con cada región y año apareciendo 23 y 17 veces, respectivamente. Esto refleja la uniformidad en la estructura de los datos.
+Valores Ausentes:
+
+El conjunto de datos contiene 493 valores ausentes en total, lo que representa el 3.1% del total de observaciones. La variable "VINAGRE" tiene el porcentaje más alto de valores ausentes, con un 17%.
+La causa principal de los valores ausentes se relaciona con cambios metodológicos en la recopilación de datos, principalmente en los años 2003 y 2004.
+Valores Atípicos:
+
+Se identificaron valores atípicos en las variables que representan categorías de alimentos. Estos valores son coherentes con las diferencias en el consumo de alimentos entre regiones con poblaciones distintas, como Andalucía, Madrid o Barcelona.
+Relaciones entre Variables:
+
+La matriz de correlación sugiere relaciones significativas entre la mayoría de las categorías de alimentos, lo que indica posibles patrones de consumo. Sin embargo, algunas categorías muestran menos correlación, como "PREPARADOS LACTEOS" y "OTROS PROD.EN PESO", así como "OTROS PROD.EN VOLUMEN", "EDULCORANTES" y "TOTAL OTRAS LECHES".
+
+Estas conclusiones proporcionan una base sólida para análisis posteriores y la construcción de un cuadro de mando efectivo. Además, resaltan la importancia de abordar los valores ausentes y valores atípicos de manera apropiada en futuros análisis. El conocimiento adquirido a través de este EDA será esencial para comprender mejor los patrones de consumo de alimentos en hogares españoles y tomar decisiones informadas en el proyecto global.
