@@ -37,12 +37,16 @@ for archivo in lista_archivos:
 
 # Iterar a través de los DataFrames y las columnas a eliminar
 for i, df in enumerate(lista_df_volumen):
-    if i>=4 and i<=12:
-        df.drop(columns=[".TOTAL ESPAÑA", "T.ANDALUCIA", "CASTILLA LEON", "NORESTE", "LEVANTE", "CENTRO-SUR", "NOROESTE", "NORTE",
-                         "T.CANARIAS"], errors="ignore", inplace=True)
-    if i>=13 and i<=18:
-        df.drop(columns=["T.ESPAÑA", "ANDALUCIA", "CASTILLA Y LEÓN", "NORESTE", "LEVANTE", "CENTRO-SUR", "NOROESTE", "NORTE",
-                         "T.CANARIAS"], errors="ignore", inplace=True)
+    if i <= 3:
+        df.drop(columns=".TOTAL ESPAÑA", errors="ignore", inplace=True)
+    if 4 <= i <= 12:
+        df.drop(columns=[".TOTAL ESPAÑA", "T.ANDALUCIA", "CASTILLA LEON", "NORESTE", "LEVANTE", "CENTRO-SUR",
+                         "NOROESTE", "NORTE", "T.CANARIAS"], errors="ignore", inplace=True)
+    if 13 <= i <= 18:
+        df.drop(columns=["T.ESPAÑA", "ANDALUCIA", "CASTILLA Y LEÓN", "NORESTE", "LEVANTE", "CENTRO-SUR", "NOROESTE",
+                         "NORTE", "T.CANARIAS"], errors="ignore", inplace=True)
+    else:
+        df.drop(columns="T.ESPAÑA", errors="ignore", inplace=True)
 
 # Corrijo el nombre de las variables correspondientes a las comunidades autónomas.
 
@@ -63,20 +67,6 @@ for df in lista_df_volumen:
     df.columns = df.columns.str.replace("C. FORAL DE NAVARRA", "NAVARRA", regex=False)
     df.loc[:, sorted(df.columns)] = df.loc[:, df.columns]
 
-
-# Mediante un bucle "for" imprimimos en pantalla la principal información de cada tabla de datos que se encuentra en la lista
-for i, df in enumerate(lista_df_volumen):
-    # Generamos una variable con el nombre de la tabla de datos
-    tabla_nombre = f"df_{2000 + i}"
-    # Imprimimos en pantalla el nombre de la tabla de datos e información de cada una de ellas
-    print("Nombre de la tabla de datos:", tabla_nombre)
-    print(df.info())
-    # Buscamos valores nulos o ausentes en la tabla de datos, imprimiento en pantalla si los hay o no
-    if df.isna().any().any():
-      print("Hay valores NA en la tabla de datos" + "\n")
-    else:
-      print("No hay valores NA en la tabla de datos" + "\n")
-
 # Añado la columna AÑO con los valores correspondiente al año del marco de datos
 
 for i, df in enumerate(lista_df_volumen):
@@ -93,7 +83,7 @@ df_total = df_total.melt(id_vars=["AÑO", "PRODUCTOS"],
                          value_name="VOLUMEN")
 
 """
-4) EXPORTACIÓN DEL MARCO RESULTANTE
+4) CARGA DEL MARCO RESULTANTE
 
 Finalmente, del marco de datos resultantes, creo un documento con extensión .csv, que, posteriormente, voy a guardar en
 la carpeta de descarga de la máquina local
