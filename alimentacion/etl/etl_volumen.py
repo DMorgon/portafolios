@@ -61,8 +61,23 @@ for df in lista_df_volumen:
     df.columns = df.columns.str.replace("CASTILLA Y LEÓN", "CASTILLA Y LEON", regex=False)
     df.columns = df.columns.str.replace("PRINCIPADO DE ASTURIAS", "ASTURIAS", regex=False)
     df.columns = df.columns.str.replace("RIOJA", "LA RIOJA", regex=False)
+    df.columns = df.columns.str.replace("LA LA RIOJA", "LA RIOJA", regex=False)
     df.columns = df.columns.str.replace("C. FORAL DE NAVARRA", "NAVARRA", regex=False)
     df.loc[:, sorted(df.columns)] = df.loc[:, df.columns]
+
+
+# Mediante un bucle "for" imprimimos en pantalla la principal información de cada tabla de datos que se encuentra en la lista
+for i, df in enumerate(lista_df_volumen):
+    # Generamos una variable con el nombre de la tabla de datos
+    tabla_nombre = f"df_{2000 + i}"
+    # Imprimimos en pantalla el nombre de la tabla de datos e información de cada una de ellas
+    print("Nombre de la tabla de datos:", tabla_nombre)
+    print(df.info())
+    # Buscamos valores nulos o ausentes en la tabla de datos, imprimiento en pantalla si los hay o no
+    if df.isna().any().any():
+      print("Hay valores NA en la tabla de datos" + "\n")
+    else:
+      print("No hay valores NA en la tabla de datos" + "\n")
 
 # Añado la columna AÑO con los valores correspondiente al año del marco de datos
 
