@@ -38,17 +38,15 @@ for archivo in lista_archivos:
 # Iterar a través de los DataFrames y las columnas a eliminar
 for i, df in enumerate(lista_df_volumen):
     if i>=4 and i<=12:
-        df.drop(columns=["T.ANDALUCIA", "CASTILLA LEON", "NORESTE", "LEVANTE", "CENTRO-SUR", "NOROESTE", "NORTE",
+        df.drop(columns=[".TOTAL ESPAÑA", "T.ANDALUCIA", "CASTILLA LEON", "NORESTE", "LEVANTE", "CENTRO-SUR", "NOROESTE", "NORTE",
                          "T.CANARIAS"], errors="ignore", inplace=True)
     if i>=13 and i<=18:
-        df.drop(columns=["ANDALUCIA", "CASTILLA Y LEÓN", "NORESTE", "LEVANTE", "CENTRO-SUR", "NOROESTE", "NORTE",
+        df.drop(columns=["T.ESPAÑA", "ANDALUCIA", "CASTILLA Y LEÓN", "NORESTE", "LEVANTE", "CENTRO-SUR", "NOROESTE", "NORTE",
                          "T.CANARIAS"], errors="ignore", inplace=True)
 
 # Corrijo el nombre de las variables correspondientes a las comunidades autónomas.
 
 for df in lista_df_volumen:
-    df.columns = df.columns.str.replace(".TOTAL ESPAÑA", "ESPAÑA", regex=False)
-    df.columns = df.columns.str.replace("T.ESPAÑA", "ESPAÑA", regex=False)
     df.columns = df.columns.str.replace("Unnamed: 0", "PRODUCTOS", regex=False)
     df.columns = df.columns.str.replace("ARAGÓN", "ARAGON", regex=False)
     df.columns = df.columns.str.replace("ILLES BALEARS", "BALEARES", regex=False)
