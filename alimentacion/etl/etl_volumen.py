@@ -111,7 +111,7 @@ categoria = ["Huevos", "Miel", "Carne",  "Agua", "Preparados lacteos", "Pesca", 
              "Refrescos", "Masas", "Harinas", "Encurtidos", "Especias", "Sal", "Otros productos en peso",
              "Otros productos en volumen", "Boll/Past/Gallet/Cere", "Choco/Cacao/Suc"]
 
-df_total_filtrado = df_total[df_total["PRODUCTOS"].isin(categoria)]
+df_total = df_total[df_total["PRODUCTOS"].isin(categoria)]
 
 """
 4) CARGA DEL MARCO RESULTANTE
