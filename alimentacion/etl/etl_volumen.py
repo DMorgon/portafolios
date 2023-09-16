@@ -82,6 +82,37 @@ df_total = df_total.melt(id_vars=["AÑO", "PRODUCTOS"],
                          var_name="REGIONES",
                          value_name="VOLUMEN")
 
+# Creamos un diccionario con las denominaciones a sustituir junto a su sustituto
+reemplazos = {"T.HUEVOS KGS": "Huevos", "HUEVOS KGS": "Huevos", "MIEL": "Miel", "TOTAL CARNE": "Carne",
+              "AGUA MINERAL": "Agua", "LECHE LIQUIDA RECONST": "Preparados lacteos",  "TOTAL PESCA": "Pesca",
+              "TOTAL LECHE LIQUIDA": "Leche líquida", "TOTAL OTRAS LECHES": "Otras leches",
+              "PREPARADOS LACTEOS": "Preparados lacteos", "DERIVADOS LACTEOS": "Derivados lacteos", "PAN": "Pan",
+              "ARROZ": "Arroz", "TOTAL PASTAS": "Pasta", "AZUCAR": "Azucar", "EDULCORANTES": "Edulcorante",
+              "LEGUMBRES": "Legumbre", "TOTAL ACEITE": "Aceite", "MARGARINA": "Margarina", "ACEITUNAS": "Aceitunas",
+              "VINAGRE": "Vinagre", "TOTAL ZUMO Y NECTAR": "Zumos", "TOTAL PATATAS": "Patatas",
+              "T.HORTALIZAS FRESCAS": "Hortalizas frescas", "T.FRUTAS FRESCAS": "Frutas frescas",
+              "FRUTOS SECOS": "Frutos secos", "T.FRUTA Y HORTA.TRANSF": "Frutas y Hortalizas Transformadas",
+              "PLATOS PREPARADOS": "Platos preparados", "CAFES E INFUSIONES": "Cafés e infusiones", "CALDOS": "Caldos",
+              "SALSAS": "Salsas", "AGUA DE BEBIDA ENVAS.": "Agua",  "GASEOSAS Y BEBID.REFR": "Refrescos",
+              "BASES PIZZAS Y MASAS HO": "Masas", "HARINAS Y SEMOLAS": "Harinas", "ENCURTIDOS": "Encurtidos",
+              "ESPECIAS Y CONDIMENTO": "Especias", "SAL": "Sal", "OTROS PROD.EN PESO": "Otros productos en peso",
+              "OTROS PROD.EN VOLUMEN": "Otros productos en volumen", "BOLL.PAST.GALLET.CERE": "Boll/Past/Gallet/Cere",
+              "CHOCOLATES/CACAOS/SUC": "Choco/Cacao/Suc"}
+
+# Sustituimos en la columna "Categoría" los valores definidos en el diccionario anterior
+df_total["PRODUCTOS"] = df_total["PRODUCTOS"].replace(reemplazos)
+
+
+# Creamos una nueva tabla de datos con las categorias de alimentación que nos interesan para el análisis
+categoria = ["Huevos", "Miel", "Carne",  "Agua", "Preparados lacteos", "Pesca", "Leche líquida", "Otras leches",
+             "Derivados lacteos", "Pan", "Arroz", "Pasta", "Azucar", "Edulcorante", "Legumbre", "Aceite", "Margarina",
+             "Aceitunas", "Vinagre", "Zumos", "Patatas", "Hortalizas frescas",  "Frutas frescas", "Frutos secos",
+             "Frutas y Hortalizas Transformadas", "Platos preparados", "Cafés e infusiones", "Caldos", "Salsas",
+             "Refrescos", "Masas", "Harinas", "Encurtidos", "Especias", "Sal", "Otros productos en peso",
+             "Otros productos en volumen", "Boll/Past/Gallet/Cere", "Choco/Cacao/Suc"]
+
+df_total_filtrado = df_total[df_total["PRODUCTOS"].isin(categoria)]
+
 """
 4) CARGA DEL MARCO RESULTANTE
 
@@ -94,7 +125,7 @@ csv_content = df_total.to_csv(index=False)
 
 # Obtengo la ruta de la carpeta de descargas del usuario
 download_folder = os.path.expanduser('~')
-csv_filename = 'volumen.csv'
+csv_filename = 'volumen_categorias.csv'
 csv_path = os.path.join(download_folder, csv_filename)
 
 # Guardo el contenido del archivo CSV en la ubicación deseada
