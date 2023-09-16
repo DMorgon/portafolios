@@ -113,6 +113,12 @@ categoria = ["Huevos", "Miel", "Carne",  "Agua", "Preparados lacteos", "Pesca", 
 
 df_total = df_total[df_total["PRODUCTOS"].isin(categoria)]
 
+# Ajusto el tipo de dato de la variable AÑO para que sea de tipo fecha.
+
+df_total["AÑO"] = df_total["AÑO"].astype(str)
+df_total["AÑO"] = pd.to_datetime(df_total["AÑO"], format='%Y')
+
+
 """
 4) CARGA DEL MARCO RESULTANTE
 
