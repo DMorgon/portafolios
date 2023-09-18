@@ -156,6 +156,9 @@ En consecuencia, las tareas que se llevarán a cabo a continuación son las sigu
 Elimino las variables sobrantes
 
 ```{r}
+
+
+
 for (i in seq(5, 19)) {
   if (i <= 13) {
     lista_df_volumen[[i]] <- lista_df_volumen[[i]][, !colnames(lista_df_volumen[[i]]) %in% c("T.ANDALUCIA", "CASTILLA LEON", "NORESTE", "LEVANTE", "CENTRO-SUR", "NOROESTE", "NORTE", "T.CANARIAS")]
@@ -241,6 +244,8 @@ for (i in seq(1, 23)){
   alimentos_faltantes <- setdiff(categorias, alimentos_en_dataframe)
   cat(alimentos_faltantes, "\n")
 }
+
+
 
 rm(i, alimentos_en_dataframe, alimentos_faltantes)
   
