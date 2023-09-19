@@ -142,4 +142,4 @@ Despues de realizar el análisis de los datos, he podido extraer las siguientes 
 
 Como se aprecia en el siguiente gráfico
 
-![Cuadro de control](visualizaciones/G01.jpg)
+![Cuadro de control](alimentacion/visualizaciones/G01.jpg)
