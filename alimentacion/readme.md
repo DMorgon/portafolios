@@ -140,6 +140,22 @@ En este cuadro de mando, además, he utilizado las siguientes tipos de visualiza
 
 Despues de realizar el análisis de los datos, he podido extraer las siguientes conclusiones:
 
-Como se aprecia en el siguiente gráfico
+Como se aprecia en el siguiente gráfico, la cantidad de alimentos consumido por los hogares españoles ha crecido, pasando de los casi 24M en el 2000 hasta llegar a casi los 25M en el 2022. Sin embargo, este crecimiento no ha sido uniforme, sin que se han producido en diferentes etápas, que son las siguientes:
 
-![Cuadro de control](alimentacion/visualizaciones/G01.jpg)
+- La primera etapa abarca los años que van del 2000 al 2009, en el que el consumo de alimentos alcanzo casi los 28.9M.
+- La segunda etapa comienza en el año 2010 y finaliza en el año 2019, y que se produce una caida, hasta alcanzar los 26.7M
+- En el año 2021, el consumo de alimentos repunta hasta los 29.5M
+- Y en los años 2021 y 2022, el consumo vuelve a caer hasta situarse a niveles del año 2003, es decir, hasta los 25M aproximadamente.
+
+![G01](visualizaciones/GV01.jpg)
+
+Por lo tanto, actualmente nos encontraíamos en una etapa de caida en el consumo de alimento por parte de los hogares españoles. 
+
+En el siguiente gráfico de calor, las Comunidades Autónomas se pueden clasificar según el volumen de alimento consumidos en cuatro grupos diferentes.
+
+- En el primer grupo estaría Andalucia y Cataluña que son las dos Comunidades en las que el consumo son más elevados, llegando al 17% y 16% respectivamente de media del total.
+- Le sigue Madrid, con el 12% y Valencia con el 10%.
+- Luego estaria Galicia, Castilla y Leon con un 6% ambos, Canarias, Pais Vasco y Castilla la Mancha, con menos del 5%
+- Por último estaria Aragón, ASturias, Extremadura, Murcia, Baleares, Navarra, Cantabria y La Rioja, que se situarian por de bajo del 4%.
+
+![G01](visualizaciones/GV02.jpg)
