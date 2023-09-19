@@ -142,4 +142,4 @@ Despues de realizar el análisis de los datos, he podido extraer las siguientes 
 
 Como se aprecia en el siguiente gráfico
 
-![G01](https://github.com/DMorgon/portafolios/raw/master/alimentacion/visualizaciones/G01.jpg)
+![G01](visualizaciones/G01.jpg)
