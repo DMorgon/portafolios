@@ -140,7 +140,11 @@ En este cuadro de mando, además, he utilizado las siguientes tipos de visualiza
 
 ## 7. **Conclusiones**
 
-Despues de realizar el análisis de los datos, he podido extraer las siguientes conclusiones con respecto al comportamiento del consumo de alimentos de los hogares españoles en el periodo de tiempo que va desde el 2000 hasta el 2022:
+Despues de realizar el análisis de los datos, he podido extraer las siguientes conclusiones:
+
+Como se aprecia en el siguiente gráfico
+
+![Gráfico de líneas](visualizaciones/Gráfico de líneas con el consumo total de alimentos por los hogares españoles por año.jpg)
 
 - 
  
