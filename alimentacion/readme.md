@@ -135,16 +135,11 @@ En este cuadro de mando, además, he utilizado las siguientes tipos de visualiza
 ![Gráfico de barras](visualizaciones/grafico_barras.jpg)
 
 - **El gráfico de línes** se utilizan para representar la tendencia o cambio en los datos a lo largo del tiempo.
-
-![Cuadro de control](visualizaciones/grafico_lineas.jpg)
-
+- 
 ## 7. **Conclusiones**
 
 Despues de realizar el análisis de los datos, he podido extraer las siguientes conclusiones:
 
 Como se aprecia en el siguiente gráfico
 
-![Gráfico de líneas](visualizaciones/Gráfico de líneas con el consumo total de alimentos por los hogares españoles por año.jpg)
-
-- 
- 
+![Cuadro de control](visualizaciones/G01.jpg)
