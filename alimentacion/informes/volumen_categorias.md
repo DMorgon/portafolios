@@ -2,13 +2,11 @@
 ## <p align="center">David Moreno</p>
 ##  <p align="center">2023-09-20</p>
 
-## **Tabla decontenidos**
-
-  ## **Introducción**
-  ## **1. Objetivos**
-  ## **2. Recursos**
-  ## **3. Preparación de los datos**
-  ## **4. Análisis Exploratorio de los Datos**
-  ## **5. Conclusiones**
-  ## **5. Trabajos futuros**
+## **Introducción**
+## **1. Objetivos**
+## **2. Recursos**
+## **3. Preparación de los datos**
+## **4. Análisis Exploratorio de los Datos**
+## **5. Conclusiones**
+## **5. Trabajos futuros**
 
