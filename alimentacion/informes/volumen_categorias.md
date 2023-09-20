@@ -13,8 +13,11 @@ Nuestro análisis se basa en un conjunto de datos exhaustivo que abarca desde el
 Los objetivos específicos de este análisis incluyen:
 
 -Evaluar las categorías de alimentos más consumidas en los hogares españoles.
+
 -Identificar las categorías de alimentos que han experimentado cambios significativos en su consumo a lo largo del tiempo.
+
 -Analizar las variaciones geográficas en las preferencias alimentarias, centrándonos en las diferencias regionales.
+
 
 Este análisis no solo representa una oportunidad para explorar la riqueza de los datos sobre consumo de alimentos, sino que también sienta las bases para futuros análisis dentro de nuestro proyecto más amplio. Los resultados obtenidos en este análisis nos guiarán en la formulación de nuevas preguntas y enfoques que se abordarán en análisis posteriores.
 
