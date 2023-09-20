@@ -1,6 +1,6 @@
 # <p align="center">Análisis del Volumen de Consumo de Alimentos por Categoría en Hogares Españoles</p>
 ## <p align="center">David Moreno</p>
-## <p align="center"><!-- Fecha: 2023-09-20  --></p>
+##  <p align="center">2023-09-20</p>
 
 # **Análisis del Volumen de Consumo de Alimentos por Categoría en Hogares Españoles**
 
