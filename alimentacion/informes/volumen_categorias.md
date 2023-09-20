@@ -24,18 +24,13 @@ En resumen, este análisis inicial sobre el consumo de alimentos en hogares espa
 Este análisis inicial sobre el consumo de alimentos en hogares españoles tiene como objetivo principal explorar y comprender las tendencias y patrones generales relacionados con las preferencias alimentarias a lo largo del tiempo y en diferentes regiones de España. Para lograr este objetivo, hemos establecido los siguientes objetivos específicos:
 
 1. **Evaluar las Tendencias Temporales en el Consumo de Alimentos**. Aquí, examinaremos cómo ha variado el consumo de alimentos a lo largo del tiempo, identificando cambios significativos en la elección de alimentos y buscando explicaciones para estas fluctuaciones. Esto nos permitirá comprender mejor las dinámicas de consumo a lo largo de los años.
+   Pregunta guía: ¿Qué tendencias temporales pueden identificarse en el consumo de alimentos a lo largo de las dos últimas décadas?
 
-Pregunta guía: ¿Qué tendencias temporales pueden identificarse en el consumo de alimentos a lo largo de las dos últimas décadas?
-
-Pregunta guía: ¿Cuáles son las categorías de alimentos que predominan en la dieta de los hogares españoles y cómo ha evolucionado su consumo a lo largo de los años?
-
-2. **Determinar las categorías de alimentos más consumidas en los hogares españoles**. Este análisis ayudará a identificar las preferencias alimentarias fundamentales que han perdurado a lo largo del tiempo y a comprender cómo se han modificado estas preferencias en respuesta a cambios sociales, económicos o culturales.
-
-Pregunta guía: ¿Cuáles son las categorías de alimentos que predominan en la dieta de los hogares españoles y cómo ha evolucionado su consumo a lo largo de los años?
+3. **Determinar las categorías de alimentos más consumidas en los hogares españoles**. Este análisis ayudará a identificar las preferencias alimentarias fundamentales que han perdurado a lo largo del tiempo y a comprender cómo se han modificado estas preferencias en respuesta a cambios sociales, económicos o culturales.
+   Pregunta guía: ¿Cuáles son las categorías de alimentos que predominan en la dieta de los hogares españoles y cómo ha evolucionado su consumo a lo largo de los años?
 
 3. **Analizar las Variaciones Regionales en las Preferencias Alimentarias**. Aquí, examinaremos si las preferencias alimentarias varían significativamente según la ubicación geográfica en España. Identificar y comprender estas diferencias puede proporcionar información valiosa sobre las influencias regionales en las elecciones de alimentos.
-
-Pregunta guía: ¿Existen diferencias notables en las preferencias alimentarias entre las diferentes regiones de España, y en caso afirmativo, cuáles son esas diferencias?
+   Pregunta guía: ¿Existen diferencias notables en las preferencias alimentarias entre las diferentes regiones de España, y en caso afirmativo, cuáles son esas diferencias?
 
 Finalmente, el cuarto objetivo consiste en utilizar los resultados de este análisis como punto de partida para futuras investigaciones. A medida que identifiquemos patrones y tendencias, surgirán nuevas preguntas que requerirán análisis posteriores. Este objetivo implica la formulación de hipótesis y preguntas que guiarán la siguiente fase del proyecto.
 
