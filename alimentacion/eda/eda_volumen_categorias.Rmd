@@ -112,9 +112,9 @@ cat("La variable REGIONES contien ", length(regiones), " valores únicos", "\n")
 rm(produtos, regiones)
 ```
 
-El conjunto de los datos contiene 234.023 observaciones y 4 variables, que son:
+El conjunto de los datos contiene 209389 observaciones y 4 variables, que son:
 
-- **AÑO**: admite valores numéricos y representa cada año de la seria, que va desde el año 2000 hasta el año 2022.
+- **AÑO**: admite valores numéricos y representa cada año de la serie, que va desde el año 2000 hasta el año 2022.
 
 - **PRODUCTOS**: admite cadena de texto y representa a cada una de las categorias y alimentos que consumen los hogares españoles. Existen 791 productos únicos.
 

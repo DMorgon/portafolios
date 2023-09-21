@@ -78,7 +78,7 @@ df_total = pd.concat(objs=lista_df_volumen, axis=0)
 
 # Transformo el formato de ancho a largo, manteniendo las columnas "AÑO" y "CATEGORÍAS" como identificadores
 
-df_total = df_total.melt(id_vars=["AÑO", "PRODUCTOS"],
+df_total = df_total.melt(id_vars=["AÑO", "CATEGORÍAS"],
                          var_name="REGIONES",
                          value_name="VOLUMEN")
 
