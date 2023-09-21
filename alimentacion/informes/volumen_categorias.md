@@ -51,59 +51,80 @@ En la ejecución de este proyecto de análisis de datos sobre el consumo de alim
 
 El conjunto de datos fundamental se compone de 22 archivos en formato Excel, uno para cada año desde el 2000 hasta el 2022. Cada uno de estos archivos contiene varias hojas de datos relacionadas con el consumo de alimentos en hogares españoles. Para este análisis específico, nos hemos centrado en la hoja de datos que registra el "Volumen" de consumo de alimentos.
 
-Estos archivos se obtuvieron de fuentes confiables, específicamente del sitio web del Ministerio de Agricultura, Pesca y Alimentación. Con el fin de mantener la transparencia y la accesibilidad, estos archivos se albergan en el repositorio de GitHub bajo el directorio "datos_origen". Estos datos proporcionan la base fundamental para todas las etapas del análisis.
+Estos archivos se obtuvieron de fuentes confiables, específicamente del sitio web del **Ministerio de Agricultura, Pesca y Alimentación**. Con el fin de mantener la transparencia y la accesibilidad, estos archivos se albergan en el repositorio de GitHub bajo el directorio "**datos_origen**". Estos datos proporcionan la base fundamental para todas las etapas del análisis.
 
 ### **2.2. Herramientas y Tecnologías**
 
 #### **2.2.1. Proceso ETL**
 
-Para la extracción, transformación y carga (ETL) de los datos, hemos utilizado Python, un lenguaje de programación ampliamente reconocido por su versatilidad en el análisis de datos. Los scripts ETL se encuentran organizados en la carpeta "código", y desempeñan un papel esencial en la preparación de los datos para el análisis.
+Para la extracción, transformación y carga (**ETL**) de los datos, hemos utilizado **Python**, un lenguaje de programación ampliamente reconocido por su versatilidad en el análisis de datos. Los scripts ETL se encuentran organizados en la carpeta "**código**", y desempeñan un papel esencial en la preparación de los datos para el análisis.
 
 las bibliotecas empleadas de Python son:
 
-- os: Para operaciones de sistema y manejo de archivos.
-- requests: Para realizar solicitudes HTTP y descargar datos.
-- pandas: Para la manipulación y análisis de datos.
-- openpyxl: Para trabajar con archivos Excel.
+- **os**: Para operaciones de sistema y manejo de archivos.
+- **requests**: Para realizar solicitudes HTTP y descargar datos.
+- **pandas**: Para la manipulación y análisis de datos.
+- **openpyxl**: Para trabajar con archivos Excel.
 
 #### **2.2.2. Análisis Exploratorio de Datos (EDA)**
 
-RStudio, un entorno de desarrollo integrado (IDE) para R, se ha empleado para llevar a cabo el análisis exploratorio de datos (EDA). Este entorno proporciona las herramientas necesarias para visualizar y comprender los datos en profundidad. Los resultados de este análisis se documentan en la carpeta "eda", junto con los recursos utilizados para crear visualizaciones significativas.
+**RStudio**, un entorno de desarrollo integrado (IDE) para **R**, se ha empleado para llevar a cabo el análisis exploratorio de datos (EDA). Este entorno proporciona las herramientas necesarias para visualizar y comprender los datos en profundidad. Los resultados de este análisis se documentan en la carpeta "**eda**", junto con los recursos utilizados para crear visualizaciones significativas.
 
 El análisis exploratorio de datos se llevó utilizando las siguientes bibliotecas de R:
 
-- readxl: Para leer archivos Excel.
-- httr: Para realizar solicitudes HTTP.
-- tidyverse: Un conjunto de paquetes que incluye herramientas para manipulación y visualización de datos.
-- rmarkdown: Para la generación de informes y documentos.
-- dplyr: Para la manipulación de datos y la creación de resúmenes.
-- corrplot: Para la visualización de matrices de correlación.
+- **readxl**: Para leer archivos Excel.
+- **httr**: Para realizar solicitudes HTTP.
+- ***tidyverse**: Un conjunto de paquetes que incluye herramientas para manipulación y visualización de datos.
+- **rmarkdown**: Para la generación de informes y documentos.
+- **dplyr**: Para la manipulación de datos y la creación de resúmenes.
+- **corrplot**: Para la visualización de matrices de correlación.
 
 #### **2.2.3. Visualizaciones: Google Looker**
 
-La creación de visualizaciones interactivas y cuadros de mando es esencial para comunicar los hallazgos del análisis. Google Looker se ha utilizado para diseñar cuadros de mando que permiten una exploración más profunda de los datos. Las capturas de estas visualizaciones se almacenan en la carpeta "visualizaciones" para su posterior inclusión en los informes.
+La creación de visualizaciones interactivas y cuadros de mando es esencial para comunicar los hallazgos del análisis. **Google Looker** se ha utilizado para diseñar cuadros de mando que permiten una exploración más profunda de los datos. Las capturas de estas visualizaciones se almacenan en la carpeta "visualizaciones" para su posterior inclusión en los informes.
 
 Google Looker es una plataforma de inteligencia empresarial y visualización de datos que permite a las organizaciones analizar y compartir datos de manera efectiva. Fue adquirida por Google en 2020 y se ha integrado estrechamente en Google Cloud Platform (GCP) para brindar soluciones de análisis de datos en la nube
 
 #### **2.2.4. Informes Finales**
 
-Los informes finales que resumen y comunican los resultados de cada análisis se crean utilizando Markdown, un lenguaje de marcado ligero que facilita la generación de documentos bien estructurados y formateados. Estos informes se encuentran en la carpeta "informes", y constituyen una parte crucial de la documentación del proyecto.
+Los informes finales que resumen y comunican los resultados de cada análisis se crean utilizando **Markdown**, un lenguaje de marcado ligero que facilita la generación de documentos bien estructurados y formateados. Estos informes se encuentran en la carpeta "informes", y constituyen una parte crucial de la documentación del proyecto.
 
 ### **2.3. Organización de Recursos**
 
-Para mantener una organización clara y accesible de todos los recursos, hemos estructurado el proyecto en diversas carpetas:
+Para mantener una organización clara y accesible de todos los recursos,  he estructurado el proyecto en diversas carpetas:
 
 - **datos_origen**: Contiene los archivos Excel de las fuentes de datos originales.
-- **código**: Alberga los scripts en Python utilizados en el proceso ETL.
+- **código**: Alberga los scripts y  en Python y los recursos utilizados en el proceso ETL.
 - **eda**: Incluye los documentos y recursos utilizados para el análisis exploratorio de datos en RStudio.
 - **visualizaciones**: Guarda las capturas de pantalla de las visualizaciones y cuadros de mando de Google Looker.
 - **informes**: Contiene los informes finales escritos en Markdown, que resumen los resultados de cada análisis.
-- **datos_procesados**: Almacena los datos resultantes del proceso ETL en formato CSV, listos para su análisis.
+- **datos_procesados**: Almacena los datos resultantes del proceso ETL en formato CSV, listos para su carga en Google Looker.
 
 Estos recursos y herramientas han sido esenciales para la realización de un análisis de datos efectivo y comprensible. Su combinación nos permite extraer conocimientos valiosos de los datos y comunicarlos de manera clara y efectiva.
 
 ## **3. Preparación de los datos**
+
+La obtención y preparación de datos son pasos críticos en cualquier proyecto de análisis de datos. En este proyecto, se utilizó una variedad de fuentes y técnicas para recopilar los datos necesarios para analizar el consumo de alimentos en hogares españoles.
+
+Los datos utilizados en este análisis se obtuvieron del Ministerio de Agricultura, Pesca y Alimentación y están relacionados con el consumo de alimentos en hogares españoles. Se recopilaron 22 conjuntos de archivos en formato Excel, uno para cada año, desde el 2000 hasta el 2022. Cada conjunto de datos abarcaba múltiples aspectos del consumo de alimentos, pero para este análisis enconcreto me enfoqué en la hoja de datos que registraba el "Volumen" de consumo de alimentos.
+
+Para la preparació de los datos seguí los siguientes pasos. 
+
+- **Preparación del entorno de trabajo**: En primer lugar instalé y cargé las bibliotecas que iba a utilizar, y que se han especificado anteriormente.
+
+- **Extracción de los datos**: para la extracción de los datos cree una función que me permitia mediante un bucle **for**, recorrer cada archivo, de los 22 existentes, y obtener losdatos existentes en la hoja VOLUMEN. Los datos de cada archivo fueron guardados en dataframe de Pandas, y que, a su vez, fueron incluidos en una lista.
+
+- **Transformación de los datos**: una vez obtenidos los datos, realicé las transformaciones necesarias, como corrección de nombres de variables, corrección de nombre de registros, añadir la variable año, selecciones las variables y uní todos los dataframe verticalmente.
+
+  Una vez obtenido el conjunto de datos, apliqué un filtro para seleccionar solo los registros relacionados con las categorías más generales de alimentos. Esta decisión tiene sus ventajas y desventajas. Las ventajas son que los registros seleccionado permite realizar un análisis generalizado del consumo de alimentos, identificando tendencias y patrones en las categorías de alimentos más amplias. Esto proporcionó una visión panorámica del comportamiento de consumo en hogares españoles a lo largo del tiempo. Por otro lado, como desventajas, el filtrado de registros para incluir solo las categorías de alimentos más generales implicó la pérdida de detalles específicos sobre alimentos individuales. Esta información detallada podría haber sido valiosa para análisis más específicos. Sin embargo, teniendo en cuenta que el objetivo final del analisis era obtener información general, a partir de la cual seguir formulando preguntas que deben ser respondida en futuros análisis, la aplicación de estos filtros no debe suponer un problema mayor.
+
+- **Carga de los datos**: una vez obtenido el conjunto de datos final, lo guarde en un archivo csv llamado "volumen_categoria", que me seriviría, posteriormente, de fuente de datos para crear el primer cuadro de mando en Google Looker.
+
+El script utilizado para la preparación de datos está disponible en lacarpeta "**etl**" del repositorio de GitHub asociado a este proyecto.
+
 ## **4. Análisis Exploratorio de los Datos**
+
+Tras realizar el análisis 
 ## **5. Conclusiones**
 ## **5. Trabajos futuros**
 
