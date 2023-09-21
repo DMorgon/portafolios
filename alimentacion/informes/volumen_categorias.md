@@ -39,17 +39,17 @@ Este análisis inicial sobre el consumo de alimentos en hogares españoles tiene
 
    Pregunta guía: ¿Existen diferencias notables en las preferencias alimentarias entre las diferentes regiones de España, y en caso afirmativo, cuáles son esas diferencias?
 
-4. Finalmente, el cuarto objetivo consiste en utilizar los resultados de este análisis como punto de partida para futuras investigaciones. A medida que identifiquemos patrones y tendencias, surgirán nuevas preguntas que requerirán análisis posteriores. Este objetivo implica la formulación de hipótesis y preguntas que guiarán la siguiente fase del proyecto.
+4. Finalmente, el cuarto objetivo consiste en utilizar los resultados de este análisis como punto de partida para futuras investigaciones. A medida que se identifique patrones y tendencias, surgirán nuevas preguntas que requerirán análisis posteriores. Este objetivo implica la formulación de hipótesis y preguntas que guiarán la siguiente fase del proyecto.
 
 En resumen, los objetivos de este análisis de consumo de alimentos en hogares españoles están diseñados para arrojar luz sobre las preferencias alimentarias a lo largo del tiempo y en diferentes regiones, al tiempo que proporcionan una base sólida para investigaciones futuras. A través de estas metas, buscamos contribuir al conocimiento en el campo de la alimentación y el análisis de datos.
 
 ## **2. Recursos**
 
-En la ejecución de este proyecto de análisis de datos sobre el consumo de alimentos en hogares españoles, hemos empleado una serie de recursos y herramientas para recopilar, procesar, analizar y comunicar la información. Estos recursos se han seleccionado cuidadosamente para garantizar la calidad y eficiencia de todo el proceso.
+En la ejecución de este proyecto de análisis de datos, he empleado una serie de recursos y herramientas para recopilar, procesar, analizar y comunicar la información.
 
 ### **2.1. Fuentes de Datos**
 
-El conjunto de datos fundamental se compone de 22 archivos en formato Excel, uno para cada año desde el 2000 hasta el 2022. Cada uno de estos archivos contiene varias hojas de datos relacionadas con el consumo de alimentos en hogares españoles. Para este análisis específico, nos hemos centrado en la hoja de datos que registra el "Volumen" de consumo de alimentos.
+El conjunto de datos de parida se compone de 22 archivos en formato Excel, uno para cada año, desde el 2000 hasta el 2022. Cada uno de estos archivos contiene varias hojas de datos relacionadas con el consumo de alimentos en hogares españoles. Para este análisis específico, nos hemos centrado en la hoja de datos que registra el "Volumen" de consumo de alimentos.
 
 Estos archivos se obtuvieron de fuentes confiables, específicamente del sitio web del **Ministerio de Agricultura, Pesca y Alimentación**. Con el fin de mantener la transparencia y la accesibilidad, estos archivos se albergan en el repositorio de GitHub bajo el directorio "**datos_origen**". Estos datos proporcionan la base fundamental para todas las etapas del análisis.
 
@@ -57,9 +57,9 @@ Estos archivos se obtuvieron de fuentes confiables, específicamente del sitio w
 
 #### **2.2.1. Proceso ETL**
 
-Para la extracción, transformación y carga (**ETL**) de los datos, hemos utilizado **Python**, un lenguaje de programación ampliamente reconocido por su versatilidad en el análisis de datos. Los scripts ETL se encuentran organizados en la carpeta "**código**", y desempeñan un papel esencial en la preparación de los datos para el análisis.
+Para la extracción, transformación y carga (**ETL**) de los datos, he utilizado **Python**, un lenguaje de programación ampliamente reconocido por su versatilidad en el análisis de datos. Los scripts ETL se encuentran organizados en la carpeta "**código**", y desempeñan un papel esencial en la preparación de los datos para el posterior análisis.
 
-las bibliotecas empleadas de Python son:
+Las bibliotecas empleadas de Python son:
 
 - **os**: Para operaciones de sistema y manejo de archivos.
 - **requests**: Para realizar solicitudes HTTP y descargar datos.
@@ -68,7 +68,7 @@ las bibliotecas empleadas de Python son:
 
 #### **2.2.2. Análisis Exploratorio de Datos (EDA)**
 
-**RStudio**, un entorno de desarrollo integrado (IDE) para **R**, se ha empleado para llevar a cabo el análisis exploratorio de datos (EDA). Este entorno proporciona las herramientas necesarias para visualizar y comprender los datos en profundidad. Los resultados de este análisis se documentan en la carpeta "**eda**", junto con los recursos utilizados para crear visualizaciones significativas.
+**RStudio**, un entorno de desarrollo integrado (IDE) para **R**, he empleado para llevar a cabo el análisis exploratorio de datos (EDA). Este entorno proporciona las herramientas necesarias para visualizar y comprender los datos en profundidad. Los resultados de este análisis se documentan en la carpeta "**eda**", junto con los recursos utilizados para crear visualizaciones significativas.
 
 El análisis exploratorio de datos se llevó utilizando las siguientes bibliotecas de R:
 
@@ -87,7 +87,7 @@ Google Looker es una plataforma de inteligencia empresarial y visualización de 
 
 #### **2.2.4. Informes Finales**
 
-Los informes finales que resumen y comunican los resultados de cada análisis se crean utilizando **Markdown**, un lenguaje de marcado ligero que facilita la generación de documentos bien estructurados y formateados. Estos informes se encuentran en la carpeta "informes", y constituyen una parte crucial de la documentación del proyecto.
+Los informes finales, que resumen y comunican los resultados de cada análisis, los he creado utilizando **Markdown**, un lenguaje de marcado ligero que facilita la generación de documentos bien estructurados y formateados. Estos informes se encuentran en la carpeta "informes", y constituyen una parte crucial de la documentación del proyecto.
 
 ### **2.3. Organización de Recursos**
 
@@ -104,7 +104,7 @@ Estos recursos y herramientas han sido esenciales para la realización de un an�
 
 ## **3. Preparación de los datos**
 
-La obtención y preparación de datos son pasos críticos en cualquier proyecto de análisis de datos. En este proyecto, se utilizó una variedad de fuentes y técnicas para recopilar los datos necesarios para analizar el consumo de alimentos en hogares españoles.
+En este proyecto he utilizado una variedad de fuentes y técnicas para recopilar los datos necesarios para analizar el consumo de alimentos en hogares españoles.
 
 Los datos utilizados en este análisis se obtuvieron del Ministerio de Agricultura, Pesca y Alimentación y están relacionados con el consumo de alimentos en hogares españoles. Se recopilaron 22 conjuntos de archivos en formato Excel, uno para cada año, desde el 2000 hasta el 2022. Cada conjunto de datos abarcaba múltiples aspectos del consumo de alimentos, pero para este análisis enconcreto me enfoqué en la hoja de datos que registraba el "Volumen" de consumo de alimentos.
 
@@ -114,15 +114,24 @@ Para la preparació de los datos seguí los siguientes pasos.
 
 - **Extracción de los datos**: para la extracción de los datos cree una función que me permitia mediante un bucle **for**, recorrer cada archivo, de los 22 existentes, y obtener losdatos existentes en la hoja VOLUMEN. Los datos de cada archivo fueron guardados en dataframe de Pandas, y que, a su vez, fueron incluidos en una lista.
 
-- **Transformación de los datos**: una vez obtenidos los datos, realicé las transformaciones necesarias, como corrección de nombres de variables, corrección de nombre de registros, añadir la variable año, selecciones las variables y uní todos los dataframe verticalmente.
+- **Transformación de los datos**: una vez obtenidos los datos, realicé las transformaciones necesarias, como corrección de nombres de variables y de registros, añadir la variable año, selecciones las variables y uní todos los dataframe verticalmente. Por último, modifique el formato del dataframe de formato horizontal a formato vertical.
 
   Una vez obtenido el conjunto de datos, apliqué un filtro para seleccionar solo los registros relacionados con las categorías más generales de alimentos. Esta decisión tiene sus ventajas y desventajas. Las ventajas son que los registros seleccionado permite realizar un análisis generalizado del consumo de alimentos, identificando tendencias y patrones en las categorías de alimentos más amplias. Esto proporcionó una visión panorámica del comportamiento de consumo en hogares españoles a lo largo del tiempo. Por otro lado, como desventajas, el filtrado de registros para incluir solo las categorías de alimentos más generales implicó la pérdida de detalles específicos sobre alimentos individuales. Esta información detallada podría haber sido valiosa para análisis más específicos. Sin embargo, teniendo en cuenta que el objetivo final del analisis era obtener información general, a partir de la cual seguir formulando preguntas que deben ser respondida en futuros análisis, la aplicación de estos filtros no debe suponer un problema mayor.
 
 - **Carga de los datos**: una vez obtenido el conjunto de datos final, lo guarde en un archivo csv llamado "volumen_categoria", que me seriviría, posteriormente, de fuente de datos para crear el primer cuadro de mando en Google Looker.
 
-El script utilizado para la preparación de datos está disponible en lacarpeta "**etl**" del repositorio de GitHub asociado a este proyecto.
+El script utilizado para la preparación de datos está disponible en la carpeta "**etl**" del repositorio de GitHub asociado a este proyecto.
 
 ## **4. Análisis Exploratorio de los Datos**
+
+Como he indicado anteriormente, el Análisis Exploratori de los Datos (EDA) lo he ralizado en R, que es un lenguaje de programación diseñado específicamente para la estadísticas y el análisis de datos. 
+
+Los resultados fundamentales del EDA fueron los siguientes:
+
+- El conjunto de datos consta de 391 observaciones y 4 variables. Las variables son: 
+
+   - **AÑO**: que admite valores numéricos y representa cada año de la serie, que va desde el año 2000 hasta el 2022.
+   - **PRODUCTOS**: admite cadena de texto y represnta a cada una de las categorias de alientos que consumen los hogares españoles. Existen 
 
 Tras realizar el análisis 
 ## **5. Conclusiones**
