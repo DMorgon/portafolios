@@ -1,7 +1,6 @@
 # Importo las librerías que voy a utilizar en este proyecto
 
 import pandas as pd
-import requests as rq
 import os
 
 # 2) EXTRACCIÓN DE LOS DATOS
@@ -9,7 +8,7 @@ import os
 # URL del archivo CSV en GitHub
 base_url = "https://raw.githubusercontent.com"
 usuario_git = "DMorgon"
-repositorio = "portafolios/main/alimentacion/datos_origen"
+repositorio = "portafolios/main/alimentacion/datos_procesados"
 nombre_archivo = "volumen"
 ruta_archivo = f"{base_url}/{usuario_git}/{repositorio}/{nombre_archivo}.csv"
 
