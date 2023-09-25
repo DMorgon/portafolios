@@ -82,6 +82,19 @@ df_total = df_total.melt(id_vars=["AÑO", "CATEGORIAS"],
                          var_name="REGIONES",
                          value_name="VOLUMEN")
 
+# Ajusto el tipo de dato de la variable AÑO para que sea de tipo fecha.
+
+df_total["AÑO"] = df_total["AÑO"].astype(str)
+df_total["AÑO"] = pd.to_datetime(df_total["AÑO"], format='%Y')
+
+# Redondeo los datos e VOLUMEN a dos decimales
+
+df_total["VOLUMEN"] = df_total["VOLUMEN"].round(2)
+
+# Cambio el formato del nombre de las REGIONES
+
+df_total["REGIONES"] = df_total["REGIONES"].str.title()
+
 """
 4) CARGA DEL MARCO RESULTANTE
 
