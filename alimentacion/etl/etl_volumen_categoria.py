@@ -51,7 +51,7 @@ for i, df in enumerate(lista_df_volumen):
 # Corrijo el nombre de las variables correspondientes a las comunidades autónomas.
 
 for df in lista_df_volumen:
-    df.columns = df.columns.str.replace("Unnamed: 0", "CATEGORÍAS", regex=False)
+    df.columns = df.columns.str.replace("Unnamed: 0", "CATEGORIAS", regex=False)
     df.columns = df.columns.str.replace("ARAGÓN", "ARAGON", regex=False)
     df.columns = df.columns.str.replace("ILLES BALEARS", "BALEARES", regex=False)
     df.columns = df.columns.str.replace("COMUNITAT VALENCIANA", "VALENCIA", regex=False)
@@ -78,7 +78,7 @@ df_total = pd.concat(objs=lista_df_volumen, axis=0)
 
 # Transformo el formato de ancho a largo, manteniendo las columnas "AÑO" y "CATEGORÍAS" como identificadores
 
-df_total = df_total.melt(id_vars=["AÑO", "CATEGORÍAS"],
+df_total = df_total.melt(id_vars=["AÑO", "CATEGORIAS"],
                          var_name="REGIONES",
                          value_name="VOLUMEN")
 
@@ -100,7 +100,7 @@ reemplazos = {"T.HUEVOS KGS": "Huevos", "HUEVOS KGS": "Huevos", "MIEL": "Miel", 
               "CHOCOLATES/CACAOS/SUC": "Choco/Cacao/Suc"}
 
 # Sustituimos en la columna "Categoría" los valores definidos en el diccionario anterior
-df_total["CATEGORÍAS"] = df_total["CATEGORÍAS"].replace(reemplazos)
+df_total["CATEGORIAS"] = df_total["CATEGORIAS"].replace(reemplazos)
 
 
 # Creamos una nueva tabla de datos con las categorias de alimentación que nos interesan para el análisis
@@ -111,7 +111,7 @@ categoria = ["Huevos", "Miel", "Carne",  "Agua", "Preparados lacteos", "Pesca", 
              "Refrescos", "Masas", "Harinas", "Encurtidos", "Especias", "Sal", "Otros productos en peso",
              "Otros productos en volumen", "Boll/Past/Gallet/Cere", "Choco/Cacao/Suc"]
 
-df_total = df_total[df_total["CATEGORÍAS"].isin(categoria)]
+df_total = df_total[df_total["CATEGORIAS"].isin(categoria)]
 
 # Ajusto el tipo de dato de la variable AÑO para que sea de tipo fecha.
 

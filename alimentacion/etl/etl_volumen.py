@@ -51,7 +51,7 @@ for i, df in enumerate(lista_df_volumen):
 # Corrijo el nombre de las variables correspondientes a las comunidades autónomas.
 
 for df in lista_df_volumen:
-    df.columns = df.columns.str.replace("Unnamed: 0", "CATEGORÍAS", regex=False)
+    df.columns = df.columns.str.replace("Unnamed: 0", "CATEGORIAS", regex=False)
     df.columns = df.columns.str.replace("ARAGÓN", "ARAGON", regex=False)
     df.columns = df.columns.str.replace("ILLES BALEARS", "BALEARES", regex=False)
     df.columns = df.columns.str.replace("COMUNITAT VALENCIANA", "VALENCIA", regex=False)
@@ -78,7 +78,7 @@ df_total = pd.concat(objs=lista_df_volumen, axis=0)
 
 # Transformo el formato de ancho a largo, manteniendo las columnas "AÑO" y "CATEGORÍAS" como identificadores
 
-df_total = df_total.melt(id_vars=["AÑO", "CATEGORÍAS"],
+df_total = df_total.melt(id_vars=["AÑO", "CATEGORIAS"],
                          var_name="REGIONES",
                          value_name="VOLUMEN")
 

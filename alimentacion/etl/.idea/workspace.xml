@@ -4,7 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d744ab2a-fedc-486a-b771-7dae18e1ac1e" name="Changes" comment="" />
+    <list default="true" id="d744ab2a-fedc-486a-b771-7dae18e1ac1e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../eda/eda.Rmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../eda/eda_volumen.Rmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../eda/eda_volumen.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../eda/eda_volumen.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../eda/eda_volumen.tex" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../eda/eda_volumen_categorias.Rmd" beforeDir="false" afterPath="$PROJECT_DIR$/../eda/eda_volumen_categorias.Rmd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/etl_volumen.py" beforeDir="false" afterPath="$PROJECT_DIR$/etl_volumen.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/etl_volumen_categoria.py" beforeDir="false" afterPath="$PROJECT_DIR$/etl_volumen_categoria.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../informes/readme.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../informes/volumen_categorias.md" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

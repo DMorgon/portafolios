@@ -6,27 +6,23 @@ date: "2023-09-14"
 output: pdf_document
 ---
 
-## Introducción
+## 1. Objetivos
 
-El presente análisis exploratorio de datos (EDA) se inscribe en un proyecto más amplio destinado a examinar el patrón de consumo de alimentos por parte de los hogares españoles. Los datos en consideración fueron recopilados a partir de la fuente oficial del Ministerio de Agricultura, Pesca y Alimentación, un tesoro de información que se presentó en 22 archivos Excel, cada uno de los cuales contenía hasta 14 hojas de datos. En particular, nos enfocamos en la hoja "VOLUMEN", que almacena información sobre la cantidad de alimentos consumidos por los hogares en diferentes regiones y categorías de alimentos.
+El presente análisis exploratorio de datos (EDA) se enmarca en un proyecto de mayor alcance destinado a investigar detalladamente el patrón de consumo de alimentos en los hogares españoles.
 
-Este viaje de exploración de datos se ha dividido en pasos meticulosos para garantizar un análisis riguroso y comprensivo:
+Los datos considerados en este estudio fueron recopilados a partir de la fuente oficial del Ministerio de Agricultura, Pesca y Alimentación. Esta información se encontraba distribuida en 22 archivos de Excel, cada uno de los cuales contenía hasta 14 hojas de datos. En particular, me centro en la hoja denominada "VOLUMEN", que almacena información sobre la cantidad de alimentos consumidos por los hogares en diversas regiones de alimentos.
 
-Preparación del Entorno de Trabajo: Configuramos nuestro entorno de análisis, estableciendo las herramientas y bibliotecas necesarias para este estudio.
+Por lo tanto, el propósito principal de este análisis es adentrarnos en el patrón de consumo de alimentos por parte de los hogares españoles, centrándonos en la cantidad consumida de las principales categorías de alimentos. Esto nos permitirá dar respuesta a las siguientes cuestiones fundamentales:
 
-Obtención de los Datos: Realizamos la extracción, exploración inicial, transformación y carga de los datos desde las múltiples fuentes, consolidando así un conjunto de datos coherente que denominamos "volumen".
+- ¿Cómo ha evolucionado el volumen de consumo de alimentos en España a lo largo de los años?
 
-Análisis Descriptivo: Comenzamos con un análisis descriptivo de los datos, identificando el número de observaciones, variables y el rango temporal que abarca desde el año 2000 hasta 2022. Además, examinamos la distribución de las variables numéricas y las características únicas de las variables categóricas.
+- ¿En qué medida varía el consumo de alimentos entre las distintas regiones de España?
 
-Ajuste de Variables: Realizamos ajustes necesarios en las variables para garantizar que se adapten a los objetivos de nuestro análisis.
+- ¿Cuáles son las categorías de alimentos más populares y de qué manera han experimentado cambios a lo largo de las décadas estudiadas?
 
-Gestión de Datos Faltantes y Valores Atípicos: Detectamos y tratamos cuidadosamente los valores ausentes, que representan el 3.1% de los datos totales, y los valores atípicos, que se esperaban en las variables relacionadas con las categorías de alimentos debido a las diferencias regionales en el consumo.
+Adicionalmente, la información obtenida en este análisis nos proporcionará una base sólida para plantear nuevas preguntas que enriquecerán futuros análisis y contribuirán a una comprensión más completa de los hábitos alimentarios en los hogares españoles.
 
-Exploración de Correlaciones: Exploramos las relaciones entre las variables numéricas mediante una matriz de correlación, revelando patrones y conexiones potencialmente significativas.
-
-A lo largo de este proceso, hemos descubierto observaciones clave sobre la estructura y la naturaleza de nuestros datos, proporcionando una base sólida para análisis posteriores. Este EDA es fundamental para comprender mejor los patrones de consumo de alimentos en los hogares españoles y tomar decisiones informadas en nuestro proyecto global. ¡Continuemos nuestro análisis con estas valiosas perspectivas!
-
-## 1. Preparación del entorno de trabajo.
+## 2. Preparación del entorno de trabajo.
 
 Configuro el repositorio de CRAN de manera no interactiva
 
@@ -42,6 +38,7 @@ install.packages("httr")
 install.packages("tidyverse")
 install.packages("rmarkdown")
 install.packages("dplyr")
+install.packages("ggplot2")
 install.packages("corrplot")
 ```
 
@@ -53,18 +50,21 @@ library(httr)
 library(tidyverse)
 library(rmarkdown)
 library(dplyr)
+library(ggplot2)
 library(corrplot)
 ```
 
-## 2. Obtención de los datos
-### 2.1 Extracción de los datos
+## 3. Obtención de los datos
+
+
+Hago una copia de df_volumen llamada data, con la que trabajaré a continuación 
 
 ```{r}
 
 # Datos de la ruta
 ruta <- "https://github.com/DMorgon/portafolios/raw/main"
 rama <- "alimentacion/datos_procesados"
-nombre_archivo <- "volumen.csv"
+nombre_archivo <- "volumen_categorias.csv"
 
 # Creo la ruta desde donde se descargaran los archivos
 archivo_url <- paste0(ruta, "/", rama, "/", nombre_archivo)
@@ -76,7 +76,7 @@ archivo_local <- "volumen_categoria.csv"
 response <- GET(archivo_url, write_disk(archivo_local, overwrite = TRUE))
   
 # Creo el df con los datos del archivo local
-volumen <- read.csv(archivo_local)
+volumen_categorias <- read.csv(archivo_local)
 
 # Borro el archivo local
 file.remove(archivo_local)
@@ -86,104 +86,13 @@ file.remove(archivo_local)
 rm(ruta, rama, nombre_archivo, archivo_url, archivo_local, response)
 ```
 
-### 2.2 Exploración inicial de los datos
-
-```{r}
-View(volumen)
-```
-
-```{r}
-str(volumen)
-```
-
-```{r}
-summary(volumen)
-```
-
-
-```{r}
-produtos <- unique(volumen$PRODUCTOS)
-regiones <- unique(volumen$REGIONES)
-
-cat("La variable PRODUCTOS contien ", length(produtos), " valores únicos", "\n")
-cat("La variable REGIONES contien ", length(regiones), " valores únicos", "\n")
-
-
-rm(produtos, regiones)
-```
-
-El conjunto de los datos contiene 209389 observaciones y 4 variables, que son:
-
-- **AÑO**: admite valores numéricos y representa cada año de la serie, que va desde el año 2000 hasta el año 2022.
-
-- **PRODUCTOS**: admite cadena de texto y representa a cada una de las categorias y alimentos que consumen los hogares españoles. Existen 791 productos únicos.
-
-- **REGIONES**: admite cadeta de texto y representa las regiones. Existen 19 regiones únicas.
-
-- **VOLUMEN**: admite valores numéricos que representa la cantiad de alimentos consumen los hogares españoles. 
-
-En definitiva, el conjunto de datos tiene dos variables numéricas y dos categóricas.  La variable VOLUMEN sería la variable respuesta.
-
-### 2.3 Transformación de los datos
-
-A continuación realizaré un filtro de los registros del conjunto de los datos.
-
-Los registros seleccionados que he seleccionado me permitarirán corresponden a las categorías más generales. Esto me permitirá realizar un análisis general del consumo de alimentos por los hogares españoles.
-
-En primer lugar, corrijo el nombre de algunos productos.
-
-```{r}
-volumen <- volumen %>%
-  mutate(PRODUCTOS = case_when(
-    PRODUCTOS == "HUEVOS KGS" ~ "T.HUEVOS KGS",
-    PRODUCTOS == "LECHE LIQUIDA RECONST" ~ "PREPARADOS LACTEOS",
-    PRODUCTOS == "AGUA MINERAL" ~ "AGUA DE BEBIDA ENVAS.",
-    PRODUCTOS == "BASES PIZZAS&MASAS HO" ~ "BASES PIZZAS Y MASAS HO",
-    PRODUCTOS == "T.FRUTA&HORTA.TRANSF" ~ "T.FRUTA Y HORTA.TRANSF",
-    TRUE ~ PRODUCTOS))
-```
-
-A continuación, filtro el conjunto de datos por la lista de productos seleccionados
-
-```{r}
-# Crear la lista de productos
-categorias <- c("T.HUEVOS KGS", "MIEL", "TOTAL CARNE", "TOTAL PESCA",
-                "TOTAL LECHE LIQUIDA", "TOTAL OTRAS LECHES",
-                "PREPARADOS LACTEOS", "DERIVADOS LACTEOS", "PAN",
-                "BOLL.PAST.GALLET.CERE", "CHOCOLATES/CACAOS/SUC", "ARROZ",
-                "TOTAL PASTAS", "AZUCAR", "EDULCORANTES", "LEGUMBRES",
-                "TOTAL ACEITE", "MARGARINA", "ACEITUNAS", "VINAGRE",
-                "TOTAL ZUMO Y NECTAR", "TOTAL PATATAS", "T.HORTALIZAS FRESCAS",
-                "T.FRUTAS FRESCAS", "FRUTOS SECOS", "T.FRUTA Y HORTA.TRANSF",
-                "PLATOS PREPARADOS", "CAFES E INFUSIONES", "CALDOS", "SALSAS",
-                "AGUA DE BEBIDA ENVAS.", "GASEOSAS Y BEBID.REFR",
-                "BASES PIZZAS Y MASAS HO", "HARINAS Y SEMOLAS", "ENCURTIDOS",
-                "ESPECIAS Y CONDIMENTO", "SAL", "OTROS PROD.EN PESO",
-                "OTROS PROD.EN VOLUMEN")
-
-# Filtro el conjunto de los datos en base a la lista de productos
-volumen <- volumen %>%
-  filter(PRODUCTOS %in% categorias)
-
-rm(categorias)
-```
-
-Por último paso de formato largo a ancho la variable PRODUCTO
-```{r}
-# Utiliza pivot_wider para convertir el formato de largo a ancho
-volumen <- volumen %>%
-  pivot_wider(names_from = PRODUCTOS, values_from = VOLUMEN)
-```
-
-### 2.3 Carga de los datos
-
 Hago una copia de df_volumen llamada data, con la que trabajaré a continuación 
 
 ```{r}
-data <- volumen
+data <- volumen_categorias
 ```
 
-## 3. Analisis descriptivo
+## 4. Analisis descriptivo del conjunto de los datos
 
 Obtengo una vista preliminar del marco de datos
 
@@ -203,218 +112,485 @@ Creo un resumen estadistico de las variables del conjunto de datos
 summary(data)
 ```
 
-```{r}
-regiones <- unique(data$REGIONES)
-año <- unique(data$AÑO)
-
-cat("La variable REGIONES contien ", length(regiones), " valores únicos", "\n")
-cat(regiones, "\n", "\n")
-
-cat("La variable AÑO contien ", length(año), " valores únicos", "\n")
-cat(año, "\n", "\n")
-
-rm(regiones, año)
-```
-
 Creo un histográma para examinar la distribución de los datos de la variable VOLUMEN
 
 ```{r}
-# Configurar la disposición de los gráficos (1 fila, 2 columnas)
-for (i in seq(3, 41, 1)){
-  hist(
-  data[[i]],
-  xlab = "Valores",
-  ylab = "Frecuencia",
-  breaks = 100,
-  main = paste0("Histográma de ", colnames(data)[i]))
-}
-
-rm(i)
+# Creo el histograma de VOLUMEN
+ggplot(
+  data = data,
+  aes(
+    x = VOLUMEN)) +
+  geom_histogram(
+    binwidth = 100,
+    fill = "blue",
+    color = "lightblue") +
+  labs(x = "Valores",
+       y = "Frecuencia",
+       title = "Histograma de VOLUMEN") +
+  ylim(0, 350)
 ```
+
+
 Creo un histográma para examinar la distribución de los datos de la variable REGIONES
 
 ```{r}
-barplot(
-  table(data$REGIONES),
-  xlab = "",
-  ylab = "Frecuencia",
-  main = "Frecuencia de Regiones",
-  las = 2,
-  cex.names = 0.4,
-  ylim = c(0, 25))
+
+# Crear un gráfico de barras de la frecuencia de REGIONES
+ggplot(
+  data = data,
+  aes(
+    x = REGIONES)) +
+  geom_bar(
+    fill = "lightblue",
+    color = "black",
+    width = 0.9) +
+  labs(
+    x = "Regiones",
+    y = "Frecuencia",
+    title = "Gráfico de Barras de la frecuencia de cada región") +
+  coord_cartesian(
+    ylim = c(0, 900)) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
+Creo un histográma para examinar la distribución de los datos de la variable CATEGORÍAS
+
+```{r}
+# Crear un gráfico de barras de la frecuencia de CATEGORIAS
+ggplot(
+  data = data,
+  aes(
+    x = CATEGORÍAS)) +
+  geom_bar(
+    fill = "lightblue",
+    color = "black",
+    width = 0.8) +
+  labs(
+    x = "Categorías",
+    y = "Frecuencia",
+    title = "Gráfico de Barras de la frecuencia de cada categoria de alimentos") +
+  coord_cartesian(
+    ylim = c(0, 450)) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 Creo un histográma para examinar la distribución de los datos de la variable AÑO
 
 ```{r}
-barplot(
-  table(data$AÑO),
-  xlab = "Año",
-  ylab = "Frecuencia",
-  main = "Frecuencia de Año",
-  las = 2,
-  cex.names = 0.5,
-  ylim = c(0, 20))
+# Crear un gráfico de barras de la frecuencia de cada año
+ggplot(
+  data = data,
+  aes(
+    x = factor(substr(AÑO, 1, 4)))) +
+  geom_bar(
+    fill = "lightblue",
+    color = "black",
+    width = 0.8) +
+  labs(
+    x = "Año",
+    y = "Frecuencia",
+    title = "Gráfico de Barras de la frecuencia de cada año") +
+  coord_cartesian(ylim = c(0, 700)) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 Tras examinar el marco de datos he llegado a la siguiente conclusión:
 
-- El número total de observaciones del conjunto de datos es de 391.
+- El número total de observaciones del conjunto de datos es de 14,059 observaciones y 4 variables, que son:
 
-- El número total de variables son 41, de las cuales una, REGIONES, es de tipo categórico y las restantes numéricas. De éstas últicas cabe diferencia la variable AÑO, que como su nombre indica, representa el año, y las restantes variables, que representa la categoría de alimentos.
+  - **AÑO**: representa fechas en formato de texto (chr). La serie va desde el año 2000 hasta el 2022. Los años 2000, 2001, 2002, 2003 y 2004 tienen una frecuancia menor que el resto de año. Puede deberse a que se produjo un cambio de metodologia y apartir del 2005 se introdujo nuevas categorias, no contabilizadas anteriormente. 
 
-- El rango temporal abarca desde el año 2000 hasta el año 2022.
+  - **CATEGORÍAS**: representar las categorías a las que pertenecen los datos. Está en formato de texto (chr). El número de valores únicos son 37. Destacar que las categorías encurtidos, especias, harinas, sal y vinagre tienen menos frecuencia absolutas que el resto de las categorías. Esto, unido aque, gualmente, existen años con menos frecuencia, es una muestra de que éstas categorias se introdujeron con posterioridad. Así, el vinagre puedo introducirse en el año 2004 y el resto en a partir del 2005. 
 
-- Las variables numéricas, que representan categorías de alimentos, presentan una distribución sesgada a la izquierda, es deicir, sus valores se aproximan más a la izquierda.
+  - **REGIONES**: representa las regiones a las que pertenecen los datos. También está en formato de texto (chr) y existen 17 regiones diferentes. Todas las regiones tienen la misma frecuencia, es decir, se repiten el mismo número de veces.
+  
+  - **VOLUMEN**: es una variable numérica (num) y representa una cantidad de los alimentos consumidos por los hogares españoles. Esta variable tiene un amplio rango de valores, que va desde el 0 hasta 802585. Además,  un sesgo hacia la izquierda en su distribución, es decir, la mayoría de los valores se situan a la izquierda.
+  
+## 5. Ajuste de variables
 
-- Los valores de REGIONES y AÑO se repiten el mismo número de veces, es deicir, cada región se repite 23 y cada año 17 veces. 
+Transformo los datos de la variable VOLUMEN a tipo numeric.
 
-## 4. Ajuste de variables
+```{r}
+data$VOLUMEN <- as.numeric(data$VOLUMEN)
+```
 
-Dentro de las numericas cabe destacar la variable AÑO, que es una variable temporal. Por regla general es conveniente trasformar estas variables a tipo fecha. Sin embargo, debido a que son años, no las modificaré.
+Y Ahora cambio AÑO a tipo de dato de fecha
 
-En cuanto a las variables REGIONES convendría transformarla a tipo factor.
+```{r}
+# Suponiendo que "data" es tu marco de datos
+data$AÑO <- as.Date(data$AÑO, format = "%Y-%m-%d")
+```
+
+A continuación, tanto las variables REGIONES como CATEGORIAS las transformo en factores
 
 ```{r}
 data$REGIONES <- factor(data$REGIONES)
+data$CATEGORÍAS <- factor(data$CATEGORÍAS)
 ```
 
-## 5. Detección y tratamiento de valores ausentes
+## 6. Detección y tratamiento de valores ausentes
 
-Consulto si el conjunto de datos tiene valores ausentes:
+Por lo que parece a continuación, no existen valores ausentes.
 
 ```{r}
 any(is.na(data))
 ```
-Compruebo el número de valores ausentes y su porcentaje del total del conjunto de los datos
+
+## 7. Identificación de valores atípicos
+
+A continuación realizo un gráfico decaja y bigotes para visualizar si existen datos atípicos.
 
 ```{r}
-# Calcular el número de valores ausentes
-num_valores_ausentes <- sum(is.na(data))
+# Calculo las estadísticas necesarias para reproducir el gráfico
+estadisticas <- boxplot.stats(data$VOLUMEN)
 
-# Calcular el porcentaje de valores ausentes
-porcentaje_valores_ausentes <- mean(is.na(data)) * 100
-
-# Imprimir los resultados
-cat("El número de valores ausentes es de:", num_valores_ausentes, "\n")
-cat("El porcentaje de valores ausentes es de:", porcentaje_valores_ausentes, "%\n")
-
-rm(num_valores_ausentes, porcentaje_valores_ausentes)
-
-```
-
-Consulto el número de valores ausentes por variable.
-
-```{r}
-colSums(is.na(data))
-```
-Consulto el porcentaje de valores ausentes pos variable.
-
-```{r}
-colMeans(is.na(data))
-```
-
-Tas analizar los valores ausentes, la conclusiones son las siguientes:
-
-- El conjunto de datos contiene 493 valores ausentes que representan el 3.1% con respecto al total de los datos.
-
-- La variable VINAGRE contiene 68 valores ausentes, esto es, el 17%
-
-- Las variables BASES PIZZAS Y MASAS HO, HARINAS Y SEMOLAS, ENCURTIDOS, SAL y ESPECIAS Y CONDIMENTO tienen 85 valores ausentes cada una, esto es un 22%.
-
-La razon de estos valores ausentes es el cambio de metodologia a la hora de tomar los datos, que se produjo, lo más proble, en el 2003 y 2004. 
-
-## 6. Identificación de valores atípicos
-
-```{r}
-par(mfrow = c(2, 3))
-
-for (i in seq(3, 41)){
+# Construyo el gráfico de cajas y bigotes
+ggplot(
+  data = data,
+  aes(
+    x = VOLUMEN)) +
+  geom_boxplot() +
   
-  # Calculo las estadísticas necesarias para reproducir el gráfico
-  estadisticas <- boxplot.stats(data[[i]])
+  scale_x_continuous(
+    labels = scales::number_format(scale = 1e-6, accuracy = 0.01)) +
+  labs(
+    x = "VOLUMEN",
+    title = "Gráfico de caja y bigotes de VOLUMEN") +
+  theme_minimal()
 
-  # Construyo el gráfico de cajas y bigotes
-  boxplot(
-    data[[i]],
-    horizontal = TRUE,
-    xlab = paste0(colnames(data)[i]))
+rm(estadisticas)
+```
+
+Como se ve en gráfico, el rango de valores de la variable VOLUMEN es muy amplio, ya que va desde el 0 hasta más de los 800000. Sin embargo, como se puede apreciar, la mayoría de los valores estan situado en la izquierda, es decir, su distribución presenta un sesgo hacia la izquierda.  
+
+Como era de esperar, la variable también presenta valores atípicos. Sin embargo, es importante destacar que estos valores atípicos no necesariamente indican errores en la recopilación de datos, sino que pueden reflejar características genuinas de los datos. 
+
+A continuación, se exponen algunas razones por las cuales se pueden encontrar valores atípicos en esta variable:
+
+- **Diferencias en las Categorías de Alimentos**: Es completamente normal que las distintas categorías de alimentos se consuman en cantidades variadas. Esto puede dar lugar a diferencias significativas en la distribución de "VOLUMEN" entre las categorías. Al realizar análisis o visualizaciones específicas para cada categoría, es posible identificar valores atípicos en aquellas categorías que se consumen en cantidades mucho mayores o menores en comparación con otras.
+
+- **Diferencias en las Regiones**: Las variaciones en el tamaño de la población y las características demográficas de las diferentes regiones pueden influir en los patrones de consumo de alimentos. Regiones con poblaciones más grandes pueden tener un consumo total de alimentos más elevado, lo que puede afectar la distribución de "VOLUMEN" para esas regiones. Al analizar los valores atípicos en función de las regiones, es posible comprender mejor las diferencias regionales.
+
+- **Cambios en la Metodología y la Disponibilidad de Datos**: Cambios en la metodología de recopilación de datos o en la disponibilidad de datos a lo largo del tiempo pueden desempeñar un papel importante en la presencia de valores atípicos. Por ejemplo, si ciertas categorías de alimentos comenzaron a registrarse a partir del año 2005, es natural que existan menos datos disponibles para los años anteriores. Esto puede resultar en valores atípicos en esos años anteriores, ya que los datos pueden ser menos representativos o menos precisos debido a la falta de información histórica.
+
+En resumen, los valores atípicos en la variable "VOLUMEN" son el resultado de las diferencias en las categorías de alimentos, las variaciones regionales y los posibles cambios en la metodología y la disponibilidad de datos a lo largo del tiempo. Estos valores no necesariamente indican errores, sino que proporcionan información valiosa sobre la realidad subyacente de los datos.
+
+## 8. Análisis de relaciones entre variables.
+
+De las cuatro variables que tiene el conjunto de datos, selecciona la variable VOLUMEN como la variable respuesta y a continuación las comparo con el resto de variables
+
+### 7.1. VOLUMEN VS AÑO.
+
+```{r}
+# Establecer el formato de etiqueta del eje x a decimal
+options(scipen = 999)
+
+data_año <- data %>%
+  group_by(AÑO) %>%
+  summarise(
+    Volumen = sum(VOLUMEN))
+
+# Crear un gráfico de líneas con todos los años en el eje de las X
+ggplot(
+  data_año,
+  aes(
+    x = AÑO,
+    y = Volumen)) +
+  geom_line() +
+  labs(
+    x = "AÑO",
+    y = "VOLUMEN",
+    title = "Gráfico de Líneas VOLUMEN vs. AÑO") +
+  theme_minimal() +
+  scale_x_date(
+    date_labels = "%Y",
+    date_breaks = "1 year") +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1))
+
+rm(data_año)
+```
+
+En este gráfico, se observa la evolución de la cantidad de alimentos consumidos en hogares españoles desde el año 2000 hasta el 2022.
+
+- En el año 2000, el consumo comenzó en niveles mínimos, situándose por debajo de los 24 mil millones de kilos.
+
+- Hasta 2009, la cantidad de alimentos consumidos experimentó un aumento constante, acercándose a los 29 mil millones de kilos.
+
+- A partir del año 2010, se inició un declive que continuó hasta 2019, momento en el cual se situó por debajo de los 27 mil millones de kilos.
+
+- En el año 2020, se produjo un aumento significativo, superando los 29 mil millones de kilos.
+
+- Sin embargo, en los años 2021 y 2022, el consumo disminuyó, retornando a niveles aproximados a los del año 2003.
+
+En resumen, la evolución de la cantidad de alimentos consumidos muestra cambios significativos a lo largo de estos años, con un periodo de descenso a partir de 2021. Esta información es crucial para comprender las tendencias en los hábitos de consumo alimentario en España.
+
+### 7.3. VOLUMEN VS CATEGORIAS
+
+```{r}
+data_categorias <- data %>%
+  group_by(CATEGORÍAS) %>%
+  summarise(Volumen = sum(VOLUMEN)) %>%
+  arrange(desc(Volumen))
+
+# Crea un gráfico de líneas
+ggplot(
+  data = data_categorias,
+  aes(
+    x = reorder(CATEGORÍAS, -Volumen),
+    y = Volumen)) +
+  geom_bar(
+    stat = "identity",
+    position = "dodge",
+    fill = "lightblue",
+    color = "black",
+    width = 0.8) +
+  labs(
+    x = "CATEGORÍAS",
+    y = "VOLUMEN",
+    title = "Gráfico de Barras VOLUMEN vs. CATEGORÍAS") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+        axis.text.y = element_text(size = 8),
+        axis.title = element_text(size = 10),
+        legend.position = "none") +
+  ylim(0, max(data_categorias$Volumen * 1.1))
+
+
+rm(data_categorias)
+```
+
+Tu descripción es clara y proporciona una visión general de la distribución del consumo de diferentes categorías de alimentos según el gráfico de barras. Sin embargo, puedes mejorarla haciendo que la información sea más cohesiva y organizada. Aquí tienes una versión revisada:
+
+En este gráfico, se destaca la variabilidad en el consumo de diversas categorías de alimentos:
+
+- En el grupo de las categorías más consumidas se encuentran la fruta fresca y la leche líquida, destacando por su alta demanda.
+
+- Le siguen de cerca las hortalizas frescas, el agua mineral embotellada y la carne, que también tienen un consumo significativo.
+
+- En una categoría intermedia se encuentran los refrescos y el pan, con niveles de consumo notables.
+
+- Posteriormente, se ubican las categorías de derivados lácteos, patatas, pescado y marisco, que se consumen con frecuencia.
+
+- En un quinto grupo se incluyen el aceite, productos de bollería, galletas y cereales, platos preparados, zumos y huevos, con un nivel de consumo menor en comparación con las categorías mencionadas anteriormente.
+
+- Finalmente, las demás categorías muestran niveles de consumo más bajos en general.
+
+Esta representación visual ofrece una perspectiva clara de las preferencias de consumo de alimentos en cada categoría y es valiosa para comprender las tendencias alimentarias en la población.
+
+### 7.4. VOLUMEN VS AÑO VS CATEGORIAS
+
+```{r}
+# Agrupa los datos por categorías y años, calculando la suma del VOLUMEN para cada combinación
+data_categorias <- data %>%
+  group_by(CATEGORÍAS, AÑO) %>%
+  summarise(
+    Volumen = sum(VOLUMEN))
+
+# Obtiene las categorías únicas presentes en los datos
+categorias_unicas <- unique(data_categorias$CATEGORÍAS)
+
+# Crea un gráfico de líneas para cada categoría de alimentos
+for (i in categorias_unicas) {
+  
+  # Filtra los datos para la categoría actual
+  datos <- data_categorias %>%
+    filter(CATEGORÍAS == i)
+  
+  # Crea un gráfico de líneas para la categoría actual
+  grafico <- ggplot(
+    data = datos,
+    aes(
+      x = AÑO,
+      y = Volumen)) +
+    geom_line(
+      color = "blue") +  # Línea de color azul
+    labs(
+      x = "AÑO",
+      y = "VOLUMEN",
+      title = paste0("Gráfico de Líneas con el consumo de ", i)) +  # Títulos
+    theme_minimal() +
+    scale_x_date(
+      date_labels = "%Y",
+      date_breaks = "1 year") +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  # Imprime el gráfico actual
+  print(grafico)
 }
 
-rm(estadisticas, i)
+rm(data_categorias, categorias_unicas, i, datos)
 ```
 
-Los gráficos muestra la existencia de valores atípicos en todas las variables que hacen referencia a clases de alimentos, cosa que era de esperar ya que, como es lógico, existen regiones en las que se consuman muchos más alimentos que en otras regiones. Así, por ejemplo, es normal que en regiones como Andalucia, Madrid o Barcelona, regiones con mucha población, se consuman muchos más alimentos que en regiones con menos población.
+En general, durante los años 2021 y 2022, se observa una tendencia a la disminución en el consumo en todas las categorías de alimentos.
 
-## 7. Análisis de correlación
+Sin embargo, al analizar la serie temporal en su totalidad, se destacan varios patrones interesantes:
 
-A continuación, mediante una matriz de correlación analizo la relación entre las variables numéricas, que hacen referencia a las categorias de alimetnos.
+- Algunas categorías, como el agua, bollería, pastelería, galletas y cereales, cafés e infusiones, chocolates, cacao y sucedáneos, derivados lácteos, frutos secos, otros productos en volumen, pasta, platos preparados y salsas, comienzan con un consumo relativamente bajo en el año 2000 y experimentan un aumento constante a lo largo de los años.
+
+- Otras categorías, como el aceite, el azúcar, la leche líquida y el pan, comienzan la serie con un consumo alto y experimentan una disminución gradual a lo largo del tiempo.
+
+- Algunas categorías, como la fruta fresca, las hortalizas frescas, el pescado y los refrescos, comienzan con un consumo bajo y alcanzan un pico en los años 2009 y 2010, pero luego experimentan una disminución hasta 2019. En 2020, se observa un repunte temporal, seguido de una disminución pronunciada en 2021 y 2022.
+
+- Otras categorías, como la sal, la margarina, la carne y los caldos, comienzan con un consumo moderado o alto, mantienen cierta estabilidad durante algunos años y luego experimentan un aumento hasta alcanzar un pico en 2009. Sin embargo, a partir de 2013, su consumo disminuye significativamente hasta 2019. En 2020, se observa nuevamente un repunte, pero luego su consumo cae en 2021 y 2022.
+
+- Por último, el arroz y otros productos en peso comienzan con un consumo alto, pero experimentan una fuerte caída hacia 2003 y 2006. A partir de 2008, su consumo comienza a aumentar nuevamente.
+
+### 7.4. VOLUMEN VS REGIONES
 
 ```{r}
-# Seleccionar las variables numéricas
-indice <- seq(3, 41, 1)
-num_variable <- data[, indice]
+data_regiones <- data %>%
+  group_by(REGIONES) %>%
+  summarise(Volumen = sum(VOLUMEN)) %>%
+  arrange(desc(Volumen))
 
-# Calcular la matriz de correlación
-correlacion <- cor(num_variable, use = "pairwise.complete.obs") # Ignorar valores faltantes
+# Crea un gráfico de líneas
+barplot(
+  height = data_regiones$Volumen,
+  beside = TRUE, 
+  main = "Gráfico de Barras VOLUMEN vs. REGIONES",
+  names.arg = data_regiones$REGIONES,
+  las = 2,
+  cex.names = 0.5,
+  cex.axis = 0.5,
+  ylim = c(0, max(data_regiones$Volumen * 1.1)))
 
-# Cargar la librería corrplot si aún no está cargada
-# install.packages("corrplot") # Instala la librería si es necesario
-# library(corrplot)
 
-# Visualizar la matriz de correlación
-corrplot(
-  correlacion,
-  method = "square",
-  tl.cex = 0.3, # Tamaño de la fuente en las etiquetas
-  diag = FALSE, # No mostrar correlaciones en la diagonal
-  tl.col = "black" # Color de las etiquetas
-)
-
-rm(indice, num_variable, correlacion)
+rm(data_regiones)
 ```
+
+Según se puede apreciar en el gráfico, las regiones muestran un consumo dispar de alimentos. Como se aprecia, las regiones que más consumen son Andalucia, Cataluña.
+
+### 7.4. VOLUMEN VS AÑO VS REGIONES
+
 
 ```{r}
-# Seleccionar las variables numéricas
-indice <- seq(3, 41, 1)
-num_variable <- data[, indice]
+data_regiones <- data %>%
+  group_by(REGIONES, AÑO) %>%
+  summarise(
+    Volumen = sum(VOLUMEN))
 
-# Calcular la matriz de correlación
-correlacion <- cor(num_variable, use = "pairwise.complete.obs") # Ignorar valores faltantes
+regiones_unicas <- unique(data_regiones$REGIONES)
 
-# Convertir la matriz de correlación en un dataframe
-correlacion_df <- as.data.frame(correlacion)
+for (i in regiones_unicas){
+  datos <- data_regiones  %>%
+    filter(REGIONES == i)
+  
+  plot(
+    x = datos$AÑO,
+    y = datos$Volumen,
+    type = "l",
+    xlab = "AÑO",
+    ylab = "VOLUMEN",
+    main = paste0("Gráfico de Líneas con el consumo de ", i),
+    las = 2,
+    cex.axis = 0.5)
+}
 
-# Mostrar la tabla de correlaciones
-print(correlacion_df)
+rm(data_regiones, regiones_unicas, datos, i)
 ```
 
-Como se puede apreciar en la matriz, por regla general, todos los categorias de alimentos parecen mantener alguna relación entre sí, a excepción de PREPARADOS LACTEOS y OTROS PROD.EN PESO y, luego, en menor medida, OTROS PROD.EN VOLUMEN, EDULCORANTES y TOTAL OTRAS LECHES.
 
-## 8. Conclusiones
+En términos generales, se observa que en el año 2020 todas las regiones experimentaron un repunte en el consumo de alimentos por parte de los hogares españoles, seguido de una disminución pronunciada en los años 2021 y 2022.
 
-Tras un minucioso análisis de los datos relativos al consumo de alimentos en hogares españoles, se han obtenido importantes conclusiones que arrojan luz sobre la naturaleza y las particularidades de este conjunto de datos. A continuación, se resumen los hallazgos clave:
+En particular, se pueden destacar las tendencias de consumo de las siguientes regiones:
 
-Características del Conjunto de Datos:
+- Asturias: Inició la serie con un consumo de alimentos elevado y experimentó una disminución casi lineal a lo largo del tiempo.
 
-El conjunto de datos consta de 391 observaciones y 41 variables.
-La variable "REGIONES" es categórica, mientras que las demás son numéricas. "AÑO" representa el año, y las demás variables abarcan diversas categorías de alimentos.
-El período de registro abarca desde el año 2000 hasta 2022.
-Distribución de Variables Numéricas:
+- Baleares: Comenzó la serie con un consumo bajo y experimentó un crecimiento constante a lo largo de los años.
 
-Las variables numéricas relacionadas con las categorías de alimentos exhiben una distribución sesgada hacia la izquierda, lo que indica que los valores tienden a concentrarse en el extremo inferior.
-Valores Únicos y Repetición:
+- Luego, existen un conjunto de regiones que como Cantabria, Castillas La Macha, Valencia, País Vasco, Madrid, La Rioja o Galicia, que muestran un comportamiento similar al general. Empiezan la serie con un consumo bajo o medio. Luego experimentan una subida en el consumo hasta el 2009 para luego caer paulatinamente hasta el 2019. En el 2020 se produce un repunte, y luego, en el 2021 y 2022 cae.
 
-Tanto las variables "REGIONES" como "AÑO" presentan una repetición constante, con cada región y año apareciendo 23 y 17 veces, respectivamente. Esto refleja la uniformidad en la estructura de los datos.
-Valores Ausentes:
+### 7.4. VOLUMEN VS REGIONES VS CATEGORÍAS
 
-El conjunto de datos contiene 493 valores ausentes en total, lo que representa el 3.1% del total de observaciones. La variable "VINAGRE" tiene el porcentaje más alto de valores ausentes, con un 17%.
-La causa principal de los valores ausentes se relaciona con cambios metodológicos en la recopilación de datos, principalmente en los años 2003 y 2004.
-Valores Atípicos:
+Crea gráficos de barras que muestran el volumen de consumo de diferentes categorías de alimentos por region.
 
-Se identificaron valores atípicos en las variables que representan categorías de alimentos. Estos valores son coherentes con las diferencias en el consumo de alimentos entre regiones con poblaciones distintas, como Andalucía, Madrid o Barcelona.
-Relaciones entre Variables:
+```{r}
+# Calculo el resumen de datos por regiones y categorías
+datos_regiones_categoria <- data %>%
+  group_by(REGIONES, CATEGORÍAS) %>%
+  summarise(Volumen = sum(VOLUMEN)) %>%
+  arrange(desc(Volumen))
 
-La matriz de correlación sugiere relaciones significativas entre la mayoría de las categorías de alimentos, lo que indica posibles patrones de consumo. Sin embargo, algunas categorías muestran menos correlación, como "PREPARADOS LACTEOS" y "OTROS PROD.EN PESO", así como "OTROS PROD.EN VOLUMEN", "EDULCORANTES" y "TOTAL OTRAS LECHES".
+# Obtengo el nombre de las regiones únicas
+regiones_unicas <- unique(datos_regiones_categoria$REGIONES)
 
-Estas conclusiones proporcionan una base sólida para análisis posteriores y la construcción de un cuadro de mando efectivo. Además, resaltan la importancia de abordar los valores ausentes y valores atípicos de manera apropiada en futuros análisis. El conocimiento adquirido a través de este EDA será esencial para comprender mejor los patrones de consumo de alimentos en hogares españoles y tomar decisiones informadas en el proyecto global.
+#  Itero a través de cada región para crear gráficos de barras por región.
+for (i in regiones_unicas){
+  
+  # Filtro los datos para la región actual
+  datos <- datos_regiones_categoria %>%
+    filter(REGIONES == i)
+
+  # Creo un gráfico de barras para la región actual
+  barplot(
+    height = datos$Volumen,
+    beside = TRUE, 
+    main = paste0("Gráfico de Barras VOLUMEN vs CATEGORÍAS en ", i),
+    ylim = c(0, max(datos$Volumen) * 1.1),
+    ylab = "VOLUMEN",
+    names.arg = datos$CATEGORÍAS,
+    las = 2,
+    cex.names = 0.5,
+    cex.axis = 0.5) 
+}
+
+# Elimino las variables que no utilizaré
+rm(datos_regiones_categoria,regiones_unicas, datos, i)
+```
+
+Acontinuación realizo etiqueto la categorías basado en cuartiles para diferentes regiones.
+ 
+```{r}
+# Calculo el resumen de datos por regiones y categorías
+datos_regiones_categoria <- data %>%
+  group_by(REGIONES, CATEGORÍAS) %>%
+  summarise(Volumen = sum(VOLUMEN)) %>%
+  arrange(desc(Volumen))
+
+# Obtengo el nombre de las regiones
+regiones_unicas <- unique(datos_regiones_categoria$REGIONES)
+
+# Itero a través de cada región para realizar análisis por región.
+for(i in regiones_unicas){
+  
+  # Filtrar los datos para la región actual
+  datos_region <- datos_regiones_categoria %>%
+    filter(REGIONES == i)
+  
+  # Calculo las estadísticas necesarias para reproducir el gráfico
+  estadisticas <- boxplot.stats(datos_region$Volumen)
+  
+  # Etiqueto las categorías en función de los cuartiles
+  datos_region <- datos_region %>%
+    mutate(
+      Estadisticas = case_when(
+        Volumen <= estadisticas$stats[2] ~ "Primer cuartil",
+        Volumen > estadisticas$stats[2] & Volumen <= estadisticas$stats[3] ~ "Segundo cuartil",
+        Volumen > estadisticas$stats[3] & Volumen <= estadisticas$stats[4] ~ "Tercer cuartil",
+        Volumen > estadisticas$stats[4]  & Volumen < min(estadisticas$out) ~ "Cuarto cuartil",
+        Volumen %in% estadisticas$out ~ "Valores atípicos",
+        TRUE ~ "Otros"))
+  
+  # Imprimir la tabla con etiquetas
+  print(datos_region)
+}
+
+
+rm(datos_regiones_categoria, regiones_unicas, estadisticas, datos_region, i)
+```
+Por regla general, las categorias de alimentos más consumidas en todas las regiones son la fruta fresca y la leche líquida. Le sigue las hortalizas frescas, la carne el pan y los refrescos. 
+
+Las categorias que menos se consumen son los edulcorantes, las especias, los caldos, la miel, otras leches y los encurtidos. 
+
+El agua envasada dependiendo de la región tiene una prioridad u otras Así, por ejemplo, en Canarias y Baleares es la categoria de alimentos que más se consume. Le sigue Cataluñá y Valencia, que es el segundo, y despues Castilla y Leon y Murcia, que es el tercero. Donde menos prioridad le dan es en Madrid, Pais Vasco y Navarra, donde ocupa la décima posición. 
+
+A priori, consideraba que la pesca, es decir, el pescado y el marisco, tenía mayor prioridad en zonas de costa, como Galicia o Cantabria, y en las islas Baleares y Canarias. Sin embargo, no se ha evidenciado esta hipótesis. Así, la pesca, por ejemplo ocupa la decima posición tanto en Extremadura, Baleares como en Cataluña. 
+
+## 9. Conclusiones
+
