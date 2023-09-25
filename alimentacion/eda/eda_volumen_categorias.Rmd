@@ -283,7 +283,7 @@ En resumen, los valores atípicos en la variable "VOLUMEN" son el resultado de l
 
 De las cuatro variables que tiene el conjunto de datos, selecciona la variable VOLUMEN como la variable respuesta y a continuación las comparo con el resto de variables
 
-### 7.1. VOLUMEN VS AÑO.
+### 8.1. VOLUMEN VS AÑO.
 
 ```{r}
 # Establecer el formato de etiqueta del eje x a decimal
@@ -329,7 +329,7 @@ En este gráfico, se observa la evolución de la cantidad de alimentos consumido
 
 En resumen, la evolución de la cantidad de alimentos consumidos muestra cambios significativos a lo largo de estos años, con un periodo de descenso a partir de 2021. Esta información es crucial para comprender las tendencias en los hábitos de consumo alimentario en España.
 
-### 7.3. VOLUMEN VS CATEGORIAS
+### 8.3. VOLUMEN VS CATEGORIAS
 
 ```{r}
 data_categorias <- data %>%
@@ -382,7 +382,7 @@ En este gráfico, se destaca la variabilidad en el consumo de diversas categorí
 
 Esta representación visual ofrece una perspectiva clara de las preferencias de consumo de alimentos en cada categoría y es valiosa para comprender las tendencias alimentarias en la población.
 
-### 7.4. VOLUMEN VS AÑO VS CATEGORIAS
+### 8.4. VOLUMEN VS AÑO VS CATEGORIAS
 
 ```{r}
 # Agrupa los datos por categorías y años, calculando la suma del VOLUMEN para cada combinación
@@ -441,7 +441,7 @@ Sin embargo, al analizar la serie temporal en su totalidad, se destacan varios p
 
 - Por último, el arroz y otros productos en peso comienzan con un consumo alto, pero experimentan una fuerte caída hacia 2003 y 2006. A partir de 2008, su consumo comienza a aumentar nuevamente.
 
-### 7.4. VOLUMEN VS REGIONES
+### 8.4. VOLUMEN VS REGIONES
 
 ```{r}
 # Agrupa los datos por regiones calculando la suma del VOLUMEN
@@ -492,7 +492,7 @@ Asturias, Extremadura y Baleares presentan un nivel de consumo relativamente men
 
 Por último, las comunidades de Navarra, Cantabria y, en menor medida, La Rioja muestran los niveles más bajos de consumo de alimentos en el conjunto de datos.
 
-### 7.4. VOLUMEN VS AÑO VS REGIONES
+### 8.5. VOLUMEN VS AÑO VS REGIONES
 
 
 ```{r}
@@ -549,7 +549,7 @@ En particular, se pueden destacar las tendencias de consumo de las siguientes re
 
 - Luego, existen un conjunto de regiones que como Cantabria, Castillas La Macha, Valencia, País Vasco, Madrid, La Rioja o Galicia, que muestran un comportamiento similar al general. Empiezan la serie con un consumo bajo o medio. Luego experimentan una subida en el consumo hasta el 2009 para luego caer paulatinamente hasta el 2019. En el 2020 se produce un repunte, y luego, en el 2021 y 2022 cae.
 
-### 7.4. VOLUMEN VS REGIONES VS CATEGORÍAS
+### 8.6. VOLUMEN VS REGIONES VS CATEGORÍAS
 
 Crea gráficos de barras que muestran el volumen de consumo de diferentes categorías de alimentos por region.
 
@@ -667,27 +667,31 @@ Las conclusiones a las que he podido llegar son las siguientes:
 
 1. **Evolución del Volumen de Consumo de Alimentos**: 
 
-  - Observamos que desde el año 2000 hasta 2022, en términos generales, la cantidad de alimentos consumidos por los hogares españoles ha experimentado un crecimiento, pasando de casi 24 millones a más de 25 millones de kilos. Sin embargo, este crecimiento no ha sido lineal y ha estado marcado por fluctuaciones significativas. 
-  
-  - El año 2023 comenzo en una etapa de caida del consumo de alimentos. 
+- Durante el período comprendido entre 2000 y 2022, se observa un patrón de aumento en el volumen de alimentos consumidos por los hogares españoles en términos generales. En el año 2000, el consumo se situaba en aproximadamente 24 millones de kilos, mientras que en 2022, esta cifra había superado los 25 millones de kilos. Sin embargo, es importante destacar que este aumento no siguió una trayectoria lineal y estuvo marcado por fluctuaciones notables.
+
+- Dos momentos cruciales en la evolución del consumo de alimentos merecen especial atención. En primer lugar, a partir de 2010, se produjo un cambio significativo en la tendencia de crecimiento, dando paso a un período de declive que se extendió hasta 2019. El segundo momento destacado ocurrió en el año 2020, cuando se experimentó un aumento en todas las regiones y categorías de alimentos, solo para ser seguido por una disminución pronunciada en los años subsiguientes. 
 
 2. **Variabilidad Regional en el Consumo de Alimentos**:
 
-  - En general, durante los años 2021 y 2022, se observa una tendencia a la disminución en el consumo en todas regiones.
-  
-  - He identificado diferencias notables en el consumo de alimentos entre las distintas regiones de España. Andalucía y Cataluña lideran en consumo, seguidas de cerca por Madrid y Valencia. En contraste, La Rioja, Cantabria y Navarra presentan los niveles de consumo más bajos.
+- En líneas generales, durante los años 2021 y 2022, se ha observado una tendencia a la disminución en el consumo de alimentos en todas las regiones de España.
+
+- Se han identificado diferencias significativas en los patrones de consumo de alimentos entre las diversas regiones del país. Las regiones de Andalucía y Cataluña lideran en consumo, seguidas de cerca por Madrid y Valencia. En contraste, La Rioja, Cantabria y Navarra presentan los niveles de consumo más bajos.
 
 3. **Categorías de Alimentos Populares y Cambios en el Tiempo**:
 
-  - En general, durante los años 2021 y 2022, se observa una tendencia a la disminución en el consumo en todas las categorías de alimentos.
+- Durante los años 2021 y 2022, se ha observado una tendencia general a la disminución en el consumo de todas las categorías de alimentos.
 
-  - Al analizar las categorías de alimentos, Observé que la fruta fresca y la leche líquida son las más consumidas, tanto a nivel general como regional. Otras categorías populares incluyen las hortalizas frescas, la carne, el pan y los refrescos. 
-  
-  - Además, indentifiqué categorías menos consumidas, como edulcorantes, especias, caldos y encurtidos.
+- Al analizar las categorías de alimentos, se destacan algunas tendencias notables. La fruta fresca y la leche líquida son las categorías más consumidas, tanto a nivel general como regional. Otras categorías populares incluyen las hortalizas frescas, la carne, el pan y los refrescos.
 
-  - El consumo de agua envasada varía según la región. Por ejemplo, en Canarias y Baleares, esta categoría ocupa el primer lugar, seguida de Cataluña y Valencia en segundo lugar. En contraste, Madrid, País Vasco y Navarra la ubican en la décima posición en sus preferencias.
+- Por otro lado, se han identificado categorías menos consumidas, como edulcorantes, especias, caldos y encurtidos.
 
-  - Contrariamente a la hipótesis inicial que sugería un mayor consumo de pescado y marisco en regiones costeras como Galicia y Cantabria, así como en las islas Baleares y Canarias, los datos no respaldan esta suposición. Estas categorías ocupan la décima posición en regiones como Extremadura, Baleares y Cataluña.
+- También es interesante observar que hay un conjunto de categorías de alimentos que han experimentado un crecimiento casi lineal desde el año 2000. Estas categorías incluyen el agua, bollería y pastelería, galletas y cereales, cafés e infusiones, chocolates, cacao y sucedáneos, derivados lácteos, frutos secos, otros productos en volumen, pasta, platos preparados y salsas.
+
+- Por otro lado, algunas categorías han experimentado una disminución casi lineal en su consumo desde el año 2000. Estas categorías comprenden el aceite, el azúcar, la leche líquida y el pan.
+
+- Es importante destacar que el consumo de agua envasada varía según la región. Por ejemplo, en Canarias y Baleares, esta categoría ocupa el primer lugar, seguida de Cataluña y Valencia en segundo lugar. En contraste, Madrid, País Vasco y Navarra la ubican en la décima posición en sus preferencias.
+
+- Contrariamente a la hipótesis inicial que sugería un mayor consumo de pescado y marisco en regiones costeras como Galicia y Cantabria, así como en las islas Baleares y Canarias, los datos no respaldan esta suposición. Estas categorías ocupan la décima posición en regiones como Extremadura, Baleares y Cataluña.
   
   
 

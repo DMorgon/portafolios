@@ -1,0 +1,7 @@
+---
+title: EDA del precio de los alimentos, clasificados en categorias generales, consumidas
+  por los hogares españoles
+author: "David Moreno"
+date: "2023-09-25"
+output: pdf_document
+---
