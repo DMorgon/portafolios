@@ -162,7 +162,7 @@ Creo un histográma para examinar la distribución de los datos de la variable C
 ggplot(
   data = data,
   aes(
-    x = CATEGORÍAS)) +
+    x = CATEGORIAS)) +
   geom_bar(
     fill = "lightblue",
     color = "black",
@@ -229,7 +229,7 @@ A continuación, tanto las variables REGIONES como CATEGORIAS las transformo en 
 
 ```{r}
 data$REGIONES <- factor(data$REGIONES)
-data$CATEGORÍAS <- factor(data$CATEGORÍAS)
+data$CATEGORIAS <- factor(data$CATEGORIAS)
 ```
 
 ## 6. Detección y tratamiento de valores ausentes
@@ -300,7 +300,7 @@ ggplot(
   aes(
     x = AÑO,
     y = Volumen)) +
-  geom_line() +
+  geom_line(color = "blue") +
   labs(
     x = "AÑO",
     y = "VOLUMEN",
@@ -333,7 +333,7 @@ En resumen, la evolución de la cantidad de alimentos consumidos muestra cambios
 
 ```{r}
 data_categorias <- data %>%
-  group_by(CATEGORÍAS) %>%
+  group_by(CATEGORIAS) %>%
   summarise(Volumen = sum(VOLUMEN)) %>%
   arrange(desc(Volumen))
 
@@ -341,7 +341,7 @@ data_categorias <- data %>%
 ggplot(
   data = data_categorias,
   aes(
-    x = reorder(CATEGORÍAS, -Volumen),
+    x = reorder(CATEGORIAS, -Volumen),
     y = Volumen)) +
   geom_bar(
     stat = "identity",
@@ -350,9 +350,9 @@ ggplot(
     color = "black",
     width = 0.8) +
   labs(
-    x = "CATEGORÍAS",
+    x = "CATEGORIAS",
     y = "VOLUMEN",
-    title = "Gráfico de Barras VOLUMEN vs. CATEGORÍAS") +
+    title = "Gráfico de Barras VOLUMEN vs. CATEGORIAS") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
         axis.text.y = element_text(size = 8),
@@ -387,19 +387,19 @@ Esta representación visual ofrece una perspectiva clara de las preferencias de 
 ```{r}
 # Agrupa los datos por categorías y años, calculando la suma del VOLUMEN para cada combinación
 data_categorias <- data %>%
-  group_by(CATEGORÍAS, AÑO) %>%
+  group_by(CATEGORIAS, AÑO) %>%
   summarise(
     Volumen = sum(VOLUMEN))
 
 # Obtiene las categorías únicas presentes en los datos
-categorias_unicas <- unique(data_categorias$CATEGORÍAS)
+categorias_unicas <- unique(data_categorias$CATEGORIAS)
 
 # Crea un gráfico de líneas para cada categoría de alimentos
 for (i in categorias_unicas) {
   
   # Filtra los datos para la categoría actual
   datos <- data_categorias %>%
-    filter(CATEGORÍAS == i)
+    filter(CATEGORIAS == i)
   
   # Crea un gráfico de líneas para la categoría actual
   grafico <- ggplot(
@@ -408,11 +408,11 @@ for (i in categorias_unicas) {
       x = AÑO,
       y = Volumen)) +
     geom_line(
-      color = "blue") +  # Línea de color azul
+      color = "blue") +
     labs(
       x = "AÑO",
       y = "VOLUMEN",
-      title = paste0("Gráfico de Líneas con el consumo de ", i)) +  # Títulos
+      title = paste0("Gráfico de Líneas con el consumo de ", i)) +
     theme_minimal() +
     scale_x_date(
       date_labels = "%Y",
@@ -424,7 +424,7 @@ for (i in categorias_unicas) {
   print(grafico)
 }
 
-rm(data_categorias, categorias_unicas, i, datos)
+rm(data_categorias, categorias_unicas, i, grafico, datos)
 ```
 
 En general, durante los años 2021 y 2022, se observa una tendencia a la disminución en el consumo en todas las categorías de alimentos.
@@ -444,55 +444,98 @@ Sin embargo, al analizar la serie temporal en su totalidad, se destacan varios p
 ### 7.4. VOLUMEN VS REGIONES
 
 ```{r}
+# Agrupa los datos por regiones calculando la suma del VOLUMEN
 data_regiones <- data %>%
   group_by(REGIONES) %>%
   summarise(Volumen = sum(VOLUMEN)) %>%
   arrange(desc(Volumen))
 
 # Crea un gráfico de líneas
-barplot(
-  height = data_regiones$Volumen,
-  beside = TRUE, 
-  main = "Gráfico de Barras VOLUMEN vs. REGIONES",
-  names.arg = data_regiones$REGIONES,
-  las = 2,
-  cex.names = 0.5,
-  cex.axis = 0.5,
-  ylim = c(0, max(data_regiones$Volumen * 1.1)))
-
+ggplot(
+  data = data_regiones,
+  aes(
+    x = reorder(REGIONES, -Volumen),
+    y = Volumen)) +
+  geom_bar(
+    stat = "identity",
+    position = "dodge",
+    fill = "lightblue",
+    color = "black",
+    width = 0.9) +
+  labs(
+    x = "REGIONES",
+    y = "VOLUMEN",
+    title = "Gráfico de Barras VOLUMEN vs. REGIONES") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+        axis.text.y = element_text(size = 8),
+        axis.title = element_text(size = 10),
+        legend.position = "none") +
+  ylim(0, max(data_regiones$Volumen * 1.1))
 
 rm(data_regiones)
 ```
 
-Según se puede apreciar en el gráfico, las regiones muestran un consumo dispar de alimentos. Como se aprecia, las regiones que más consumen son Andalucia, Cataluña.
+Como se puede apreciar en el gráfico, las regiones muestran un patrón de consumo de alimentos bastante dispar:
+
+Las regiones de Andalucía y Cataluña lideran en consumo de alimentos, destacándose por su alta demanda de productos.
+
+Les siguen de cerca en términos de consumo las comunidades de Madrid y Valencia, que también presentan cifras considerables.
+
+Galicia y Castilla y León ocupan el tercer lugar en cuanto al volumen de consumo de alimentos.
+
+En cuarto lugar se encuentran las comunidades autónomas de Canarias, País Vasco y Castilla-La Mancha, que tienen un nivel de consumo similar.
+
+Aragón y Murcia se ubican en el siguiente grupo, mostrando cifras moderadas de consumo.
+
+Asturias, Extremadura y Baleares presentan un nivel de consumo relativamente menor en comparación con las regiones mencionadas anteriormente.
+
+Por último, las comunidades de Navarra, Cantabria y, en menor medida, La Rioja muestran los niveles más bajos de consumo de alimentos en el conjunto de datos.
 
 ### 7.4. VOLUMEN VS AÑO VS REGIONES
 
 
 ```{r}
-data_regiones <- data %>%
+# Agrupa los datos por categorías y años, calculando la suma del VOLUMEN para cada combinación
+data_categorias <- data %>%
   group_by(REGIONES, AÑO) %>%
   summarise(
     Volumen = sum(VOLUMEN))
 
-regiones_unicas <- unique(data_regiones$REGIONES)
+# Obtiene las categorías únicas presentes en los datos
+regiones_unicas <- unique(data_categorias$REGIONES)
 
-for (i in regiones_unicas){
-  datos <- data_regiones  %>%
+# Crea un gráfico de líneas para cada categoría de alimentos
+for (i in regiones_unicas) {
+  
+  # Filtra los datos para la categoría actual
+  datos <- data_categorias %>%
     filter(REGIONES == i)
   
-  plot(
-    x = datos$AÑO,
-    y = datos$Volumen,
-    type = "l",
-    xlab = "AÑO",
-    ylab = "VOLUMEN",
-    main = paste0("Gráfico de Líneas con el consumo de ", i),
-    las = 2,
-    cex.axis = 0.5)
+  # Crea un gráfico de líneas para la categoría actual
+  grafico <- ggplot(
+    data = datos,
+    aes(
+      x = AÑO,
+      y = Volumen)) +
+    geom_line(
+      color = "lightblue") +
+    labs(
+      x = "AÑO",
+      y = "VOLUMEN",
+      title = paste0("Gráfico de Líneas con el consumo de ", i)) +
+    theme_minimal() +
+    scale_x_date(
+      date_labels = "%Y",
+      date_breaks = "1 year") +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1))
+  
+  # Imprime el gráfico actual
+  print(grafico)
 }
 
-rm(data_regiones, regiones_unicas, datos, i)
+rm(data_categorias, regiones_unicas, datos, i, grafico)
 ```
 
 
@@ -500,7 +543,7 @@ En términos generales, se observa que en el año 2020 todas las regiones experi
 
 En particular, se pueden destacar las tendencias de consumo de las siguientes regiones:
 
-- Asturias: Inició la serie con un consumo de alimentos elevado y experimentó una disminución casi lineal a lo largo del tiempo.
+- Asturias y Castilla y Leon: Inició la serie con un consumo de alimentos elevado y experimentó una disminución casi lineal a lo largo del tiempo.
 
 - Baleares: Comenzó la serie con un consumo bajo y experimentó un crecimiento constante a lo largo de los años.
 
@@ -513,7 +556,7 @@ Crea gráficos de barras que muestran el volumen de consumo de diferentes catego
 ```{r}
 # Calculo el resumen de datos por regiones y categorías
 datos_regiones_categoria <- data %>%
-  group_by(REGIONES, CATEGORÍAS) %>%
+  group_by(REGIONES, CATEGORIAS) %>%
   summarise(Volumen = sum(VOLUMEN)) %>%
   arrange(desc(Volumen))
 
@@ -528,20 +571,34 @@ for (i in regiones_unicas){
     filter(REGIONES == i)
 
   # Creo un gráfico de barras para la región actual
-  barplot(
-    height = datos$Volumen,
-    beside = TRUE, 
-    main = paste0("Gráfico de Barras VOLUMEN vs CATEGORÍAS en ", i),
-    ylim = c(0, max(datos$Volumen) * 1.1),
-    ylab = "VOLUMEN",
-    names.arg = datos$CATEGORÍAS,
-    las = 2,
-    cex.names = 0.5,
-    cex.axis = 0.5) 
+  grafico <- ggplot(
+    data = datos,
+    aes(
+      x = reorder(CATEGORIAS, -Volumen),
+      y = Volumen)) + 
+    geom_bar(
+      stat = "identity",
+      position = "dodge",
+      fill = "lightblue",
+      color = "black",
+      width = 0.8) +
+    labs(
+      x = "CATEGORÍAS",
+      y = "VOLUMEN",
+      title = paste0("Gráfico de Barras VOLUMEN vs CATEGORÍAS en ", i)) +
+    theme_minimal() +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+      axis.text.y = element_text(size = 8),
+      axis.title = element_text(size = 10),
+      legend.position = "none") +
+    ylim(0, max(datos$Volumen) * 1.1)
+  
+  print(grafico)
 }
 
 # Elimino las variables que no utilizaré
-rm(datos_regiones_categoria,regiones_unicas, datos, i)
+rm(datos_regiones_categoria,regiones_unicas, datos, i, grafico)
 ```
 
 Acontinuación realizo etiqueto la categorías basado en cuartiles para diferentes regiones.
@@ -549,7 +606,7 @@ Acontinuación realizo etiqueto la categorías basado en cuartiles para diferent
 ```{r}
 # Calculo el resumen de datos por regiones y categorías
 datos_regiones_categoria <- data %>%
-  group_by(REGIONES, CATEGORÍAS) %>%
+  group_by(REGIONES, CATEGORIAS) %>%
   summarise(Volumen = sum(VOLUMEN)) %>%
   arrange(desc(Volumen))
 
@@ -584,7 +641,7 @@ for(i in regiones_unicas){
 
 rm(datos_regiones_categoria, regiones_unicas, estadisticas, datos_region, i)
 ```
-Por regla general, las categorias de alimentos más consumidas en todas las regiones son la fruta fresca y la leche líquida. Le sigue las hortalizas frescas, la carne el pan y los refrescos. 
+Por regla general, las categorias de alimentos más consumidas en todas las regiones son la fruta fresca y la leche líquida. Le sigue las hortalizas frescas, la carne el pan y los refrescos. Otras categorias, pero en menor medida que las anteriores, pueden ser los derivados lacteos, las patatas y la pesca
 
 Las categorias que menos se consumen son los edulcorantes, las especias, los caldos, la miel, otras leches y los encurtidos. 
 
@@ -593,4 +650,44 @@ El agua envasada dependiendo de la región tiene una prioridad u otras Así, por
 A priori, consideraba que la pesca, es decir, el pescado y el marisco, tenía mayor prioridad en zonas de costa, como Galicia o Cantabria, y en las islas Baleares y Canarias. Sin embargo, no se ha evidenciado esta hipótesis. Así, la pesca, por ejemplo ocupa la decima posición tanto en Extremadura, Baleares como en Cataluña. 
 
 ## 9. Conclusiones
+
+Como he indicado al comienzo, el presente análisis exploratorio tenía como finalidad comprender los patrones de consumo de alimentos por parte de los hogares españoles. 
+
+Con el fin de ayudarme en el desarrollo del análisis, furmule una seríe de preguntas guías que me permitirían cumplir con el objetivo marcado. Estas preguntas son:
+
+- ¿Cómo ha evolucionado el volumen de consumo de alimentos en España a lo largo de los años?
+
+- ¿En qué medida varía el consumo de alimentos entre las distintas regiones de España?
+
+- ¿Cuáles son las categorías de alimentos más populares y de qué manera han experimentado cambios a lo largo de las décadas estudiadas?
+
+Para hayar la respuesta a estas preguntas decidí utilizar un conjunto de datos, denominado "volumen_categorías". Este conjunto de datos, constaba de 14.059 observaciones y 4 variables que son: AÑO, CATEGORIAS, REGIONES y VOLUMEN.
+
+Las conclusiones a las que he podido llegar son las siguientes:
+
+1. **Evolución del Volumen de Consumo de Alimentos**: 
+
+  - Observamos que desde el año 2000 hasta 2022, en términos generales, la cantidad de alimentos consumidos por los hogares españoles ha experimentado un crecimiento, pasando de casi 24 millones a más de 25 millones de kilos. Sin embargo, este crecimiento no ha sido lineal y ha estado marcado por fluctuaciones significativas. 
+  
+  - El año 2023 comenzo en una etapa de caida del consumo de alimentos. 
+
+2. **Variabilidad Regional en el Consumo de Alimentos**:
+
+  - En general, durante los años 2021 y 2022, se observa una tendencia a la disminución en el consumo en todas regiones.
+  
+  - He identificado diferencias notables en el consumo de alimentos entre las distintas regiones de España. Andalucía y Cataluña lideran en consumo, seguidas de cerca por Madrid y Valencia. En contraste, La Rioja, Cantabria y Navarra presentan los niveles de consumo más bajos.
+
+3. **Categorías de Alimentos Populares y Cambios en el Tiempo**:
+
+  - En general, durante los años 2021 y 2022, se observa una tendencia a la disminución en el consumo en todas las categorías de alimentos.
+
+  - Al analizar las categorías de alimentos, Observé que la fruta fresca y la leche líquida son las más consumidas, tanto a nivel general como regional. Otras categorías populares incluyen las hortalizas frescas, la carne, el pan y los refrescos. 
+  
+  - Además, indentifiqué categorías menos consumidas, como edulcorantes, especias, caldos y encurtidos.
+
+  - El consumo de agua envasada varía según la región. Por ejemplo, en Canarias y Baleares, esta categoría ocupa el primer lugar, seguida de Cataluña y Valencia en segundo lugar. En contraste, Madrid, País Vasco y Navarra la ubican en la décima posición en sus preferencias.
+
+  - Contrariamente a la hipótesis inicial que sugería un mayor consumo de pescado y marisco en regiones costeras como Galicia y Cantabria, así como en las islas Baleares y Canarias, los datos no respaldan esta suposición. Estas categorías ocupan la décima posición en regiones como Extremadura, Baleares y Cataluña.
+  
+  
 

@@ -9,8 +9,8 @@ import os
 base_url = "https://raw.githubusercontent.com"
 usuario_git = "DMorgon"
 repositorio = "portafolios/main/alimentacion/datos_procesados"
-nombre_archivo = "volumen"
-ruta_archivo = f"{base_url}/{usuario_git}/{repositorio}/{nombre_archivo}.csv"
+nombre_archivo = "volumen.csv"
+ruta_archivo = f"{base_url}/{usuario_git}/{repositorio}/{nombre_archivo}"
 
 # Cargar el archivo CSV en un DataFrame de Pandas
 volumen = pd.read_csv(ruta_archivo)
@@ -46,11 +46,6 @@ categoria = ["Huevos", "Miel", "Carne",  "Agua", "Preparados lacteos", "Pesca", 
              "Otros productos en volumen", "Boll/Past/Gallet/Cere", "Choco/Cacao/Suc"]
 
 volumen = volumen[volumen["CATEGORIAS"].isin(categoria)]
-
-# Ajusto el tipo de dato de la variable AÑO para que sea de tipo fecha.
-
-volumen["AÑO"] = volumen["AÑO"].astype(str)
-volumen["AÑO"] = pd.to_datetime(volumen["AÑO"], format='%Y')
 
 """
 4) CARGA DEL MARCO RESULTANTE
