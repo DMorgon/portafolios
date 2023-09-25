@@ -5,3 +5,13 @@ author: "David Moreno"
 date: "2023-09-25"
 output: pdf_document
 ---
+
+## 1. Objetivos
+## 2. Preparación del entorno de trabajo
+## 3. Obtención de los datos
+## 4. Análisis descriptivo del conjunto de los datos
+## 5. Ajustes de variables
+## 6. Detección y tratamiento de los valores ausentes
+## 7. Detección y tratamiento de los valores atípicos
+## 8. Análisis de relación entre variables
+## 9. Conclusiones
