@@ -8,6 +8,39 @@ output: pdf_document
 
 ## 1. Objetivos
 ## 2. Preparación del entorno de trabajo
+
+Configuro el repositorio de CRAN de manera no interactiva
+
+```{r}
+options(repos = c(CRAN = "https://cran.r-project.org"))
+```
+
+Instalo las librerías que voy a utilizar
+
+```{r}
+install.packages("readxl")
+install.packages("httr")
+install.packages("tidyverse")
+install.packages("rmarkdown")
+install.packages("dplyr")
+install.packages("ggplot2")
+install.packages("corrplot")
+install.packages("stringr")
+```
+
+Y, por último, se cargan las librerías.
+
+```{r}
+library(readxl)
+library(httr)
+library(tidyverse)
+library(rmarkdown)
+library(dplyr)
+library(ggplot2)
+library(corrplot)
+library(stringr)
+```
+
 ## 3. Obtención de los datos
 ## 4. Análisis descriptivo del conjunto de los datos
 ## 5. Ajustes de variables

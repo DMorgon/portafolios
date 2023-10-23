@@ -598,7 +598,7 @@ for (i in regiones_unicas){
 }
 
 # Elimino las variables que no utilizaré
-rm(datos_regiones_categoria,regiones_unicas, datos, i, grafico)
+rm(datos_regiones_categoria, regiones_unicas, datos, i, grafico)
 ```
 
 Acontinuación realizo etiqueto la categorías basado en cuartiles para diferentes regiones.
@@ -681,7 +681,7 @@ Las conclusiones a las que he podido llegar son las siguientes:
 
 - Durante los años 2021 y 2022, se ha observado una tendencia general a la disminución en el consumo de todas las categorías de alimentos.
 
-- Al analizar las categorías de alimentos, se destacan algunas tendencias notables. La fruta fresca y la leche líquida son las categorías más consumidas, tanto a nivel general como regional. Otras categorías populares incluyen las hortalizas frescas, la carne, el pan y los refrescos.
+- Al analizar las categorías de alimentos, se destacan algunas tendencias notables. La fruta fresca y la leche líquida son las categorías más consumidas, tanto a nivel general como regional. Otras categorías populares incluyen las hortalizas frescas, la carne, el pan y los refrescos, los derivados lacteos, las patatas y la pesca.
 
 - Por otro lado, se han identificado categorías menos consumidas, como edulcorantes, especias, caldos y encurtidos.
 
