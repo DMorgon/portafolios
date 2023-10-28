@@ -1,0 +1,5 @@
+# CREO LA BASE DE DATOS
+
+CREATE DATABASE books;
+USE books;
+
