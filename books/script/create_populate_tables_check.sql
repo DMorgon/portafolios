@@ -1,3 +1,9 @@
+-- Crear la base de datos (si no existe)
+CREATE DATABASE IF NOT EXISTS books;
+
+-- Usar la base de datos "books"
+USE books;
+
 -- **********************************************************************
 -- Borrar Constraints
 ALTER TABLE IF EXISTS titles DROP FOREIGN KEY fk_titles_pub_id;
