@@ -1,22 +1,10 @@
--- **********************************************************************
--- Borrar Constraints
-ALTER TABLE IF EXISTS titles DROP FOREIGN KEY fk_titles_pub_id;
-ALTER TABLE IF EXISTS title_authors DROP FOREIGN KEY fk_title_authors_title_id;
-ALTER TABLE IF EXISTS title_authors DROP FOREIGN KEY fk_title_authors_au_id;
+-- Crear la base de datos (si no existe)
+CREATE DATABASE IF NOT EXISTS books;
 
 
 -- **********************************************************************
--- Borrar tablas
-DROP TABLE IF EXISTS authors;
-DROP TABLE IF EXISTS publishers;
-DROP TABLE IF EXISTS new_publishers;
-DROP TABLE IF EXISTS titles;
-DROP TABLE IF EXISTS title_authors;
-DROP TABLE IF EXISTS royalties;
-DROP TABLE IF EXISTS employees;
-DROP TABLE IF EXISTS test_scores ;
-DROP TABLE IF EXISTS emp ;
-
+-- Usar la base de datos "books"
+USE books;
 
 
 -- **********************************************************************
@@ -81,42 +69,19 @@ INSERT INTO new_publishers VALUES('P14','Springer','Berlin',NULL,'Germany');
 
 
 -- **********************************************************************
--- Crear tabla titles
+-- Crear tabla titels
 CREATE TABLE titles
   (
   title_id   CHAR(3)      NOT NULL,
   title_name VARCHAR(40)  NOT NULL,
   type       VARCHAR(10)          ,
   pub_id     CHAR(3)      NOT NULL,
-  pages      INTEGER
-    CHECK (pages > 0)             ,
+  pages      INTEGER              ,
   price      DECIMAL(5,2)         ,
   sales      INTEGER              ,
   pubdate    DATE                 ,
   contract   SMALLINT     NOT NULL,
-
-  CONSTRAINT pk_titles PRIMARY KEY (title_id),
-
-  CONSTRAINT title_id_chk
-    CHECK (
-      (SUBSTR(title_id, 1, 1) = 'T')
-    AND
-      (CAST(SUBSTR(title_id, 2, 2)
-    AS SIGNED) BETWEEN 0 AND 99)),
-
-  CONSTRAINT price_chk
-    CHECK (price >= 0.00
-      AND price < 100.00),
-
-  CONSTRAINT sales_chk
-    CHECK (sales >= 0),
-
-  CONSTRAINT pubdate_chk
-    CHECK (pubdate >= '1950-01-01'),
-
-  CONSTRAINT title_name_chk
-    CHECK (title_name <> ''
-      AND contract >= 0)
+  CONSTRAINT pk_titles PRIMARY KEY (title_id)
   );
 ALTER TABLE titles ADD CONSTRAINT fk_titles_pub_id FOREIGN KEY (pub_id) references publishers(pub_id);
 
@@ -207,6 +172,7 @@ INSERT INTO employees VALUES('E03','Mr. Salter','E01');
 INSERT INTO employees VALUES('E04','William Boot','E03');
 INSERT INTO employees VALUES('E05','Mr. Corker','E03');
 
+
 -- **********************************************************************
 -- Crear tabla test_score
 CREATE TABLE IF NOT EXISTS test_scores (
@@ -234,7 +200,7 @@ CREATE TABLE IF NOT EXISTS emp (
   ename    VARCHAR(10),
   job      VARCHAR(9),
   mgr      DECIMAL(4),
-  hiredate CHAR(10),
+  hiredate DATE,
   sal      DECIMAL(7,2),
   comm     DECIMAL(7,2),
   deptno   DECIMAL(2),
@@ -256,3 +222,4 @@ INSERT INTO emp VALUES
   (7900, 'JAMES', 'CLERK', 7698, '1981-12-03', 950, NULL, 30),
   (7902, 'FORD', 'ANALYST', 7566, '1981-12-03', 3000, NULL, 20),
   (7934, 'MILLER', 'CLERK', 7782, '1982-01-23', 1300, NULL, 10) ; 
+  
